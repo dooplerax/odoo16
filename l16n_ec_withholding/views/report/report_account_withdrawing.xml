@@ -42,62 +42,62 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-5">
                                                 <strong>RUC</strong>
                                             </div>
-                                            <div class="col-xs-6">
+                                            <div class="col-7">
                                                 <span t-esc="res_company.partner_id.vat"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12">
+                                            <div class="col-12">
                                                 <h4>COMPROBANTE DE RETENCIÓN</h4>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-3">
+                                            <div class="col-5">
                                                 <span>No.</span>
                                             </div>
-                                            <div class="col-xs-8">
+                                            <div class="col-7">
                                                 <span t-esc="o.name"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12">
+                                            <div class="col-12">
                                                 <span>NUMERO DE AUTORIZACION</span>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12">
+                                            <div class="col-12">
                                                 <span t-esc="o.authorization_number"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6">
+                                            <div class="col-5">
                                                 <span>FECHA Y HORA DE AUTORIZACION:</span>
                                             </div>
-                                            <div class="col-xs-6">
+                                            <div class="col-7">
                                                 <span t-esc="o.date"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6">
+                                            <div class="col-5">
                                                 <span>AMBIENTE:</span>
                                             </div>
-                                            <div class="col-xs-6">
+                                            <div class="col-7">
                                                 <span t-esc="res_company.env_service == '1' and 'PRUEBAS' or 'PRODUCCION'"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-6">
+                                            <div class="col-5">
                                                 <span>EMISION:</span>
                                             </div>
-                                            <div class="col-xs-6">
+                                            <div class="col-7">
                                                 <span t-esc="res_company.emission_code == '1' and 'NORMAL' or 'INDISPONIBILIDAD'"/>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-xs-12">
+                                            <div class="col-12">
                                                 <span>CLAVE DE ACCESO</span>
                                             </div>
                                             <div class="col-xs-12">
