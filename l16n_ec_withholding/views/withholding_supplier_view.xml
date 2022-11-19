@@ -78,7 +78,9 @@
                                     <form string="Impuestos">
                                         <group>
                                             <group>
-                                                <field name="tax_id" required="1" domain="[('type_tax_use','=','purchase'),('tax_group_id.l10n_ec_type','in',['withhold_vat','withhold_income_tax','outflows_tax','other'])]" options="{'no_create': True, 'no_create_edit': True}" />
+                                                <field name="tax_id" required="1" domain="[('type_tax_use','=','purchase'),
+                                                ('tax_group_id.l10n_ec_type','in',['withhold_vat','withhold_income_tax','outflows_tax','other'])]"
+                                                       options="{'no_create': True, 'no_create_edit': True}" />
                                                 <field name="account_id" groups="account.group_account_user"/>
                                                 <field name="fiscal_year" readonly="1"/>
                                             </group>
