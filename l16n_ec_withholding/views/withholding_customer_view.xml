@@ -37,6 +37,7 @@
                                 <field name="name" class="oe_inline" required="1"/>
                                 <field name="invoice_id" options="{'no_create': True, 'no_create_edit': True}" domain="[('partner_id','=',partner_id),('move_type','in',['out_invoice']), ('state','=','posted'),('retention_id','=',False)]" />
                                 <field name="authorization_number"/>
+
                             </group>
                             <group>
                                 <field name="date"/>
