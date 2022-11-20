@@ -14,7 +14,7 @@
         # 'data/partner.xml'
     ],
     'depends': [
-        'account'
+        'account','l10n_ec'
     ],
     # 'external_dependencies': {
     #     'python': ['stdnum']

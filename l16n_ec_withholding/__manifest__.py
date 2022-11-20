@@ -8,6 +8,7 @@
     'license': 'AGPL-3',
     'depends': [
         'account',
+        'l16n_ec_partner',
         'l10n_latam_invoice_document',
         'account_accountant'
     ],
