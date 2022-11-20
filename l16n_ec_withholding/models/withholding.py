@@ -17,7 +17,7 @@ class AccountWithdrawing(models.Model):
     _name = 'account.retention'
     _description = 'Withdrawing Documents'
     _order = 'date DESC'
-   
+
     @api.depends('move_ids.amount')
     def _compute_total(self):
         """
@@ -35,43 +35,41 @@ class AccountWithdrawing(models.Model):
         #     # if tax.base == 0:
         #     #    self.recalcular_base(tax)
 
-            #  if tax.amount != None:
-            #      self.amount_valor_retencion += tax.amount  # / 0.30
-            #  if tax.tax_id.tax_group_id.code == 'isb':
-            #      self.isb += tax.amount
-            #  if tax.tax_id.tax_group_id.code == 'ret_vat_b':
-            #      if tax.tax_id.percent_report == '30':
-            #          self.val_ret_bienes += tax.amount
-            #      if tax.tax_id.percent_report == '10':
-            #          self.val_ret_bien_10 += tax.amount
-            #  if tax.tax_id.tax_group_id.code == 'ret_vat_srv':
-            #      if tax.tax_id.percent_report == '70':
-            #          self.val_ret_serv += tax.amount
-            #      if tax.tax_id.percent_report == '20':
-            #          self.val_ret_serv_20 += tax.amount
-            #      if tax.tax_id.percent_report == '50':
-            #          self.val_ret_serv_50 += tax.amount
-            #      if tax.tax_id.percent_report == '100':
-            #          self.val_ret_serv_100 += tax.amount
+        #  if tax.amount != None:
+        #      self.amount_valor_retencion += tax.amount  # / 0.30
+        #  if tax.tax_id.tax_group_id.code == 'isb':
+        #      self.isb += tax.amount
+        #  if tax.tax_id.tax_group_id.code == 'ret_vat_b':
+        #      if tax.tax_id.percent_report == '30':
+        #          self.val_ret_bienes += tax.amount
+        #      if tax.tax_id.percent_report == '10':
+        #          self.val_ret_bien_10 += tax.amount
+        #  if tax.tax_id.tax_group_id.code == 'ret_vat_srv':
+        #      if tax.tax_id.percent_report == '70':
+        #          self.val_ret_serv += tax.amount
+        #      if tax.tax_id.percent_report == '20':
+        #          self.val_ret_serv_20 += tax.amount
+        #      if tax.tax_id.percent_report == '50':
+        #          self.val_ret_serv_50 += tax.amount
+        #      if tax.tax_id.percent_report == '100':
+        #          self.val_ret_serv_100 += tax.amount
 
         self.amount_total = sum(tax.amount for tax in self.move_ids)
 
     def _get_report_base_filename(self):
         return self.name
+
     def _get_in_type(self):
         context = self._context
         return context.get('in_type', 'ret_out_invoice')
         """_summary_
         """
-    
+
     def _default_type(self):
         context = self._context
         return context.get('type', 'out_invoice')
 
-
     STATES_VALUE = {'draft': [('readonly', False)]}
-
-    
 
     name = fields.Char(
         'Número',
@@ -92,8 +90,7 @@ class AccountWithdrawing(models.Model):
         readonly=True,
         states={'draft': [('readonly', False)]}, required=True
     )
-    
-   
+
     in_type = fields.Selection(
         [
             ('ret_in_invoice', u'Retención a Proveedor'),
@@ -103,7 +100,7 @@ class AccountWithdrawing(models.Model):
         readonly=True,
         default=_get_in_type
     )
-    
+
     move_ids = fields.One2many(
         'account.retention.move',
         'retention_id',
@@ -135,9 +132,10 @@ class AccountWithdrawing(models.Model):
         readonly=True,
         states=STATES_VALUE
     )
- 
-    l10n_latam_document_type_id = fields.Many2one('l10n_latam.document.type', 'Document Type', index=True)
-    
+
+    l10n_latam_document_type_id = fields.Many2one(
+        'l10n_latam.document.type', 'Document Type', index=True)
+
     state = fields.Selection(
         [
             ('draft', 'Borrador'),
@@ -148,7 +146,7 @@ class AccountWithdrawing(models.Model):
         string='Estado',
         default='draft'
     )
-    
+
     def action_cancel(self):
         """
         Método para cambiar de estado a cancelado el documento
@@ -156,8 +154,7 @@ class AccountWithdrawing(models.Model):
         for ret in self:
             self.write({'state': 'cancel'})
         return True
-    
-    
+
     def button_validate(self):
         """
         Botón de validación de Retención que se usa cuando
@@ -167,30 +164,31 @@ class AccountWithdrawing(models.Model):
         """
         self.ensure_one()
         if self.in_type == 'ret_out_invoice':
-            if len(self.name)!=17:
-                raise UserError(u'El número de retención inconcorrecto debe el siquiente formato 000-000-000000000')
+            if len(self.name) != 17:
+                raise UserError(
+                    u'El número de retención inconcorrecto debe el siquiente formato 000-000-000000000')
             self.write({
                 'state': 'done',
-                })
+            })
         else:
             sequence = self._set_next_sequence()
             str_sequence = str(sequence).zfill(9)
             l10n_ec_retention_entity = self.invoice_id.journal_id.l10n_ec_retention_entity
             l10n_ec_retention_emission = self.invoice_id.journal_id.l10n_ec_retention_emission
-            name = "{}-{}-{}".format(l10n_ec_retention_entity, l10n_ec_retention_emission, str_sequence)
-            
+            name = "{}-{}-{}".format(l10n_ec_retention_entity,
+                                     l10n_ec_retention_emission, str_sequence)
+
             self.write({
                 'state': 'done',
                 'l10n_ec_retention_entity': l10n_ec_retention_entity,
-                'l10n_ec_retention_emission':l10n_ec_retention_emission,
-                'name':name,
-                'sequence' : sequence
-                })
+                'l10n_ec_retention_emission': l10n_ec_retention_emission,
+                'name': name,
+                'sequence': sequence
+            })
         self.invoice_id.write({'retention_id': self.id})
         self._create_move()
         return True
-    
-    
+
     def action_validate(self):
         """
         Valida la retencion desde la factura, no genera movimientos
@@ -198,28 +196,30 @@ class AccountWithdrawing(models.Model):
         """
         self.ensure_one()
         sequence = self._set_next_sequence()
+
         str_sequence = str(sequence).zfill(9)
         l10n_ec_retention_entity = self.invoice_id.journal_id.l10n_ec_retention_entity
         l10n_ec_retention_emission = self.invoice_id.journal_id.l10n_ec_retention_emission
-        name = "{}-{}-{}".format(l10n_ec_retention_entity, l10n_ec_retention_emission, str_sequence)
-        
+        name = "{}-{}-{}".format(l10n_ec_retention_entity,
+                                 l10n_ec_retention_emission, str_sequence)
+
         self.write({
             'state': 'done',
             'l10n_ec_retention_entity': l10n_ec_retention_entity,
-            'l10n_ec_retention_emission':l10n_ec_retention_emission,
-            'name':name,
-            'sequence' : sequence
-            })
-        
-        return True 
-    
+            'l10n_ec_retention_emission': l10n_ec_retention_emission,
+            'name': name,
+            'sequence': sequence
+        })
+
+        return True
+
     @api.model_create_multi
     @api.returns('self', lambda value: value.id)
     def create(self, vals_list):
-        retention = super(AccountWithdrawing,self).create(vals_list)
+        retention = super(AccountWithdrawing, self).create(vals_list)
         retention.invoice_id.write({'retention_id': retention.id})
         return retention
-    
+
     def _create_move(self):
         """
         Genera los asientos contables de la retencion
@@ -231,16 +231,16 @@ class AccountWithdrawing(models.Model):
         lines = []
         if self.move_id:
             self.move_id.unlink()
-            
+
         move_data = {
             'journal_id': self.invoice_id.journal_id.id,
             'ref': "RET-{}".format(self.name),
             'date': self.date,
             'move_type': 'entry',
-            'l10n_latam_document_type_id' : self.l10n_latam_document_type_id.id,
-            'l10n_latam_document_number' : self.name,
+            'l10n_latam_document_type_id': self.l10n_latam_document_type_id.id,
+            'l10n_latam_document_number': self.name,
         }
-        
+
         if self.invoice_id.move_type in ('in_invoice', 'liq_purchase'):
             for line in self.move_ids:
                 lines.append((0, 0, {
@@ -268,7 +268,7 @@ class AccountWithdrawing(models.Model):
                     'credit': 0.00,
                     'debit': abs(line.amount)
                 }))
-                
+
                 total_counter += abs(line.amount)
 
             lines.append((0, 0, {
@@ -280,18 +280,28 @@ class AccountWithdrawing(models.Model):
             }))
 
         move_data.update({'line_ids': lines})
-        
-        move = self.env['account.move'].create(move_data)
-        
+
+        move = self.env['account.move'].sudo().create(move_data)
+
         # acctype = self.type == 'in_invoice' and 'payable' or 'receivable'
         # inv_lines = inv.move_id.line_ids
         # acc2rec = inv_lines.filtered(lambda l: l.account_id.internal_type == acctype)  # noqa
         # acc2rec += move.line_ids.filtered(lambda l: l.account_id.internal_type == acctype)  # noqa
         # acc2rec.auto_reconcile_lines()
-        self.write({'move_id': move.id})
+
+        move_name = move.name.split(' ')
+        if self.invoice_id.move_type in ('in_invoice', 'liq_purchase'):
+            move_name = "{}-RET-{}-{}".format(
+                move_name[0], self.company_id.id, move_name[1])
+        else:
+            move_name = "{}-RET-{}-{}".format(
+                move_name[0], self.partner_id.id, move_name[1])
+        move.sudo().write({'name': move_name})
+        self.sudo().write({'move_id': move.id})
         move.action_post()
+
         return True
-    
+
     amount_total = fields.Float(
         compute='_compute_total',
         string='Total',
@@ -341,7 +351,6 @@ class AccountWithdrawing(models.Model):
         readonly=True
     )
 
-  
     company_id = fields.Many2one(
         'res.company',
         'Company',
@@ -352,12 +361,11 @@ class AccountWithdrawing(models.Model):
         default=lambda self: self.env.company.id
     )
 
-   
     authorization_number = fields.Char(
         string='Numero de autorizacion',
         size=64
     )
-    
+
     authorization_state = fields.Char(
         'Estado de Autorización',
         size=64,
@@ -375,12 +383,15 @@ class AccountWithdrawing(models.Model):
         readonly=True,
         copy=False
     )
-    authorization_sri = fields.Boolean('¿Autorizado SRI?', readonly=True, copy =False)
-    
+    authorization_sri = fields.Boolean(
+        '¿Autorizado SRI?', readonly=True, copy=False)
+
     sequence = fields.Integer(string='Sequence', default=1, store=True)
-    l10n_ec_retention_entity = fields.Char(string="Emission Retention Entity", size=3)
-    l10n_ec_retention_emission = fields.Char(string="Emission Retencion Point", size=3)
-    
+    l10n_ec_retention_entity = fields.Char(
+        string="Emission Retention Entity", size=3)
+    l10n_ec_retention_emission = fields.Char(
+        string="Emission Retencion Point", size=3)
+
     def _set_next_sequence(self):
         """
         Set the next sequence on the journal
@@ -390,37 +401,16 @@ class AccountWithdrawing(models.Model):
                 select  max(ar.sequence) max  from account_retention ar 
                 inner join account_move am on ar.invoice_id = am.id 
                 where am.company_id  = {} and l10n_ec_retention_entity = '{}' and l10n_ec_retention_emission = '{}' 
-            """.format(self.company_id.id, self.l10n_ec_retention_entity, self.l10n_ec_retention_emission)
-        
+            """.format(self.company_id.id, self.invoice_id.journal_id.l10n_ec_retention_entity,
+                       self.invoice_id.journal_id.l10n_ec_retention_emission)
+
         self.env.cr.execute(sql)
         value = self.env.cr.fetchone()
-        return value[0] + 1 if value[0] else 1    
-         
+        return value[0] + 1 if value[0] else 1
 
     def action_draft(self):
         self.write({'state': 'draft'})
         return True
 
-    def print(self):
-        try:
-            return self.env['report'].get_action(
-                self.id,
-                'l16n_ec_withholding.withholding_report'
-            )
-        except Exception as e:
-            raise UserError(utils.CODE809)
-
-       
-
     def print_retention(self):
-        # try:    
         return self.env.ref('l16n_ec_withholding.account_withholding_report').report_action(self)
-        # return report._get_report_values(self)
-        # return self.env.ref('account.account_invoices_without_payment').report_action(self)
-
-        # return self.env['report']._get_report_values(
-        #     self.id,
-        #     'l16n_ec_withholding.withholding_report'
-        # )
-        # except Exception as e:
-        #     raise UserError(utils.CODE809)
