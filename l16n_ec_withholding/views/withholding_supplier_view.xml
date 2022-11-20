@@ -47,7 +47,6 @@
                                 </label>
                                 <label for="name" class="px-0" string="" attrs="{'invisible': [('state','=','draft')]}">Retención Generada</label>
                                 <field name="name" class="oe_inline" readonly="1" attrs="{'invisible': [('state','=','draft')]}" />
-                                <!-- <field name="authorization_number"/> -->
                             </h1>
                         </div>
                         <group>
@@ -59,7 +58,7 @@
                             </group>
                             <group>
                                 <field name="date"/>
-                                <field name="l10n_latam_document_type_id" select="1" domain="[('code','=',42)]"/>
+                                <field name="l10n_latam_document_type_id" select="1" required="1" domain="[('code','=',42)]"/>
                                 <!-- <field name="type" invisible="1"/> -->
                                 <field name="in_type"/>
                             </group>
@@ -99,8 +98,11 @@
                             <page string="Info Extra">
                                 <group>
                                     <field name="move_id"/>
-
-
+                                    <field name="authorization_number" readonly="1" />
+                                    <field name="authorization_state" readonly="1"/>
+                                    <field name="authorization_date" readonly="1"/>
+                                    <field name="environment" readonly="1"/>
+                                    <field name="authorization_sri" readonly="1"/>
                                 </group>
                             </page>
                         </notebook>

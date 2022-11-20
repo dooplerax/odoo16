@@ -39,7 +39,7 @@
                             </group>
                             <group>
                                 <field name="date"/>
-                                <field name="l10n_latam_document_type_id" select="1" domain="[('code','=',42)]" />
+                                <field name="l10n_latam_document_type_id" select="1" required="1" domain="[('code','=',42)]" />
                                 <field name="in_type"/>
                             </group>
                         </group>

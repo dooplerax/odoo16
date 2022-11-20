@@ -234,7 +234,7 @@ class AccountWithdrawing(models.Model):
             
         move_data = {
             'journal_id': self.invoice_id.journal_id.id,
-            'ref': self.name,
+            'ref': "RET-{}".format(self.name),
             'date': self.date,
             'move_type': 'entry',
             'l10n_latam_document_type_id' : self.l10n_latam_document_type_id.id,
