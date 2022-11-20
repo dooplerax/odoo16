@@ -27,32 +27,16 @@
                         <button name="action_cancel" string="Anular" type="object" states="draft,done"/>
                         <button name="button_validate" string="Validar" class="oe_highlight" type="object" states="draft"/>
                         <button name="action_draft" string="Volver a Borrador" type="object" states="cancel"/>
-
-                        <button name="print_retention" string="Retención" type="object" states="done" class="btn btn-primary" icon="fa-print"/>
-                        <button name="action_generate_document" type="object" string="Generar Doc. Electrónica" class="oe_highlight"/>
-                        <!-- attrs="{'invisible':['|',('authorization_sri','=',True),('move_type','=','in_invoice')]}" /> -->
-                        <!--
-                        <button name="action_print" string="Documento Manual" type="object" attrs="{'invisible': [('tipo_contrato','!=','2')]}" class="btn btn-primary" icon="fa-print"/>
-                         -->
-
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
-                        <!-- <div class="oe_title">
-                            <h1>
-                                <label for="name" class="px-0" ttrs="{'invisible': [('state','=','draft')]}">
-                                    Retención Borrador clientes 
-                                </label>
-                                <label for="name" class="px-0" string="" attrs="{'invisible': [('state','!=','draft')]}">
-                                    Retención Generada
-                                </label>
-                            </h1>
-                        </div> -->
+
                         <group>
                             <group>
                                 <field name="partner_id" select="1" />
                                 <field name="name" class="oe_inline" required="1"/>
                                 <field name="invoice_id" options="{'no_create': True, 'no_create_edit': True}" domain="[('partner_id','=',partner_id),('move_type','in',['out_invoice']), ('state','=','posted'),('retention_id','=',False)]" />
+                                <field name="authorization_number"/>
                             </group>
                             <group>
                                 <field name="date"/>
@@ -93,11 +77,6 @@
                             <page string="Info Extra">
                                 <group>
                                     <field name="move_id" />
-                                    <field name="authorization_number" readonly="1" />
-                                    <field name="authorization_state" readonly="1"/>
-                                    <field name="authorization_date" readonly="1"/>
-                                    <field name="environment" readonly="1"/>
-                                    <field name="authorization_sri" readonly="1"/>
                                 </group>
                             </page>
                         </notebook>
@@ -135,10 +114,6 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_account_retention_customer_form"/>
         </record>
-
-
-
-
         <menuitem action="action_account_retention_customer_tree" id="menu_action_retention_customer" parent="account.menu_finance_receivables" sequence="4"/>
 
     </data>

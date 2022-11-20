@@ -13,8 +13,10 @@
                                         <p>Fecha y hora de impresión:
                                             <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
                                         </p>
-                                        <img t-if="res_company.logo" height="150px"
-                                             t-att-src="'data:image/png;base64,%s' % res_company.logo"/>
+                                        
+                                        <img t-if="res_company.partner_id.image_1920"
+                                         t-att-src="image_data_uri(res_company.partner_id.image_1920)"
+                                         style="height:150px;max-width:90%" alt="Company Logo"/>
                                         <h4>
                                             <span t-esc="res_company.name"/>
                                         </h4>
@@ -100,7 +102,7 @@
                                             <div class="col-12">
                                                 <span>CLAVE DE ACCESO</span>
                                             </div>
-                                            <div class="col-xs-12">
+                                            <div class="col-12">
                                                 <!-- <img style="width: 100% !important; t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', o.authorization_number, 450, 60)"/> -->
                                                 <img t-if="o.authorization_number" t-att-src="'/report/barcode/Code128/'+o.authorization_number"
                                                      style="width:400px;height:25px" alt="Barcode"/>
