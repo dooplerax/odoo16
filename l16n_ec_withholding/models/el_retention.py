@@ -69,20 +69,15 @@ class AccountWithdrawing(models.Model):
                 'baseImponible': '%.2f' % (line.base),
                 'porcentajeRetener': str(abs(line.tax_id.amount)),
                 'valorRetenido': '%.2f' % (abs(line.amount)),
-                'codDocSustento': retention.invoice_id.sustento_id.code,
-                'numDocSustento': retention.invoice_id.l10n_latan_document_number,
-                'fechaEmisionDocSustento': time.strftime('%d/%m/%Y',
-                                                         time.strptime(retention.invoice_id.date, '%Y-%m-%d'))
+                'codDocSustento': retention.invoice_id.sustento_sri.code,
+                'numDocSustento': retention.invoice_id.l10n_latam_document_number,
+                'fechaEmisionDocSustento': "{}/{}/{}".format(
+                                                             str(retention.invoice_id.date.day).zfill(2),
+                                                              str(retention.invoice_id.date.month).zfill(2),
+                                                             retention.invoice_id.date.year)
 
             }
             
-            totalImpuesto = {
-                            'codigo': utils.tabla17[temp_tax.tax_group_id.l10n_ec_type],
-                            'codigoPorcentaje': utils.tabla18[str(int(temp_tax.real_amount))],
-                            'baseImponible': mov.tax_base_amount,
-                            'tarifa': int(temp_tax.real_amount),
-                            'valor': abs(mov.amount_currency)
-                        }
             impuestos.append(impuesto)
         return {'impuestos': impuestos}
 
@@ -149,7 +144,6 @@ class AccountWithdrawing(models.Model):
                 emission_code = self.company_id.emission_code
 
             ewithdrawing = self.render_document(obj, access_key, emission_code)
-            self._logger.debug(ewithdrawing)
             inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
             inv_xml.validate_xml()
             # xades = Xades()

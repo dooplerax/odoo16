@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import datetime
-from email.policy import default
-import re
 from odoo import api, fields, models, _
 
 from odoo.exceptions import (UserError)
@@ -32,6 +30,7 @@ class AccountMove(models.Model):
                                    ,store=True)
     
     retention_id = fields.Many2one('account.retention', string='Retención', readonly=True, copy=False)
+    sustento_sri = fields.Many2one('l10n_ec.sri.payment', string='Sustento del Comprobante',  copy=True)
     
     
     authorization_number = fields.Char(

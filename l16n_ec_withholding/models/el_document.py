@@ -116,10 +116,9 @@ class Edocument(models.AbstractModel):
             numero = getattr(self, 'l10n_latam_document_number').replace('-','')
         
         elif name == 'account.retention':
-            auth = self.company_id.partner_id.get_authorisation('ret_in_invoice')  
-            ld = self.date.split('-')
-            numero = getattr(self, 'name')
-            numero = numero[6:15]
+            auth = self.l10n_latam_document_type_id
+            ld = "{}{}{}".format( self.date.year, str(self.date.month).zfill(2), str(self.date.day).zfill(2))
+            numero = getattr(self, 'name').replace('-','')
         
         fecha = ''.join(ld)
         tcomp = utils.tipoDocumento[auth.code]
