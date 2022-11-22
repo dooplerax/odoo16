@@ -97,48 +97,18 @@ class AccountInvoice(models.Model):
         infoFactura.update({'totalConImpuestos': totalConImpuestos})
         
         if self.move_type == 'out_refund':
-            if not self.comentario:
-                error_mesagge = u'La nota de credito no tiene un detalle'
-                raise UserError(error_mesagge)
+            """
+            Estos datos faltan
+            """
+            notacredito = {
+                'codDocModificado': 'factuta.auth_inv_id.type_id.code',
+                'numDocModificado': 'inv_number',
+                'motivo': 'self.comentario',
+                'fechaEmisionDocSustento': 'fix_date(factuta.date_invoice',
+                'valorModificacion': self.amount_total
+            }
+            
 
-            factuta = self.env['account.invoice'].search(
-                [('invoice_number', '=', str(self.origin)), ('company_id', '=', self.env.user.company_id.id)],
-                limit=1)
-            if not factuta:
-                factuta = self.env['account.invoice'].search(
-                    [('number', '=', str(self.origin)), ('company_id', '=', self.env.user.company_id.id)],
-                    limit=1)
-            if factuta:
-                inv_number = '{0}-{1}-{2}'.format(factuta.invoice_number[:3], factuta.invoice_number[3:6],
-                                                    factuta.invoice_number[6:])
-
-                notacredito = {
-                    'codDocModificado': factuta.auth_inv_id.type_id.code,
-                    'numDocModificado': inv_number,
-                    'motivo': self.comentario,
-                    'fechaEmisionDocSustento': fix_date(factuta.date_invoice),
-                    'valorModificacion': self.amount_total
-                }
-            else:
-                factuta = self.env['easy.saldos.iniciales'].search(
-                    [('invoice_number', '=', self.origin), ('company_id', '=', self.env.user.company_id.id)],
-                    limit=1)
-                inv_number = '{0}-{1}-{2}'.format(self.origin[:3], self.origin[3:6],
-                                                    self.origin[6:])
-
-                cod_doc = ''
-                if factuta.journal_id.type == 'sale':
-                    cod_doc = '18'
-                if factuta.journal_id.type == 'purchase':
-                    cod_doc = '01'
-
-                notacredito = {
-                    'codDocModificado': cod_doc,
-                    'numDocModificado': inv_number,
-                    'motivo': self.comentario,
-                    'fechaEmisionDocSustento': fix_date(factuta.date_invoice),
-                    'valorModificacion': self.amount_total
-                }
             infoFactura.update(notacredito)
         return infoFactura
         # except Exception as e:
@@ -291,7 +261,7 @@ class AccountInvoice(models.Model):
         # data.update({'observaciones': invoice.comentario or '-'})
 
         try:
-            terminos_pago = invoice.invoice_payment_term_id
+            terminos_pago = 30 *(invoice.invoice_payment_term_id.line_ids[0].months) + invoice.invoice_payment_term_id.line_ids[0].days
         except:
             terminos_pago = 0
         data.update({'terminos_pago': terminos_pago})
