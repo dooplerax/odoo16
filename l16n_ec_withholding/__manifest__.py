@@ -22,12 +22,11 @@
         'data/account.epayment.csv',
         'views/account_invoice.xml',
         'views/el_company.xml',
-        
+
         # 'views/report_account_move.xml',
-         'views/report/reports.xml',
-         'views/report/report_account_withdrawing.xml',
-         
-        
+        'views/report/reports.xml',
+        'views/report/report_account_withdrawing.xml',
+
         # 'views/manual_retention.xml',
         # 'views/invoice_manual.xml',
 
