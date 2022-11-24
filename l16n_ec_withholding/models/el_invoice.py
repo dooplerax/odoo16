@@ -60,7 +60,7 @@ class AccountInvoice(models.Model):
             'propina': '0.00',
             'importeTotal': '{:.2f}'.format(invoice.amount_paid),
             'moneda': 'DOLAR',
-            # 'formaPago': invoice.epayment_id.code,
+            'formaPago': invoice.epayment_id.code,
             'valorRetIva': 0.00, #'{:.2f}'.format(invoice.taxed_ret_vatsrv + invoice.taxed_ret_vatb),  
             'valorRetRenta':0.00, #'{:.2f}'.format(invoice.amount_tax_ret_ir),
             'direccionProveedor': "{} {}".format(partner.street, partner.street2)

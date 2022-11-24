@@ -18,7 +18,8 @@
         'views/withholding_supplier_view.xml',
         'views/withholding_customer_view.xml',
         'security/ir.model.access.csv',
-        # 'data/account.fiscal.position.csv',
+        'data/account.fiscal.position.csv',
+        'data/account.epayment.csv',
         'views/account_invoice.xml',
         'views/el_company.xml',
         

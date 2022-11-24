@@ -6,6 +6,14 @@ from odoo import api, fields, models, _
 from odoo.exceptions import (UserError)
 from . import utils
 
+class AccountEpayment(models.Model):
+    _name = 'account.epayment'
+
+    code = fields.Char('Código')
+    name = fields.Char('Forma de Pago')
+
+
+
 class AccountMove(models.Model):
     _inherit='account.move'
     
@@ -31,7 +39,7 @@ class AccountMove(models.Model):
     
     retention_id = fields.Many2one('account.retention', string='Retención', readonly=True, copy=False)
     sustento_sri = fields.Many2one('l10n_ec.sri.payment', string='Sustento del Comprobante',  copy=True)
-    
+    epayment_id = fields.Many2one('account.epayment', 'Forma de Pago')
     
     authorization_number = fields.Char(
         string='Clave de Acceso',
