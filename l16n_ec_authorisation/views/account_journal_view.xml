@@ -13,6 +13,10 @@
                            attrs="{'invisible':['|', '|', ('country_code', '!=', 'EC'), ('l10n_latam_use_documents', '=', False), ('type', 'not in', ( 'purchase'))], 'required':[('country_code', '=', 'EC'), ('l10n_latam_use_documents', '=', True), ('type', 'not in', ('sale', 'purchase'))]}"
                     />
                 </field>
+                <xpath expr="//field[@name='refund_sequence']" position="after">
+                    <field name="account_bank_retention" attrs="{'invisible': [('type', 'not in', ['sale'])]}" />
+                </xpath>
+                
             </field>
         </record>
     </data>

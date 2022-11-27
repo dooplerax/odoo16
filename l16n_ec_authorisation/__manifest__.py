@@ -14,8 +14,8 @@
     'website': '',
     'data': [
         'views/account_journal_view.xml',
-        'data/account.ats.sustento.csv',
-        'security/ir.model.access.csv'
+        # 'data/account.ats.sustento.csv',
+        # 'security/ir.model.access.csv'
     ],
     'depends': [
        'l16n_ec_partner',  

@@ -34,13 +34,21 @@
                             <group>
                                 <field name="partner_id" select="1" />
                                 <field name="name" class="oe_inline" required="1"/>
-                                <field name="invoice_id" options="{'no_create': True, 'no_create_edit': True}" domain="[('partner_id','=',partner_id),('move_type','in',['out_invoice']), ('state','=','posted'),('retention_id','=',False)]" />
+                                <field name="invoice_id" options="{'no_create': True, 'no_create_edit': True}" 
+                                domain="[('partner_id','=',partner_id),('move_type','in',['out_invoice']), ('state','=','posted'),('retention_id','=',False)]"
+                                attrs="{'required':[('bank_retention','=',False)],'invisible':[('bank_retention','=',True)],
+                                'readonly': [('state','!=','draft')]}"/>
+                                
+                                <field name="bank_document"
+                                       attrs="{'required':[('bank_retention','=',True)],'invisible':[('bank_retention','=',False)], 'readonly': [('state','!=','draft')]}"/>
                                 <field name="authorization_number"/>
                             </group>
                             <group>
                                 <field name="date"/>
                                 <field name="l10n_latam_document_type_id" select="1" required="1" domain="[('code','=',42)]" />
+                                <field name="bank_retention"/>
                                 <field name="in_type"/>
+
                             </group>
                         </group>
                         <notebook colspan="4">

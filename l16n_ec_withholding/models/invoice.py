@@ -160,16 +160,18 @@ class AccountRetentionMove(models.Model):
     def _compute_base(self):
         for rec in self:
             if rec.tax_id:
-                if not rec.retention_id.invoice_id:
+                if not rec.retention_id.invoice_id and rec.retention_id.bank_retention == False:
                     raise UserError(_('No se ha seleccionado una factura'))
-                
                 try:
                     rec.account_id = rec.tax_id.invoice_repartition_line_ids[1].account_id
                 except:
                     pass
                 try:
                     # ('tax_group_id.l10n_ec_type','in',['withhold_vat','withhold_income_tax','outflows_tax','other'])]"
-                    if rec.tax_id.tax_group_id.l10n_ec_type in ['withhold_vat']:
+                    if rec.retention_id.bank_retention == True:
+                        rec.base = 0
+                        rec.amount = 0
+                    elif rec.tax_id.tax_group_id.l10n_ec_type in ['withhold_vat']:
                         rec.base = rec.retention_id.invoice_id.amount_tax
                         rec.amount = rec.retention_id.invoice_id.amount_tax * rec.tax_id.amount / 100
                     elif rec.tax_id.tax_group_id.l10n_ec_type in ['withhold_income_tax','outflows_tax']:

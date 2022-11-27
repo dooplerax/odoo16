@@ -67,7 +67,7 @@ tabla18 = {
 tabla20 = {
     'ret_ir': '1',
     'withhold_vat': '2',
-    'withhold_vat': '2',
+    'withhold_income_tax': '2',
     'ret_isd': '6'
 }
 

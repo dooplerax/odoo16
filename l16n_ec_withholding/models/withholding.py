@@ -132,6 +132,17 @@ class AccountWithdrawing(models.Model):
         readonly=True,
         states=STATES_VALUE
     )
+    bank_retention = fields.Boolean(
+        string='Retención Tarjeta Crédito',
+        readonly=True,
+        states=STATES_VALUE
+    )
+    
+    bank_document = fields.Char(
+        string='Documento',
+        size=17,
+    )
+
 
     l10n_latam_document_type_id = fields.Many2one(
         'l10n_latam.document.type', 'Document Type', index=True)
@@ -240,8 +251,31 @@ class AccountWithdrawing(models.Model):
             'l10n_latam_document_type_id': self.l10n_latam_document_type_id.id,
             'l10n_latam_document_number': self.name,
         }
+        if self.bank_retention:
+            journal = self.env['account.journal'].search([('type', '=', 'sale')], limit=1)
+            move_data.update({'journal_id': journal.id})
+            if journal==None or not journal.account_bank_retention:
+                raise UserError(u'Especifique la cuenta de retención bancaria en el diario de ventas')
+                     
+            for line in self.move_ids:
+                lines.append((0, 0, {
+                    'partner_id': self.partner_id.id,
+                    'account_id': journal.account_bank_retention.id,
+                    'name': self.name,
+                    'credit': 0.00,
+                    'debit': abs(line.amount)
+                }))
+                total_counter += abs(line.amount)
 
-        if self.invoice_id.move_type in ('in_invoice', 'liq_purchase'):
+            lines.append((0, 0, {
+                'partner_id': self.partner_id.id,
+                'account_id': self.partner_id.property_account_payable_id.id,
+                'name': self.name,
+                'credit': total_counter,
+                'debit': 0.00
+            }))
+
+        elif self.invoice_id.move_type in ('in_invoice', 'liq_purchase'):
             for line in self.move_ids:
                 lines.append((0, 0, {
                     'partner_id': self.partner_id.id,
