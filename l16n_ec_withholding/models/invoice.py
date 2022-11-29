@@ -83,7 +83,7 @@ class AccountMove(models.Model):
         wd_number = False
         for inv in self:
             if not self.has_retention:
-                continue
+                return True
             if inv.move_type in ['out_refund', 'in_refund']:
                 raise UserError(utils.CODE810)
             ret_taxes =[]

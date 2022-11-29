@@ -328,8 +328,7 @@ class AccountWithdrawing(models.Model):
             move_name = "{}-RET-{}-{}".format(
                 move_name[0], self.company_id.id, move_name[1])
         else:
-            move_name = "{}-RET-{}-{}".format(
-                move_name[0], self.partner_id.id, move_name[1])
+            move_name = "{}-RET-{}-{}".format(move_name[0], self.partner_id.id, move_name[1])
         move.sudo().write({'name': move_name})
         self.sudo().write({'move_id': move.id})
         move.action_post()
