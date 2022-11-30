@@ -69,7 +69,8 @@ class AccountMove(models.Model):
     
     def action_post(self):
         super(AccountMove, self).action_post()
-        self.action_withholding_create()
+        if self.has_retention:
+          self.action_withholding_create()
     
     def action_withholding_create(self):
         """
@@ -83,7 +84,7 @@ class AccountMove(models.Model):
         wd_number = False
         for inv in self:
             if not self.has_retention:
-                continue
+                return True
             if inv.move_type in ['out_refund', 'in_refund']:
                 raise UserError(utils.CODE810)
             ret_taxes =[]
