@@ -69,7 +69,8 @@ class AccountMove(models.Model):
     
     def action_post(self):
         super(AccountMove, self).action_post()
-        self.action_withholding_create()
+        if self.has_retention:
+          self.action_withholding_create()
     
     def action_withholding_create(self):
         """

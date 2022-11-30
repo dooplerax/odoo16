@@ -59,6 +59,8 @@ class ResPartner(models.Model):
         :return:
         """
         for obj in self:
+            if not obj.vat:
+                raise ValidationError('Número de Identificación campo requerido')
             if obj.l10n_latam_identification_type_id.name != 'Pasaporte':
                 partner = self.search(
                     [('vat', '=', obj.vat), ('company_id', '=', obj.env.user.company_id.id)])  # noqa
@@ -72,7 +74,7 @@ class ResPartner(models.Model):
             else:
                 return True
             if not res:
-                raise ValidationError('Identificador incorrecto.')
+                raise ValidationError('Número de Identificación incorrecto.')
 
     @api.depends('vat')
     def _person_type_compute(self):

@@ -197,7 +197,10 @@ class AccountWithdrawing(models.Model):
                 'sequence': sequence
             })
         self.invoice_id.write({'retention_id': self.id})
-        self._create_move()
+        if not self.invoice_id.has_retention:
+            self._create_move()
+        else:
+            self.sudo().write({'move_id': self.invoice_id})
         return True
 
     def action_validate(self):
@@ -324,12 +327,11 @@ class AccountWithdrawing(models.Model):
         # acc2rec.auto_reconcile_lines()
 
         move_name = move.name.split(' ')
-        if self.invoice_id.move_type in ('in_invoice', 'liq_purchase'):
-            move_name = "{}-RET-{}-{}".format(
-                move_name[0], self.company_id.id, move_name[1])
-        else:
-            move_name = "{}-RET-{}-{}".format(move_name[0], self.partner_id.id, move_name[1])
+
+        move_name = "{}-RET-{}-{}".format(
+            move_name[0], self.company_id.id, move_name[1])
         move.sudo().write({'name': move_name})
+
         self.sudo().write({'move_id': move.id})
         move.action_post()
 
