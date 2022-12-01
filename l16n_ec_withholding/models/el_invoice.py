@@ -1,14 +1,10 @@
-
-import os
-import time
 import logging
-import itertools
+import os
 
 from jinja2 import Environment, FileSystemLoader
 
-from odoo import api, models
-from odoo.exceptions import Warning as UserError
-
+from odoo import models
+from odoo.exceptions import (UserError)
 from . import utils
 from ..xades.sri import DocumentXML
 from ..xades.xades import Xades
@@ -311,13 +307,36 @@ class AccountInvoice(models.Model):
             inv_xml = DocumentXML(einvoice, obj.move_type)
             inv_xml.validate_xml()
             signed_document = einvoice
-            param_easyfac = {
-                'IdExterno': str(self.env.user.company_id.id) + '-' + str(obj.reference),
-                'RucEmpresa': str(self.env.user.company_id.partner_id.identifier),
-                'XmlString': signed_document
-            }
 
-            ok, errores = inv_xml.send_receipt(param_easyfac)
+            xades = Xades()
+            file_pk12 = obj.company_id.electronic_signature
+            password = obj.company_id.password_electronic_signature
+            xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
+            # obj.signed_document = signed_document
+            obj.authorization_number = access_key
+            logging.info('Factura Error ' + str(xades_error))
+            if xades_error:
+                error_msg = signed_document
+                # raise UserError(error_msg)
+
+            # ok, estado, errores = False #= inv_xml.send_receipt(signed_document, obj.company_id.env_service)
+            ok = False
+            estado = "False"
+            errores = "False"
+            logging.info('Factura Sri ' + estado)
+            obj.authorization_state = estado
+
+            if obj.company_id.env_service == '1':
+                obj.environment = 'PRUEBAS'
+            else:
+                obj.environment = 'PRODUCCION'
+
+            if not ok:
+                error_msg = errores
+                return False, errores
+            else:
+                obj.autorizado_sri = True
+            obj.autorizado_sri = True
             if ok:
                 obj.autorizado_sri = True
 

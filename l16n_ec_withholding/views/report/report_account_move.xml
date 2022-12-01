@@ -116,11 +116,8 @@
                                                 </span>
                                                 <br/>
                                                 <div class="text-align: left;">
-
-                                                    <img style="text-align: left;" t-if="o.authorization_number"
-                                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', o.authorization_number , 450, 60)"/>
-                                                    <img style="text-align: left;" t-else=""
-                                                         t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s&amp;humanreadable=1' % ('Code128', FALSE , 450, 60)"/>
+                                                    <img t-if="o.authorization_number" t-att-src="'/report/barcode/Code128/'+o.authorization_number"
+                                                     style="width:400px;height:25px" alt="Barcode"/>
                                                 </div>
                                                 <br/>
                                             </div>

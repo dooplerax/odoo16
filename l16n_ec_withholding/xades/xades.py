@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import logging
 import os
 import subprocess
-import logging
 
 
 class CheckDigit(object):
@@ -58,13 +58,14 @@ class Xades(object):
         JAVA_CMD = 'java'
         firma_path = os.path.join(os.path.dirname(__file__), JAR_PATH)
         file_pk12_path = os.path.join(os.path.dirname(__file__), file_pk12)
+
         command = [
             JAVA_CMD,
             '-jar',
             firma_path,
             xml_str,
-            base64.b64encode(file_pk12_path),
-            base64.b64encode(password)
+            base64.b64encode(file_pk12_path.encode('ascii')),
+            base64.b64encode(password.encode('ascii')),
         ]
         try:
             logging.info('Probando comando de firma digital')
@@ -74,6 +75,7 @@ class Xades(object):
             output = e.output
             logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
             logging.error('Error: %s' % output)
+            return True, e.output
 
         p = subprocess.Popen(
             command,
@@ -81,4 +83,4 @@ class Xades(object):
             stderr=subprocess.STDOUT
         )
         res = p.communicate()
-        return res[0]
+        return False, res[0]
