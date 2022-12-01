@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 
-import os
 import base64
 import logging
+import os
+from io import StringIO
 
 from lxml import etree
 from lxml.etree import fromstring, DocumentInvalid
 
-from ..models import utils
 from .xades import CheckDigit
+from ..models import utils
+try:
+    from suds.client import Client
+except ImportError:
+    logging.getLogger('xades.sri').info('Instalar libreria suds-jurko')
 
 SCHEMAS = {
     'out_invoice': 'schemas/factura.xsd',
@@ -55,42 +60,38 @@ class DocumentXML(object):
             return False
 
     @classmethod
-    def send_receipt(self, document):
+    def send_receipt(self, document, envairoment):
+
         """
         Metodo que envia el XML al WS
         """
-        try:
-            self.logger.info('Enviando documento para recepcion EasyFac')
-            buf = StringIO()
-            # buf.write(document)
-            # buffer_xml = buf.getvalue()
+        self.logger.info('Enviando documento para recepcion SRI')
+        buf = StringIO()
+        buf.write(document)
+        buffer_xml = base64.encodestring(buf.getvalue())
 
-           # if not utils.check_service('prueba'):
-                # TODO: implementar modo offline
-           #     raise 'Error SRI', 'Servicio SRI no disponible.'
-
-            # enviar al easyfacto el documento
-            client = Client(SriService.get_easy_fact())
-            result = client.service.GrabaArchivo(document)
-            self.logger.info('Estado de respuesta documento: %s' % result.Estado)
-            errores = []
-            if result.Estado == 'OK':
-                return True, errores
-            else:
-                """for comp in result.comprobantes:
-                    for m in comp[1][0].mensajes:
-                        rs = [m[1][0].tipo, m[1][0].mensaje]
-                        rs.append(getattr(m[1][0], 'informacionAdicional', ''))
-                        errores.append(' '.join(rs))
-                """
-                self.logger.error(result.Mensaje)
-                return False, ', '.join(result.Mensaje)
-        except EnvironmentError:
-            return False, 'Error en la conexion'
+        if not utils.check_service('prod'):
+            # TODO: implementar modo offline
+            raise Exception('Error SRI', 'Servicio SRI no disponible.')
+        self.logger.info('ambiente: %s' % SriService.get_active_ws(envairoment)[0])
+        client = Client(SriService.get_active_ws(envairoment)[0])
+        result = client.service.validarComprobante(buffer_xml)
+        self.logger.info('Estado de respuesta documento: %s' % result.estado)
+        errores = []
+        if result.estado in ('RECIBIDA'):
+            return True, result.estado, errores
+        else:
+            for comp in result.comprobantes:
+                for m in comp[1][0].mensajes:
+                    rs = [m[1][0].tipo, m[1][0].mensaje]
+                    rs.append(getattr(m[1][0], 'informacionAdicional', ''))
+                    errores.append(' '.join(rs))
+            self.logger.error(errores)
+            return False, result.estado, ', '.join(errores)
 
     def request_authorization(self, access_key):
         messages = []
-        client = Client(SriService.get_active_ws()[1])
+        client = (SriService.get_active_ws()[1])
         result = client.service.autorizacionComprobante(access_key)
         self.logger.debug("Respuesta de autorizacionComprobante:SRI")
         self.logger.debug(result)
