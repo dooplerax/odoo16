@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_l16n_ec_doopler_catalogs_l16n_ec_doopler_catalogs,l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs,model_l16n_ec_doopler_catalogs_l16n_ec_doopler_catalogs,base.group_user,1,1,1,1
+access_models,ec_models.ec_models,model_ec_models,base.group_user,1,1,1,1
