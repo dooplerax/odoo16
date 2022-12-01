@@ -1,0 +1,234 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="l16n_ec_doopler_catalogs.list">
+      <field name="name">l16n_ec_doopler_catalogs list</field>
+      <field name="model">l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="l16n_ec_doopler_catalogs.action_window">
+      <field name="name">l16n_ec_doopler_catalogs window</field>
+      <field name="res_model">l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="l16n_ec_doopler_catalogs.action_server">
+      <field name="name">l16n_ec_doopler_catalogs server</field>
+      <field name="model_id" ref="model_l16n_ec_doopler_catalogs_l16n_ec_doopler_catalogs"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+    <!-- Vistas de Clases Productos-->
+    <record model="ir.ui.view" id="cproduct_doclass_form_view">
+      <field name="name">cproduct.doclass.view.form</field>
+      <field name="model">cproduct.doclass</field>
+      <field name="arch" type="xml">
+        <form string="Formulario Clase">
+          <sheet>
+            <separator string="Información"/>
+            <!--<label class="oe_edit_only" for="cl_name" string="Clase de producto"/>-->
+            <group>
+              <group>
+                <field name="cl_name"/>
+              </group>
+              <group>
+                <field name="cl_name_code"/>
+              </group>
+            </group>
+        </sheet>
+        </form>
+      </field>
+    </record>
+    <!--Vista LIst de CLase-->
+    <record id="cproduct_doclass_list_view" model="ir.ui.view">
+        <field name="name">cproduct.doclass.list</field>
+        <field name="model">cproduct.doclass</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="Class Pro">
+              <field name="cl_name" string="Clase"/>
+              <field name="cl_name_code" string="Código"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vistas de Subclases Productos -->
+    <record model="ir.ui.view" id="subproduct_dosubclass_form_view">
+      <field name="name">subproduct.dosubclass.view.form</field>
+      <field name="model">subproduct.dosubclass</field>
+      <field name="arch" type="xml">
+        <form string="Formulario SubClase">
+          <sheet>
+            <label class="oe_edit_only" for="scl_name" string="Subclase de producto"/>
+            <h2>
+              <field name="scl_name"/>
+            </h2>
+            <group>
+              <group>
+                <separator string="Información"/>
+                <field name="scl_name_code"/>
+                <field name="cl_product_id"/>
+              </group>
+            </group>
+        </sheet>
+        </form>
+      </field>
+    </record>
+    <!-- Vistas de List Subclases Productos -->
+    <record id="subproduct_dosubclass_list_view" model="ir.ui.view">
+        <field name="name">subproduct.dosubclass.list</field>
+        <field name="model">subproduct.dosubclass</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="SubClass Pro">
+              <field name="scl_name" string="Subclase"/>
+              <field name="scl_name_code" string="Código"/>
+              <field name="cl_product_id" string="Clase"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vistas de Familia Productos -->
+    <record model="ir.ui.view" id="fproduct_dofamily_list_view">
+      <field name="name">fproduct.dofamily.view.tree</field>
+      <field name="model">fproduct.dofamily</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="f_name"/>
+          <field name="f_name_code"/>
+          <field name="scl_product_id"/>
+        </tree>
+      </field>
+    </record>
+      <record id="fproduct_dofamily_list_view" model="ir.ui.view">
+        <field name="name">fproduct.dofamily.list</field>
+        <field name="model">fproduct.dofamily</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="Familias Productos">
+              <field name="f_name" string="Familia"/>
+              <field name="f_name_code" string="Código"/>
+              <field name="scl_product_id" string="Subclase"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+    <!-- Vistas de Modelo Productos -->
+    <record model="ir.ui.view" id="mproduct_domodel_list_view">
+      <field name="name">mproduct.domodel.view.tree</field>
+      <field name="model">mproduct.domodel</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="m_name"/>
+          <field name="m_name_code"/>
+          <field name="f_product_id"/>
+        </tree>
+      </field>
+    </record>
+      <record id="mproduct_domodel_list_view" model="ir.ui.view">
+        <field name="name">mproduct.domodel.list</field>
+        <field name="model">mproduct.domodel</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <tree string="SubClass Pro">
+              <field name="m_name" string="Modelo"/>
+              <field name="m_name_code" string="Código"/>
+              <field name="f_product_id" string="Familia"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- DEFINICIONES-->
+
+    <!-- actions opening views on clases -->
+
+    <record model="ir.actions.act_window" id="cproduct_doclass_action_window">
+      <field name="name">Clases de Productos</field>
+      <field name="res_model">cproduct.doclass</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views subclases -->
+
+    <record model="ir.actions.act_window" id="subproduct_dosubclass_action_window">
+      <field name="name">Subclases de Productos</field>
+      <field name="res_model">subproduct.dosubclass</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views familia -->
+
+    <record model="ir.actions.act_window" id="fproduct_dofamily_action_window">
+      <field name="name">Familias de Productos</field>
+      <field name="res_model">fproduct.dofamily</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- actions opening views modelo -->
+
+    <record model="ir.actions.act_window" id="mproduct_domodel_action_window">
+      <field name="name">Modelos de Productos</field>
+      <field name="res_model">mproduct.domodel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Catalogos de productos" id="ec_doopler_catalogs_menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Clases de producto" id="cproduct_doclass_menu" parent="ec_doopler_catalogs_menu_root" action="cproduct_doclass_action_window"/>
+    <menuitem name="Subclases de producto" id="subproduct_dosubclass_menu" parent="ec_doopler_catalogs_menu_root" action="subproduct_dosubclass_action_window"/>
+    <menuitem name="Familias de producto" id="fproduct_dofamily_menu" parent="ec_doopler_catalogs_menu_root" action="fproduct_dofamily_action_window"/>
+    <menuitem name="Modelos de producto" id="mproduct_domodel_menu" parent="ec_doopler_catalogs_menu_root" action="mproduct_domodel_action_window"/>
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="l16n_ec_doopler_catalogs.menu_1_list" parent="l16n_ec_doopler_catalogs.menu_1"
+              action="l16n_ec_doopler_catalogs.action_window"/>
+    <menuitem name="Server to list" id="l16n_ec_doopler_catalogs" parent="l16n_ec_doopler_catalogs.menu_2"
+              action="l16n_ec_doopler_catalogs.action_server"/>
+-->
+    <!-- Herencias de Vistas -->
+    <record id="cproduct_template_inherit_form" model="ir.ui.view">
+            <field name="name">product.template.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"></field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/field[@name='product_tooltip']" position="after">
+                    <field name="class_inherit"/>
+                    <field name="subclass_inherit" domain="[('cl_product_id','=',class_inherit)]"/>
+                    <field name="fa_class_inherit" domain="[('scl_product_id','=',subclass_inherit)]"/>
+                    <field name="mod_class_inherit" domain="[('f_product_id','=',fa_class_inherit)]"/>
+                </xpath>
+                <!--<field name="company_id" position="replace">
+                    <field name="need_class"/>
+                </field>-->
+            </field>
+        </record>
+
+  </data>
+</odoo>
