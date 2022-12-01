@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_l16n_ec_doopler_catalogs_l16n_ec_doopler_catalogs,l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs,model_l16n_ec_doopler_catalogs_l16n_ec_doopler_catalogs,base.group_user,1,1,1,1
-access_models,ec_models.ec_models,model_ec_models,base.group_user,1,1,1,1
+access_cproduct_doclass,cproduct_doclass,model_cproduct_doclass,base.group_user,1,1,1,1
+access_subproduct_dosubclass,subproduct_dosubclass,model_subproduct_dosubclass,base.group_user,1,1,1,1
+access_fproduct_dofamily,fproduct_dofamily,model_fproduct_dofamily,base.group_user,1,1,1,1
+access_mproduct_domodel,mproduct_domodel,model_mproduct_domodel,base.group_user,1,1,1,1
+

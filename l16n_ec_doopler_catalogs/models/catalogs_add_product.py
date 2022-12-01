@@ -33,11 +33,10 @@ class AddCatalogInProduct(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         producto = super(AddCatalogInProduct, self).create(vals_list)
-        sequense = self._calculate_sequence()
+        sequense = producto._calculate_sequence()
         str_seq = str(sequense).zfill(4)
         code = str(
-            f"{producto.class_inherit.cl_name_code}-{producto.subclass_inherit.scl_name_code}-{producto.fa_class_inherit.f_name_code}-{producto.mod_class_inherit.m_name_code}" -
-            f"{str_seq}")
+            f"{producto.class_inherit.cl_name_code}-{producto.subclass_inherit.scl_name_code}-{producto.fa_class_inherit.f_name_code}-{producto.mod_class_inherit.m_name_code}-{str_seq}")
 
         producto.write({'default_code': code, "sequence": sequense})
 
