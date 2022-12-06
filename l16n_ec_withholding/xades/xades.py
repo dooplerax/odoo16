@@ -6,6 +6,7 @@ import os
 import subprocess
 
 
+
 class CheckDigit(object):
     # Definicion modulo 11
     _MODULO_11 = {
@@ -47,6 +48,8 @@ class CheckDigit(object):
 
 
 class Xades(object):
+    def path(self):
+        return os.path.abspath(os.path.dirname(__file__))
 
     def sign(self, xml_document, file_pk12, password):
         """
@@ -54,19 +57,27 @@ class Xades(object):
         TODO: Revisar return
         """
         xml_str = xml_document.encode('utf-8')
-        JAR_PATH = 'firma/firmaXadesBes.jar'
+        # JAR_PATH = 'firma/firmaXadesBes.jar'
+        JAR_PATH = 'firma/firma/firma.jar'
         JAVA_CMD = 'java'
-        firma_path = os.path.join(os.path.dirname(__file__), JAR_PATH)
+        firma_path = os.path.join(self.path(), JAR_PATH)
         file_pk12_path = os.path.join(os.path.dirname(__file__), file_pk12)
+        cwd = os.path.join(self.path(), 'java')
 
         command = [
             JAVA_CMD,
             '-jar',
+            '-Djava.awt.headless=true',
+            '-XX:MaxHeapSize=512m',
+            '-XX:InitialHeapSize=512m',
+            '-XX:CompressedClassSpaceSize=64m',
+            '-XX:MaxMetaspaceSize=256m',
             firma_path,
             xml_str,
             base64.b64encode(file_pk12_path.encode('ascii')),
             base64.b64encode(password.encode('ascii')),
         ]
+
         try:
             logging.info('Probando comando de firma digital')
             subprocess.check_output(command)
@@ -75,12 +86,17 @@ class Xades(object):
             output = e.output
             logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
             logging.error('Error: %s' % output)
+            # queue.put((False, e.output))
             return True, e.output
 
         p = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT
+            stderr=subprocess.PIPE,
+            stdin=subprocess.PIPE,
+            cwd=cwd
         )
+        p.wait()
         res = p.communicate()
+        # queue.put((True,res[0]))
         return False, res[0]
