@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import glob
 import logging
 import os
 import subprocess
@@ -59,10 +60,20 @@ class Xades(object):
         xml_str = xml_document.encode('utf-8')
         # JAR_PATH = 'firma/firmaXadesBes.jar'
         JAR_PATH = 'firma/firma/firma.jar'
-        JAVA_CMD = 'java/'
+        JAVA_CMD = 'java'
         firma_path = os.path.join(self.path(), JAR_PATH)
         file_pk12_path = os.path.join(os.path.dirname(__file__), file_pk12)
         cwd = os.path.join(self.path(), 'java')
+        env = {}
+        env.update(os.environ)
+        if os.name == 'nt':
+            a = ';'
+        else:
+            a = ':'
+        libs = os.path.join(self.path(), '', 'java', 'lib', '*.jar')
+        env['CLASSPATH'] = os.path.join(self.path(), '..', 'java' + a) + \
+                           a.join(glob.glob(libs)) + a + os.path.join(
+            self.path(), '..', 'custom_reports')
 
         command = [
             JAVA_CMD,
@@ -94,6 +105,7 @@ class Xades(object):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             stdin=subprocess.PIPE,
+            env=env,
             cwd=cwd
         )
         p.wait()

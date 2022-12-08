@@ -329,7 +329,7 @@ class AccountInvoice(models.Model):
             ok, estado, errores  = inv_xml.send_receipt(signed_document)
             
             logging.info('Factura Sri ' + estado)
-            obj.authorization_state = estado
+            # obj.authorization_state = estado
 
             if obj.company_id.env_service == '1':
                 obj.environment = 'PRUEBAS'
