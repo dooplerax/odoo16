@@ -1,44 +1,5 @@
 <odoo>
   <data>
-    <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="l16n_ec_doopler_catalogs.list">
-      <field name="name">l16n_ec_doopler_catalogs list</field>
-      <field name="model">l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
--->
-
-    <!-- actions opening views on models -->
-<!--
-    <record model="ir.actions.act_window" id="l16n_ec_doopler_catalogs.action_window">
-      <field name="name">l16n_ec_doopler_catalogs window</field>
-      <field name="res_model">l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs</field>
-      <field name="view_mode">tree,form</field>
-    </record>
--->
-
-    <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="l16n_ec_doopler_catalogs.action_server">
-      <field name="name">l16n_ec_doopler_catalogs server</field>
-      <field name="model_id" ref="model_l16n_ec_doopler_catalogs_l16n_ec_doopler_catalogs"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
-    </record>
--->
     <!-- Vistas de Clases Productos-->
     <record model="ir.ui.view" id="cproduct_doclass_form_view">
       <field name="name">cproduct.doclass.view.form</field>
@@ -200,17 +161,12 @@
 
     <!-- menu categories -->
 
-    <menuitem name="Clases de producto" id="cproduct_doclass_menu" parent="ec_doopler_catalogs_menu_root" action="cproduct_doclass_action_window"/>
-    <menuitem name="Subclases de producto" id="subproduct_dosubclass_menu" parent="ec_doopler_catalogs_menu_root" action="subproduct_dosubclass_action_window"/>
-    <menuitem name="Familias de producto" id="fproduct_dofamily_menu" parent="ec_doopler_catalogs_menu_root" action="fproduct_dofamily_action_window"/>
-    <menuitem name="Modelos de producto" id="mproduct_domodel_menu" parent="ec_doopler_catalogs_menu_root" action="mproduct_domodel_action_window"/>
+    <menuitem name="Clases de producto" id="cproduct_doclass_menu" parent="stock.menu_product_in_config_stock" action="cproduct_doclass_action_window"/>
+    <menuitem name="Subclases de producto" id="subproduct_dosubclass_menu" parent="stock.menu_product_in_config_stock" action="subproduct_dosubclass_action_window"/>
+    <menuitem name="Familias de producto" id="fproduct_dofamily_menu" parent="stock.menu_product_in_config_stock" action="fproduct_dofamily_action_window"/>
+    <menuitem name="Modelos de producto" id="mproduct_domodel_menu" parent="stock.menu_product_in_config_stock" action="mproduct_domodel_action_window"/>
     <!-- actions -->
-<!--
-    <menuitem name="List" id="l16n_ec_doopler_catalogs.menu_1_list" parent="l16n_ec_doopler_catalogs.menu_1"
-              action="l16n_ec_doopler_catalogs.action_window"/>
-    <menuitem name="Server to list" id="l16n_ec_doopler_catalogs" parent="l16n_ec_doopler_catalogs.menu_2"
-              action="l16n_ec_doopler_catalogs.action_server"/>
--->
+
     <!-- Herencias de Vistas -->
     <record id="cproduct_template_inherit_form" model="ir.ui.view">
             <field name="name">product.template.form.inherit</field>
@@ -219,16 +175,29 @@
             <field name="priority" eval="8"/>
             <field name="arch" type="xml">
                 <xpath expr="//group/field[@name='product_tooltip']" position="after">
-                    <field name="class_inherit"/>
-                    <field name="subclass_inherit" domain="[('cl_product_id','=',class_inherit)]"/>
-                    <field name="fa_class_inherit" domain="[('scl_product_id','=',subclass_inherit)]"/>
-                    <field name="mod_class_inherit" domain="[('f_product_id','=',fa_class_inherit)]"/>
+                    <field name="class_inherit" required="1"/>
+                    <field name="subclass_inherit" required="1" domain="[('cl_product_id','=',class_inherit)]"/>
+                    <field name="fa_class_inherit" required="1" domain="[('scl_product_id','=',subclass_inherit)]"/>
+                    <field name="mod_class_inherit" required="1" domain="[('f_product_id','=',fa_class_inherit)]"/>
                 </xpath>
-                <!--<field name="company_id" position="replace">
-                    <field name="need_class"/>
-                </field>-->
+               
+                <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>  -->
             </field>
         </record>
+        <record id="cproduct_template_inherit_only_form" model="ir.ui.view">
+            <field name="name">product.template.only.form.inherit</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"></field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group/field[@name='default_code']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </field>
+        </record>
+      
 
   </data>
 </odoo>

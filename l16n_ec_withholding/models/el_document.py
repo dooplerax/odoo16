@@ -6,14 +6,11 @@
 
 
 import base64
-from datetime import datetime
 import io
 
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.exceptions import Warning as UserError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-
-
 from . import utils
 from ..xades.sri import SriService
 
@@ -100,8 +97,8 @@ class Edocument(models.AbstractModel):
         Codigo de secuencial
         :return:
         """
-        code ="{}".format(self.company_id.document_sequense).zfill(9)
-        self.sudo().company_id.document_sequense +=1
+        code = "{}".format(self.company_id.document_sequense).zfill(8)
+        self.sudo().company_id.document_sequense += 1
         return code
 
     def get_access_key(self, name):
@@ -110,15 +107,17 @@ class Edocument(models.AbstractModel):
         :param name:
         :return:
         """
-        if name == 'account.invoice':
+        if name == 'account.move':
             auth = self.l10n_latam_document_type_id
-            ld = "{}{}{}".format( self.invoice_date.year, str(self.invoice_date.month).zfill(2), str(self.invoice_date.day).zfill(2))
-            numero = getattr(self, 'l10n_latam_document_number').replace('-','')
+            ld = "{}{}{}".format(str(self.invoice_date.day).zfill(2), str(self.invoice_date.month).zfill(2),
+                                 self.invoice_date.year)
+            numero = getattr(self, 'l10n_latam_document_number').replace('-', '')
         
         elif name == 'account.retention':
             auth = self.l10n_latam_document_type_id
-            ld = "{}{}{}".format( self.date.year, str(self.date.month).zfill(2), str(self.date.day).zfill(2))
-            numero = getattr(self, 'name').replace('-','')
+            ld = "{}{}{}".format(str(self.date.day).zfill(2), str(self.date.month).zfill(2),
+                                 self.date.year)
+            numero = getattr(self, 'name').replace('-', '')
         
         fecha = ''.join(ld)
         tcomp = utils.tipoDocumento[auth.code]
@@ -131,8 +130,7 @@ class Edocument(models.AbstractModel):
             )
         return access_key
 
-    
-    def _get_codes(self, name='account.invoice'):
+    def _get_codes(self, name='account.move'):
         """
         retorna la cleve de acceso y e codigo de emision
         :param name:

@@ -27,7 +27,9 @@ class DoClassCatalog(models.Model):
     c_id = fields.Many2one('cproduct.doclass')
     cl_name = fields.Char('Clases de productos', required=True)
     cl_name_code = fields.Char('Código de clase', required=True, size=4)
-
+    _sql_constraints = [
+        ('cl_name_code_uniq', 'unique (cl_name_code)', "Código ya registrado!"),
+    ]
 
     #Relaciones entre tablas subclase
     scl_product_ids = fields.One2many('subproduct.dosubclass','cl_product_id', string='Subclases')
@@ -52,6 +54,10 @@ class DoSubClassCatalog(models.Model):
 
     #Relacion entre tablas Family
     f_product_ids = fields.One2many('fproduct.dofamily','scl_product_id', string='Subclases')
+    
+    _sql_constraints = [
+        ('scl_name_code_uniq', 'unique (scl_name_code)', "Código ya registrado!"),
+    ]
 
     @api.ondelete(at_uninstall=False)
     def check_del_class(self):
@@ -73,6 +79,9 @@ class DoFamilyCatalog(models.Model):
 
     #apunta a subclase
     scl_product_id = fields.Many2one('subproduct.dosubclass', "Subclase")
+    _sql_constraints = [
+        ('f_name_code_uniq', 'unique (f_name_code)', "Código ya registrado!"),
+    ]
 
 
 
@@ -82,14 +91,14 @@ class DoModelCatalog(models.Model):
     _rec_name = 'm_name'
 
     m_name = fields.Char('Modelo de producto', required=True)
-    m_name_code = fields.Char('Código de Modelo', required=True, size=4)
+    m_name_code = fields.Char('Código de Modelo', required=True, size=4, unique=True)
 
     #Apunta a Familia
     f_product_id = fields.Many2one('fproduct.dofamily', string="Familia")
-
-    # apunta a familia
-    #scl_product_id = fields.Many2one('subproduct.dosubclass', "Subclase")
-
+    
+    _sql_constraints = [
+        ('f_name_code_uniq', 'unique (m_name_code)', "Código ya registrado!"),
+    ]
 
 
 

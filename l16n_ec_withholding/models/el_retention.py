@@ -146,25 +146,25 @@ class AccountWithdrawing(models.Model):
             ewithdrawing = self.render_document(obj, access_key, emission_code)
             inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
             inv_xml.validate_xml()
-            # xades = Xades()
-            # file_pk12 = obj.company_id.electronic_signature
-            # password = obj.company_id.password_electronic_signature
+            xades = Xades()
+            file_pk12 = obj.company_id.electronic_signature
+            password = obj.company_id.password_electronic_signature
 
-            # xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
-            # if xades_error:
-            #     error_msg = signed_document
-            #     raise UserError(error_msg)
+            xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
+            if xades_error:
+                error_msg = signed_document
+                raise UserError(error_msg)
             
-            ok, estado, errores = inv_xml.send_receipt(signed_document, obj.company_id.env_service)
-            obj.estado_autorizacion = estado
+            ok, estado, errores = inv_xml.send_receipt(signed_document)
+            obj.authorization_state = estado
 
             if obj.company_id.env_service == '1':
-                obj.ambiente = 'PRUEBAS'
+                obj.environment = 'PRUEBAS'
             else:
-                obj.ambiente = 'PRODUCCION'
+                obj.environment = 'PRODUCCION'
 
             obj.authorization_number = access_key
-            obj.claveacceso = access_key
+        
 
             if not ok:
                 error_msg = errores
@@ -172,12 +172,6 @@ class AccountWithdrawing(models.Model):
             else:
                 obj.authorization_sri = True
 
-            obj.authorization_sri = True
-            attac = self.env['ir.attachment'].search([('res_name', '=', obj.name),
-                                                        ('res_model', '=', 'account.retention'),
-                                                        ('name', 'ilike', '.pdf'),
-                                                        ('company_id', '=', obj.company_id.id)
-                                                        ])
 
             # for at in attac:
             #     at.unlink()

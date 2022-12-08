@@ -6,7 +6,7 @@
         <razonSocial>{{ razonSocial }}</razonSocial>
         <nombreComercial>{{ nombreComercial }}</nombreComercial>
         <ruc>{{ ruc }}</ruc>
-        <claveAcceso/>
+        <claveAcceso>{{claveAcceso}}</claveAcceso>
         <codDoc>{{ codDoc }}</codDoc>
         <estab>{{ estab }}</estab>
         <ptoEmi>{{ ptoEmi }}</ptoEmi>

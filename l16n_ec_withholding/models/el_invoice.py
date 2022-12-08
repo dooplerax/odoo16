@@ -1,4 +1,6 @@
+from concurrent.futures import ProcessPoolExecutor
 import logging
+from multiprocessing import Process,Queue
 import os
 
 from jinja2 import Environment, FileSystemLoader
@@ -147,24 +149,24 @@ class AccountInvoice(models.Model):
                 'precioTotalSinImpuesto': '%.2f' % (line.price_subtotal)
             }
         
-        totalConImpuestos = []
-        taxes = self.env['account.tax'].search([('type_tax_use', '=', 'sale'),('company_id', '=', invoice.company_id.id)])
-        for mov in invoice.line_ids:
-            temp_tax = taxes.filtered(lambda x: x.name == mov.name)
-            if temp_tax and temp_tax.tax_group_id.l10n_ec_type in ['vat12', 'vat0', 'ice']:
-                totalImpuesto = {
-                            'codigo': utils.tabla17[temp_tax.tax_group_id.l10n_ec_type],
-                            'codigoPorcentaje': utils.tabla18[str(int(temp_tax.real_amount))],
-                            'baseImponible': mov.tax_base_amount,
-                            'tarifa': int(temp_tax.real_amount),
-                            'valor': abs(mov.amount_currency)
-                        }
-                totalConImpuestos.append(totalImpuesto)
-          
+            totalConImpuestos = []
+            taxes = self.env['account.tax'].search([('type_tax_use', '=', 'sale'),('company_id', '=', invoice.company_id.id)])
+            for mov in invoice.line_ids:
+                temp_tax = taxes.filtered(lambda x: x.name == mov.name)
+                if temp_tax and temp_tax.tax_group_id.l10n_ec_type in ['vat12', 'vat0', 'ice']:
+                    totalImpuesto = {
+                                'codigo': utils.tabla17[temp_tax.tax_group_id.l10n_ec_type],
+                                'codigoPorcentaje': utils.tabla18[str(int(temp_tax.real_amount))],
+                                'baseImponible': mov.tax_base_amount,
+                                'tarifa': int(temp_tax.real_amount),
+                                'valor': abs(mov.amount_currency)
+                            }
+                    totalConImpuestos.append(totalImpuesto)
+
       
         
-        detalle.update({'impuestos': totalConImpuestos})
-        detalles.append(detalle)
+            detalle.update({'impuestos': totalConImpuestos})
+            detalles.append(detalle)
 
         return {'detalles': detalles}
 
@@ -302,27 +304,30 @@ class AccountInvoice(models.Model):
                 continue
             # self.check_date(obj.invoice_date)
             # self.check_before_sent()
-            access_key, emission_code = self._get_codes(name='account.invoice')
+            access_key, emission_code = self._get_codes(name='account.move')
             einvoice = self.render_document(obj, access_key, emission_code)
             inv_xml = DocumentXML(einvoice, obj.move_type)
             inv_xml.validate_xml()
-            signed_document = einvoice
 
             xades = Xades()
             file_pk12 = obj.company_id.electronic_signature
             password = obj.company_id.password_electronic_signature
             xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
+
+
+            # resul = queue.get()
+            # xades_error = resul[0]
+            #
+            # signed_document = resul[1]
             # obj.signed_document = signed_document
             obj.authorization_number = access_key
             logging.info('Factura Error ' + str(xades_error))
             if xades_error:
                 error_msg = signed_document
-                # raise UserError(error_msg)
+                raise UserError(error_msg)
 
-            # ok, estado, errores = False #= inv_xml.send_receipt(signed_document, obj.company_id.env_service)
-            ok = False
-            estado = "False"
-            errores = "False"
+            ok, estado, errores  = inv_xml.send_receipt(signed_document)
+            
             logging.info('Factura Sri ' + estado)
             obj.authorization_state = estado
 
@@ -335,13 +340,8 @@ class AccountInvoice(models.Model):
                 error_msg = errores
                 return False, errores
             else:
-                obj.autorizado_sri = True
-            obj.autorizado_sri = True
-            if ok:
-                obj.autorizado_sri = True
-
-            if not ok:
-                raise UserError(errores)
+                obj.authorization_sri = True
+            
 
         #except Exception:
         #    raise UserError(U'Error de conección')
