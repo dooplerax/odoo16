@@ -7,10 +7,10 @@ class AddCatalogInProduct(models.Model):
     _inherit = 'product.template'
 
 
-    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto', required=True)
-    subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto', required=True)
-    fa_class_inherit = fields.Many2one('fproduct.dofamily', 'Familia de producto', required=True)
-    mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto', required=True)
+    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto' )
+    subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto')
+    fa_class_inherit = fields.Many2one('fproduct.dofamily', 'Familia de producto')
+    mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto')
     sequence = fields.Integer("Secuencia", default=1)
 
     #@api.onchange('class_inherit')
