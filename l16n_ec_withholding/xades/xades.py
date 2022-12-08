@@ -89,16 +89,16 @@ class Xades(object):
             base64.b64encode(password.encode('ascii')),
         ]
         logging.info('Probando '.format(cwd))
-        try:
-            logging.info('Probando comando de firma digital')
-            subprocess.check_output(command)
-        except subprocess.CalledProcessError as e:
-            returncode = e.returncode
-            output = e.output
-            logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
-            logging.error('Error: %s' % output)
-            # queue.put((False, e.output))
-            return True, e.output
+        # try:
+        #     logging.info('Probando comando de firma digital')
+        #     subprocess.check_output(command)
+        # except subprocess.CalledProcessError as e:
+        #     returncode = e.returncode
+        #     output = e.output
+        #     logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
+        #     logging.error('Error: %s' % output)
+        #     # queue.put((False, e.output))
+        #     return True, e.output
 
         p = subprocess.Popen(
             command,
