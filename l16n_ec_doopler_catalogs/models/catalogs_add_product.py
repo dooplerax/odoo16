@@ -23,24 +23,59 @@ class AddCatalogInProduct(models.Model):
     # counter_se = fields.Char("contador s", default=lambda self: _('New'))
     # codes = fields.Char('Code', default=lambda self: _('New'), track_visibility='onchange')
 
-    @api.model
-    def create(self, waltz):
-        if waltz:
-            waltz['codes'] = self.env['ir.sequence'].next_by_code('sprogroup.purchase.request') or _('New')
-
-        return super(AddCatalogInProduct, self).create(waltz)
-
     @api.model_create_multi
     def create(self, vals_list):
         producto = super(AddCatalogInProduct, self).create(vals_list)
         sequense = producto._calculate_sequence()
-        str_seq = str(sequense).zfill(4)
-        code = str(
-            f"{producto.class_inherit.cl_name_code}-{producto.subclass_inherit.scl_name_code}-{producto.fa_class_inherit.f_name_code}-{producto.mod_class_inherit.m_name_code}-{str_seq}")
-
+        code =self._generate_product_code(sequense)
         producto.write({'default_code': code, "sequence": sequense})
-
         return producto
+    
+    def write(self, vals):  
+        vals['default_code'] = self._generate_product_code()
+        producto = super(AddCatalogInProduct, self).write(vals)
+        
+        pass
+             
+        
+    @api.onchange('class_inherit')
+    def change_class_inehrit(self):
+        self.subclass_inherit = False
+        self.fa_class_inherit = False
+        self.mod_class_inherit = False
+        self.default_code = self._generate_product_code()
+    
+    @api.onchange('subclass_inherit')
+    def change_subclass_inherit(self):
+        self.fa_class_inherit = False
+        self.mod_class_inherit = False
+        self.default_code = self._generate_product_code()
+    
+    @api.onchange('fa_class_inherit')
+    def change_fa_class_inherit(self):
+        
+        self.mod_class_inherit = False
+        self.default_code = self._generate_product_code()
+    
+    @api.onchange('mod_class_inherit')
+    def change_mod_class_inherit(self):
+        self.default_code = self._generate_product_code()
+        
+    def _generate_product_code(self,sequence = None):
+        if sequence:
+            str_seq = str(sequence).zfill(4)
+        else:
+            str_seq = str(self.sequence if self.sequence else 0).zfill(4)
+        
+        code = "{}-{}-{}-{}-{}".format(
+            self.class_inherit.cl_name_code,
+            self.subclass_inherit.scl_name_code,
+            self.fa_class_inherit.f_name_code,
+            self.mod_class_inherit.m_name_code,
+            str_seq
+        )
+        return code
+             
 
     def _calculate_sequence(self):
         self.ensure_one()
