@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import base64
+import glob
 import logging
 import os
 import subprocess
@@ -63,6 +64,16 @@ class Xades(object):
         firma_path = os.path.join(self.path(), JAR_PATH)
         file_pk12_path = os.path.join(os.path.dirname(__file__), file_pk12)
         cwd = os.path.join(self.path(), 'java')
+        env = {}
+        env.update(os.environ)
+        if os.name == 'nt':
+            a = ';'
+        else:
+            a = ':'
+        libs = os.path.join(self.path(), '', 'java', 'lib', '*.jar')
+        env['CLASSPATH'] = os.path.join(self.path(), '..', 'java' + a) + \
+                           a.join(glob.glob(libs)) + a + os.path.join(
+            self.path(), '..', 'custom_reports')
 
         command = [
             JAVA_CMD,
@@ -77,23 +88,24 @@ class Xades(object):
             base64.b64encode(file_pk12_path.encode('ascii')),
             base64.b64encode(password.encode('ascii')),
         ]
-
-        try:
-            logging.info('Probando comando de firma digital')
-            subprocess.check_output(command)
-        except subprocess.CalledProcessError as e:
-            returncode = e.returncode
-            output = e.output
-            logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
-            logging.error('Error: %s' % output)
-            # queue.put((False, e.output))
-            return True, e.output
+        logging.info('Probando '.format(cwd))
+        # try:
+        #     logging.info('Probando comando de firma digital')
+        #     subprocess.check_output(command)
+        # except subprocess.CalledProcessError as e:
+        #     returncode = e.returncode
+        #     output = e.output
+        #     logging.error('Llamada a proceso JAVA codigo: %s' % returncode)
+        #     logging.error('Error: %s' % output)
+        #     # queue.put((False, e.output))
+        #     return True, e.output
 
         p = subprocess.Popen(
             command,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             stdin=subprocess.PIPE,
+            env=env,
             cwd=cwd
         )
         p.wait()
