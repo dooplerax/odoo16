@@ -313,6 +313,8 @@ class AccountInvoice(models.Model):
             file_pk12 = obj.company_id.electronic_signature
             password = obj.company_id.password_electronic_signature
             xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
+            xades_error = False
+            signed_document =""
 
 
             # resul = queue.get()
