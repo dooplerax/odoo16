@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+                id="id_extracto_reporte"
+                string="Reporte de Extraco Bancario"
+                model="report.l10n_ec_reconcile.extracto_reporte"
+                report_type="qweb-pdf"
+                name="l10n_ec_reconcile.extracto_reporte"
+                file="l10n_ec_reconcile.extracto_reporte"/>
+    </data>
+</odoo>
