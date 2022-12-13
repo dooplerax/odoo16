@@ -6,15 +6,23 @@
     'category': 'Generic Modules/Accounting',
     'license': 'AGPL-3',
     'depends': [
-        'account_accountant',
+        'web','account_accountant',
     ],
     'author': 'Danner Marante',
     'website': '',
-    'qweb': ['static/src/xml/*.xml'],
+    'assets': {
+        'web.assets_backend': [
+            # 'l16n_ec_reconcile/static/src/js/conciliacion.js',
+            'l16n_ec_reconcile/static/src/js/mov_bancarios.js',
+            'l16n_ec_reconcile/static/src/xml/banck_move.xml',
+            # 'l16n_ec_reconcile/static/src/xml/conciliacion.xml',
+            
+            ]
+    },
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
-        # 'views/conciliacion.xml',
+        'views/conciliacion.xml',
         # 'views/cargas_iniciales.xml',
         # 'views/reporte.xml',
         # 'views/extracto_reporte.xml',
