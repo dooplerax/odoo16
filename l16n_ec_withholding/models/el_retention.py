@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import os
-import time
 import logging
+import os
 
 from jinja2 import Environment, FileSystemLoader
 
-from odoo import models, api, fields
+from odoo import models, fields
 from odoo.exceptions import Warning as UserError
-
 from . import utils
 from ..xades.sri import DocumentXML
 from ..xades.xades import Xades

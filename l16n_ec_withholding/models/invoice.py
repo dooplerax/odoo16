@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from datetime import datetime
-from odoo import api, fields, models, _
 
+from odoo import api, fields, models, _
 from odoo.exceptions import (UserError)
 from . import utils
+
 
 class AccountEpayment(models.Model):
     _name = 'account.epayment'
@@ -70,7 +71,7 @@ class AccountMove(models.Model):
     def action_post(self):
         super(AccountMove, self).action_post()
         if self.has_retention:
-          self.action_withholding_create()
+            self.action_withholding_create()
     
     def action_withholding_create(self):
         """
@@ -136,7 +137,7 @@ class AccountMove(models.Model):
                             'tax_id': tax.id,
                             'base': value_base,
                             'amount': value_amount, 
-                            'account_id':tax.invoice_repartition_line_ids[1].account_id.id
+                            'account_id': tax.invoice_repartition_line_ids[1].account_id.id
                         }))
                 
             withdrawing_data.update({'move_ids': lines_data})
