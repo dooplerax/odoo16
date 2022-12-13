@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+<div t-name="l16n_ec_reconcile.mov_bancarios" class="o_reconciliation">
+        <div class="o_form_view">
+        <div class="o_form_sheet_bg">
+        <div class="o_form_sheet">
+            <div class="row">
+                 <div cass="col-10">
+                    <div class="panel panel-default">
+                    <input id="id_inicio" type="hidden" value="0"></input>
+                    <div class="panel-heading">
+                        <div class="container">
+                        <h2>Movimientos Bancarios</h2>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="container">
+                            <div class="row">
+                        <div class="col-3">
+                                <label>Fecha Desde</label>
+                            <input id="id_fecha_desde" type="date" class="form-control datepicker"></input>
+                            </div>
+                            <div class="col-3">
+                                <label>Fecha Hasta</label>
+                                <input id="id_fecha_hasta" type="date" class="form-control"></input>
+                            </div>
+                            <div class="col-3">
+                                <label>Número de Documento/Cheque </label>
+                                <input id="id_nodocumento" class="form-control"></input>
+                            </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-3">
+                                 <label>Seleccione</label>
+                                <select id="id_select" class="form-control">
+                                    <option value="mayor" defaul="true">Mayor que</option>
+                                    <option value="menor">Menor que</option>
+                                    <option value="Igual">Igual a</option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                  <label>Valor</label>
+                                <input id="id_valor" class="form-control"></input>
+                            </div>
+                            <div class="col-3 ">
+                                <div class="clientes"></div>
+                            </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-3">
+                                <div class="cuentas"></div>
+                            </div>
+                            <div class="col-3">
+                                 <label>Estado</label>
+                                <select id="id_estado" class="form-control">
+                                    <option value="todos" defaul="true">Todas</option>
+                                    <option value="conciliado">Conciliados</option>
+                                    <option value="noconciliado">No Conciliados</option>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                 <button style="margin-top:23px" id="id_btn_movimientos_bancos" type="button"
+                                         class="btn btn-primary ">Buscar</button>
+                                <button style="margin-top:23px; margin-left:20px" id="id_btn_movimientos_bancos_export"
+                                        type="button"
+                                        class="btn btn-primary ">Exportar</button>
+                            </div>
+                        </div>
+                        <div class="list_bancos">
+
+                            </div>
+                            </div>
+
+                    </div>
+                </div>
+                 </div>
+            </div>
+
+        </div>
+        </div>
+        </div>
+    </t>
+</templates>
