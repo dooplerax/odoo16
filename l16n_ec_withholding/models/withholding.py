@@ -200,7 +200,7 @@ class AccountWithdrawing(models.Model):
         if not self.invoice_id.has_retention:
             self._create_move()
         else:
-            self.sudo().write({'move_id': self.invoice_id})
+            self.sudo().write({'move_id': self.invoice_id.id})
         return True
 
     def action_validate(self):
