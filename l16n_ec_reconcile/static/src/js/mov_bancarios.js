@@ -13,6 +13,9 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
     contentTemplate: 'l16n_ec_reconcile.mov_bancarios',
     events: {
       'click .id_btn_buscar': 'actionBuscar',
+      'click .id_btn_conciliar': 'actionConciliar',
+      'click .btn_siquiente': 'actionSiquiente',
+      'click .btn_anterior': 'actionAnterior',
     },
     start: function () {
       var self = this
@@ -70,9 +73,30 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
           inicio,
         ],
       }).then(function (result) {
-        var html = QWeb.render('TableResultLine', { items: result })
+        var html = QWeb.render('TableResultLine', {
+          items: result,
+          init: inicio,
+        })
         $('#id_table_result').html(html)
       })
+    },
+    actionConciliar: function (e) {
+      console.log(e.currentTarget.id)
+    },
+
+    actionSiquiente: function () {
+      var total = $('#id_inicio').val()
+      total = parseInt(total) + 1
+      $('#id_inicio').val(total)
+      this.actionBuscar()
+    },
+    actionAnterior: function () {
+      var total = $('#id_inicio').val()
+      if (total > 0) {
+        total = parseInt(total) - 1
+        $('#id_inicio').val(total)
+        this.actionBuscar()
+      }
     },
   })
   core.action_registry.add('movimientos_bancarios', BanckMove)
