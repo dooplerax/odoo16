@@ -16,7 +16,7 @@ class MovimientosBancarios(models.TransientModel):
 
     def _lines(self, fecha_inicio, fecha_hasta, no_documento, id_select, id_valor, partner, prm_account,estados,limit=False ):
         account = """select id from account_account
-                                where internal_type = 'liquidity' 
+                                where account_type ='asset_cash' 
                                 and company_id = %s""" % (str(self.env.user.company_id.id))
         self._cr.execute(account)
         list_cuentas = self._cr.fetchall()
@@ -27,7 +27,7 @@ class MovimientosBancarios(models.TransientModel):
         if fecha_hasta:
             where += "and lin.date <= '{}'".format(fecha_hasta)
         if no_documento:
-            where += "and ( mov.name like '%{}%' or mov.numero like '%{}%')".format(no_documento,no_documento)
+            where += "and ( mov.name like '%{}%')".format(no_documento,no_documento)
         if id_valor:
             valor =float(id_valor)
             if id_select == 'mayor':
@@ -39,7 +39,7 @@ class MovimientosBancarios(models.TransientModel):
         if int(partner) != 0:
             where += " and par.id =" + partner
 
-        if int(prm_account) != 0:
+        if prm_account and int(prm_account) != 0:
             where += " and lin.account_id ={}".format(prm_account)
         if estados == "conciliado":
             where += " and lin.conciled = True"
@@ -59,7 +59,7 @@ class MovimientosBancarios(models.TransientModel):
 
             sql = """
                     select mov.name move_name, lin.date ,lin.name lin_name,lin.balance ,mov.ref, par.name par_name,
-                     lin.conciled, acc.name name_account,lin.id,mov.numero
+                    lin.conciled, acc.name name_account,lin.id -- ,mov.numero
                     from account_move_line lin
                     left join res_partner par
                     on par.id = lin. partner_id
@@ -67,21 +67,21 @@ class MovimientosBancarios(models.TransientModel):
                     on mov.id = move_id
                     inner join account_account acc
                     on acc.id = lin.account_id
-                    where lin.account_id in (%s) %s
+                    -- where lin.account_id in (%s) %s
                     order by lin.id desc limit 10 offset %s
                     """ % (cuentas, where, str(limite_ofset))
         else:
             sql = """
                 select mov.name move_name, lin.date ,lin.name lin_name,lin.balance ,mov.ref, par.name par_name,
-                 lin.conciled, acc.name name_account,lin.id,mov.numero
+                lin.conciled, acc.name name_account,lin.id 
                 from account_move_line lin
                 left join res_partner par
                 on par.id = lin. partner_id
                 inner join account_move mov 
                 on mov.id = move_id
                 inner join account_account acc
-                    on acc.id = lin.account_id
-                where lin.account_id in (%s) %s
+                on acc.id = lin.account_id
+                -- where lin.account_id in (%s) %s
                 order by lin.id desc
                 """ % (cuentas, where)
         self._cr.execute(sql)
@@ -91,9 +91,7 @@ class MovimientosBancarios(models.TransientModel):
     @api.model
     def list_res_parther(self):
         sql = """
-        select id,name from res_partner
-            where company_id = %s
-        and (customer = true or supplier = true)""" % (self.env.user.company_id.id)
+        select id,name from res_partner""" 
         self._cr.execute(sql)
         list = self._cr.fetchall()
         json_list = []
@@ -113,7 +111,7 @@ class MovimientosBancarios(models.TransientModel):
         sql = """
             select id, code,name 
             from account_account
-            where  company_id = %s and internal_type ='liquidity'
+            where  company_id = %s and  account_type = 'asset_cash'
             """ % (self.env.user.company_id.id)
         self._cr.execute(sql)
         list = self._cr.fetchall()
@@ -129,11 +127,27 @@ class MovimientosBancarios(models.TransientModel):
             })
         return json_list
 
+    def validate_number(self, valor):
+        try:
+            return float(valor)
+        except:
+            return 0
+        
     @api.model
-    def action_load_entries(self, fecha_inicio, fecha_hasta, no_documento, select, valor, partner, account,estados,start):
-        raise odoo.osv.osv.except_osv('title', 'description')
-
-        list = self._lines(fecha_inicio, fecha_hasta, no_documento, select, valor, partner, account,estados,start)
+    def action_load_entries(self, fecha_inicio, fecha_hasta, no_documento,
+                            select, valor, partner, account,estados,start):
+        
+        # raise odoo.osv.osv.except_osv('title', 'description')
+        
+        list = self._lines(fecha_inicio,
+                           fecha_hasta, 
+                           no_documento,
+                           select, 
+                           self.validate_number(valor) ,
+                           partner,
+                           int(account),
+                           estados,
+                           start)
         result = []
         for li in list:
             conciliado = 'No'
@@ -149,7 +163,7 @@ class MovimientosBancarios(models.TransientModel):
                 'saldo': "{0:.2f}".format(li[3]),
                 'conciliado': conciliado,
                 'name_account': li[7],
-                'numero': li[9]
+                'numero': '000'#li[9]
             })
 
         return result

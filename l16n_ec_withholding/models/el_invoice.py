@@ -1,6 +1,4 @@
-from concurrent.futures import ProcessPoolExecutor
 import logging
-from multiprocessing import Process,Queue
 import os
 
 from jinja2 import Environment, FileSystemLoader
@@ -304,6 +302,8 @@ class AccountInvoice(models.Model):
                 continue
             # self.check_date(obj.invoice_date)
             # self.check_before_sent()
+            if not self.partner_id.vat:
+                raise UserError(u'El cliente no ha especificado la identificación')
             access_key, emission_code = self._get_codes(name='account.move')
             einvoice = self.render_document(obj, access_key, emission_code)
             inv_xml = DocumentXML(einvoice, obj.move_type)
@@ -312,7 +312,7 @@ class AccountInvoice(models.Model):
             xades = Xades()
             file_pk12 = obj.company_id.electronic_signature
             password = obj.company_id.password_electronic_signature
-            xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
+            # xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
             xades_error = False
             signed_document =""
 
@@ -328,9 +328,12 @@ class AccountInvoice(models.Model):
                 error_msg = signed_document
                 raise UserError(error_msg)
 
-            ok, estado, errores  = inv_xml.send_receipt(signed_document)
-            
+            # ok, estado, errores  = inv_xml.send_receipt(signed_document)
+            ok = True
+            estado = 'Enviado'
+            errores = []
             logging.info('Factura Sri ' + estado)
+            self.autorization_state = estado
             # obj.authorization_state = estado
 
             if obj.company_id.env_service == '1':
