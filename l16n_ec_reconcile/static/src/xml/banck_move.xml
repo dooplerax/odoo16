@@ -139,43 +139,15 @@
                         <td><t t-esc="item.benef"/></td>
                         <td><t t-esc="item.concepto"/></td>
                         <td><t t-esc="item.valor"/></td>
-                        <td><t t-esc="item.conciliado"/></td>
+                        <td>
+                            <div t-att-id="'td_'+ item.id"> <t t-esc="item.conciliado"/> </div>
+                        </td>
                         <td>
                             <div class="oe_button_box" name="button_box">
-                                <!-- <button name="action_name" type="object" t-att-id="item.id"
-                                class="oe_stat_button id_btn_conciliar" icon="fa-">
+                                <button name="action_name" type="object" t-att-id="item.id"
+                                class="oe_stat_button btn-procesar-conciliacion" icon="fa-">
                                 Conciliar
-                                </button> -->
-                                <a data-toggle="modal" class="oe_stat_button"
-                                   t-att-data-target="'#disableModal'+item.id" title="Desactivar oferta"
-                                   style="cursor: pointer">
-                                    Conciliar
-                                </a>
-                                <div class="modal fade" t-att-id="'disableModal'+item.id" tabindex="-1" role="dialog"
-                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <form style="width: 100%;" t-att-action="'/job_offer/cancel/'+item.id" method="post"
-                                          role="form">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title"
-                                                        id="exampleModalLabel">Desactivar oferta</h5>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>¿Desea desactivar la oferta?
-                                                    </p>
-                                                </div>
-                                                <div class="modal-footer">
-
-                                                    <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Cancelar</button>
-                                                    <button type="sumit" class="btn btn-primary">Aceptar</button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                </button>
                             </div>
                         </td> 
                     </tr>

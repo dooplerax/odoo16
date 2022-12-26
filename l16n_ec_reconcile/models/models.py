@@ -262,7 +262,7 @@ class AccountBankReconcile(models.Model):
 
         sql = """ select rec.date_stop from account_bank_reconcile rec 
                    inner join account_journal jou on jou.id = rec.journal_id
-                   where jou.default_debit_account_id =%s and state = 'draft' 
+                   where jou.default_account_id =%s and state = 'draft' 
                    order by date_stop desc              
                    """ % (banco)
 
@@ -389,7 +389,7 @@ class AccountBankReconcile(models.Model):
             resul = []
             for ban in bancos:
                 resul.append({
-                    'id': ban.default_debit_account_id.id,
+                    'id': ban.default_account_id.id,
                     'name': ban.name
                 })
             return resul
@@ -658,10 +658,16 @@ class AccountBankReconcile(models.Model):
                 list.append(obj)
 
     def action_print(self):
-        return self.env['report'].get_action(
-            self,
-            'l10n_ec_reconcile.extracto_reporte'
-        )
+        return self.env.ref('l16n_ec_reconcile.extracto_reporte').report_action()
+    #    return self.env.ref('module_name.action_student_id_card').report_action(None, data=data)
+
+    
+        # return self.env['report']._get_report_values(
+        #     self,
+        #     'l16n_ec_reconcile.extracto_reporte'
+        # )
+
+        
 
 
 class AccountMoveLine(models.Model):

@@ -3,7 +3,7 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
   var AbstractAction = require('web.AbstractAction')
 
   var core = require('web.core')
-
+  // var hooks = require('web.hooks')
   var QWeb = core.qweb
 
   //var ajax = require('web.ajax')
@@ -16,11 +16,13 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
       'click .id_btn_conciliar': 'actionConciliar',
       'click .btn_siquiente': 'actionSiquiente',
       'click .btn_anterior': 'actionAnterior',
+      'click .btn-procesar-conciliacion': 'procesarConciliacion',
     },
     start: function () {
       var self = this
       self.listPartner()
       self.listAccount()
+      //this.action = hooks.useService('action')
     },
 
     listPartner: function () {
@@ -96,6 +98,44 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
         total = parseInt(total) - 1
         $('#id_inicio').val(total)
         this.actionBuscar()
+      }
+    },
+    // conciliacion manual
+    procesarConciliacion: function (e) {
+      var id = e.currentTarget.id
+      var estado = $('#td_' + id).html()
+      estado = estado.trim()
+      if (estado == 'No') {
+        var action = {
+          type: 'ir.actions.act_window',
+          res_model: 'conciliacion.manual',
+          view_type: 'form',
+          view_mode: 'form',
+          views: [[false, 'form']],
+          target: 'new',
+          context: {
+            move_id: id,
+          },
+        }
+        this.do_action(action)
+      } else {
+        return this._rpc({
+          model: 'bank.account.move',
+          method: 'conciliar',
+          args: [id],
+        }).then(function (result) {
+          if (result) {
+            $('#' + id).removeClass('btn btn-primary')
+            $('#' + id).addClass('btn btn-secondary')
+            $('#' + id).html('Romper')
+            $('#td_' + id).html('Si')
+          } else {
+            $('#' + id).removeClass('btn btn-secondary')
+            $('#' + id).addClass('btn btn-primary')
+            $('#' + id).html('Conciliar')
+            $('#td_' + id).html('No')
+          }
+        })
       }
     },
   })
