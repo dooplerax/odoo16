@@ -41,25 +41,62 @@
                         </group>
                         <div class="row">
                             <div class="col-12">
+                                <p class="text-danger">El documento debe tener el siguiente formato</p>
+                                <table class="table text-center">
+                                    <tr>
+                                        <td>
+                                            Fecha
+                                        </td>
+                                        <td>
+                                            Codigo
+                                        </td>
+                                        <td>
+                                            Concepto
+                                        </td>
+                                        <td>
+                                            Tipo
+                                        </td><td>
+                                            Documento
+                                        </td>
+                                        <td>
+                                            Oficina
+                                        </td>
+                                        <td>
+                                            Monto
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>11/30/2022</td>
+                                        <td>9982</td>
+                                        <td>RETENCION EN LA FUENTE</td>
+                                        <td>D</td>
+                                        <td>875939428</td>
+                                        <td>AGENCIA PARA PROCESOS BATCH</td>
+                                        <td>0.09</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="col-12" style="margin-top:20px">
                                 <kanban>
                                     <templates>
                                         <t t-name="kanban-box">
                                             <div class="row oe_kanban_vignette">
                                                 <field name="extracto_ids" nolabel="1">
                                                     <tree delete="false" create="false" edit="false"
-                                                        editable="top"
-                                                        default_order="date">
-                                                        <field name="referencia" />
-                                                        <field name="date" />
-                                                        <field name="concepto" />
-                                                        <field name="type" />
-                                                        <field name="debe" />
-                                                        <field name="haber" />
-                                                        <field name="conciliado" />
+                                                          editable="top"
+                                                          default_order="date">
+                                                        <field name="referencia"/>
+                                                        <field name="date"/>
+                                                        <field name="concepto"/>
+                                                        <field name="type"/>
+                                                        <field name="debe"/>
+                                                        <field name="haber"/>
+                                                        <field name="conciliado"/>
                                                         <button name="action_done"
-                                                            class="oe_stat_button"
-                                                            string="Conciliar"
-                                                            type="object" />
+                                                                class="oe_stat_button"
+                                                                string="Conciliar"
+                                                                type="object"/>
                                                     </tree>
                                                 </field>
                                             </div>
