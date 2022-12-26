@@ -71,7 +71,9 @@ odoo.l16n_ec_reconcile = function (instance, local) {
       model
         .call('bancos', { context: new instance.web.CompoundContext() })
         .then(function (result) {
-          self.$el.append(QWeb.render('SelectBanco', { item: result }))
+          self.$el.append(
+            QWeb.render('l16n_ec_reconcile.BankList', { item: result }),
+          )
         })
     },
   })

@@ -12,11 +12,10 @@
     'website': '',
     'assets': {
         'web.assets_backend': [
-            # 'l16n_ec_reconcile/static/src/js/conciliacion.js',
+            'l16n_ec_reconcile/static/src/js/bank_conciliation.js',
             'l16n_ec_reconcile/static/src/js/mov_bancarios.js',
             'l16n_ec_reconcile/static/src/xml/banck_move.xml',
-            # 'l16n_ec_reconcile/static/src/xml/conciliacion.xml',
-            
+            'l16n_ec_reconcile/static/src/xml/bank_conciliation.xml',
             ]
     },
     'data': [
@@ -24,9 +23,9 @@
         'views/views.xml',
         'views/conciliacion.xml',
         # 'views/cargas_iniciales.xml',
-        # 'views/reporte.xml',
-        # 'views/extracto_reporte.xml',
+        'views/reporte.xml',
+        'views/extracto_reporte.xml',
         'data/sequence.xml',
-        # 'wizard/conciliacion_manual.xml'
+        'wizard/conciliacion_manual.xml'
     ]
 }

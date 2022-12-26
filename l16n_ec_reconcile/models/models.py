@@ -262,7 +262,7 @@ class AccountBankReconcile(models.Model):
 
         sql = """ select rec.date_stop from account_bank_reconcile rec 
                    inner join account_journal jou on jou.id = rec.journal_id
-                   where jou.default_debit_account_id =%s and state = 'draft' 
+                   where jou.default_account_id =%s and state = 'draft' 
                    order by date_stop desc              
                    """ % (banco)
 
@@ -300,11 +300,6 @@ class AccountBankReconcile(models.Model):
             for ext in extracto_debit:
                 list_extracto_debit.append(self._parser_json_extracto(ext))
 
-            saldos_iniciales = self.env['bnc.initial.balances'].search(
-                [('conciliate', '=', False), ('account_id', '=', int(banco))])
-
-            for sal in saldos_iniciales:
-                list_no_concilied.append(self._parser_json_saldo_inicial(sal))
 
             list_no_coinciden = []
             list_coinciden = []
@@ -389,7 +384,7 @@ class AccountBankReconcile(models.Model):
             resul = []
             for ban in bancos:
                 resul.append({
-                    'id': ban.default_debit_account_id.id,
+                    'id': ban.default_account_id.id,
                     'name': ban.name
                 })
             return resul
@@ -417,9 +412,6 @@ class AccountBankReconcile(models.Model):
                 index = id_line.find('_')
                 id_line = data['id'][index + 1: len(id_line)]
                 carga_inicial = True
-
-                mov = self.env['bnc.initial.balances'].search([
-                    ('id', '=', id_line)])
 
             lines = []
             debe = 0
@@ -460,15 +452,6 @@ class AccountBankReconcile(models.Model):
                              """ % (mov.id, ids)
                     self.env.cr.execute(sql)
 
-                """
-                if ids_cargas_iniciales:
-                    sql = update bnc_initial_balances
-                              set conciliate = true, 
-                              conciliate_date = '%s'
-                              where id in (%s)
-                               % (mov.date, ids_cargas_iniciales)
-                    self.env.cr.execute(sql)
-                """
                 if carga_inicial:
                     mov.update({
                         'conciliate': True,
@@ -658,10 +641,16 @@ class AccountBankReconcile(models.Model):
                 list.append(obj)
 
     def action_print(self):
-        return self.env['report'].get_action(
-            self,
-            'l10n_ec_reconcile.extracto_reporte'
-        )
+        return self.env.ref('l16n_ec_reconcile.extracto_reporte').report_action()
+    #    return self.env.ref('module_name.action_student_id_card').report_action(None, data=data)
+
+    
+        # return self.env['report']._get_report_values(
+        #     self,
+        #     'l16n_ec_reconcile.extracto_reporte'
+        # )
+
+        
 
 
 class AccountMoveLine(models.Model):
