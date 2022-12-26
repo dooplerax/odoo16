@@ -452,15 +452,6 @@ class AccountBankReconcile(models.Model):
                              """ % (mov.id, ids)
                     self.env.cr.execute(sql)
 
-                """
-                if ids_cargas_iniciales:
-                    sql = update bnc_initial_balances
-                              set conciliate = true, 
-                              conciliate_date = '%s'
-                              where id in (%s)
-                               % (mov.date, ids_cargas_iniciales)
-                    self.env.cr.execute(sql)
-                """
                 if carga_inicial:
                     mov.update({
                         'conciliate': True,
