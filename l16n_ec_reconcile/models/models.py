@@ -300,11 +300,6 @@ class AccountBankReconcile(models.Model):
             for ext in extracto_debit:
                 list_extracto_debit.append(self._parser_json_extracto(ext))
 
-            saldos_iniciales = self.env['bnc.initial.balances'].search(
-                [('conciliate', '=', False), ('account_id', '=', int(banco))])
-
-            for sal in saldos_iniciales:
-                list_no_concilied.append(self._parser_json_saldo_inicial(sal))
 
             list_no_coinciden = []
             list_coinciden = []
@@ -417,9 +412,6 @@ class AccountBankReconcile(models.Model):
                 index = id_line.find('_')
                 id_line = data['id'][index + 1: len(id_line)]
                 carga_inicial = True
-
-                mov = self.env['bnc.initial.balances'].search([
-                    ('id', '=', id_line)])
 
             lines = []
             debe = 0
