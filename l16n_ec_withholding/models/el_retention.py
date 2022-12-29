@@ -6,7 +6,8 @@ import os
 from jinja2 import Environment, FileSystemLoader
 
 from odoo import models, fields
-from odoo.exceptions import Warning as UserError
+from odoo.exceptions import UserError
+
 from . import utils
 from ..xades.sri import DocumentXML
 from ..xades.xades import Xades
@@ -110,17 +111,7 @@ class AccountWithdrawing(models.Model):
 
     pre_send_sri = fields.Boolean(default=False)
 
-    
-    def action_generate_document1(self):
-        if self.authorization_sri == True:
-            raise UserError(u'El documento ya fue enviado al SRI')
-        if self.invoice_id.extracontable == True:
-            raise UserError(u'Documento seleccionado como Extra Contable no puede ser enviado al SRI')
-
-        self.authorization_sri = True
-        
-
-    
+     
     def action_generate_document(self):
 
         if self.authorization_sri == True:
