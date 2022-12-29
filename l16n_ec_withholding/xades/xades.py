@@ -60,8 +60,8 @@ class Xades(object):
         xml_str = xml_document.encode('utf-8')
         # JAR_PATH = 'firma/firmaXadesBes.jar'
         JAR_PATH = 'firma/firma/firma.jar'
-        # JAVA_CMD = os.path.join(self.path(),'java/bin')
-        JAVA_CMD = 'java'
+        JAVA_CMD = os.path.join(self.path(),'java/bin')
+        # JAVA_CMD = 'java'
         firma_path = os.path.join(self.path(), JAR_PATH)
         file_pk12_path = os.path.join(os.path.dirname(__file__), file_pk12)
         cwd = os.path.join(self.path(), 'java')
