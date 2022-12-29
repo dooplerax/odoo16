@@ -148,9 +148,9 @@ class AccountWithdrawing(models.Model):
             file_pk12 = obj.company_id.electronic_signature
             password = obj.company_id.password_electronic_signature
 
-            # xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
-            xades_error = False
-            signed_document = ""
+            xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
+            # xades_error = False
+            # signed_document = ""
             if xades_error:
                 error_msg = signed_document
                 raise UserError(error_msg)

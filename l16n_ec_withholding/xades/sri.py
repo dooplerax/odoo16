@@ -3,7 +3,7 @@
 import base64
 import logging
 import os
-from io import BytesIO, StringIO
+from io import BytesIO
 
 from lxml import etree
 from lxml.etree import fromstring, DocumentInvalid
