@@ -60,21 +60,21 @@ class Xades(object):
         xml_str = xml_document.encode('utf-8')
         # JAR_PATH = 'firma/firmaXadesBes.jar'
         JAR_PATH = 'firma/firma/firma.jar'
-        JAVA_CMD = os.path.join(self.path(),'java/bin')
-        # JAVA_CMD = 'java/bin'
+        # JAVA_CMD = os.path.join(self.path(),'java/bin')
+        JAVA_CMD = 'java'
         firma_path = os.path.join(self.path(), JAR_PATH)
         file_pk12_path = os.path.join(os.path.dirname(__file__), file_pk12)
         cwd = os.path.join(self.path(), 'java')
         env = {}
         env.update(os.environ)
-        # if os.name == 'nt':
-        #     a = ';'
-        # else:
-        #     a = ':'
-        # libs = os.path.join(self.path(), '', 'java', 'lib', '*.jar')
-        # env['CLASSPATH'] = os.path.join(self.path(), '..', 'java' + a) + \
-        #                    a.join(glob.glob(libs)) + a + os.path.join(
-        #     self.path(), '..', 'custom_reports')
+        if os.name == 'nt':
+            a = ';'
+        else:
+            a = ':'
+        libs = os.path.join(self.path(), '', 'java', 'bin', '*.jar')
+        env['CLASSPATH'] = os.path.join(self.path(), '..', 'java' + a) + \
+                           a.join(glob.glob(libs)) + a + os.path.join(
+            self.path(), '..', 'custom_reports')
 
         command = [
             JAVA_CMD,
@@ -107,7 +107,7 @@ class Xades(object):
             stderr=subprocess.PIPE,
             stdin=subprocess.PIPE,
             env=env,
-            # cwd=cwd
+            cwd=cwd
         )
         p.wait()
         res = p.communicate()
