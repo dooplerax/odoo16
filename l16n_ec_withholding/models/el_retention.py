@@ -114,9 +114,9 @@ class AccountWithdrawing(models.Model):
      
     def action_generate_document(self):
 
-        if self.authorization_sri == True:
-            raise UserError(u'El documento ya fue enviado al SRI')
-        
+        # if self.authorization_sri == True:
+        #     raise UserError(u'El documento ya fue enviado al SRI')
+        #
 
         self.authorization_sri = True
         
