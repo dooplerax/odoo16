@@ -14,6 +14,9 @@
     ],
     'author': 'danner.marante@citytech.ec',
     'website': '',
+    'external_dependencies': {
+        'python': ['xmlsig'],
+    },
     'data': [
         'views/withholding_supplier_view.xml',
         'views/withholding_customer_view.xml',
