@@ -3,12 +3,12 @@
 import base64
 import logging
 import os
-from io import BytesIO, StringIO
+from io import BytesIO
 
 from lxml import etree
 from lxml.etree import fromstring, DocumentInvalid
 
-from .xades import CheckDigit
+from .xades_sri import CheckDigit
 from ..models import utils
 try:
     from suds.client import Client
@@ -60,38 +60,31 @@ class DocumentXML(object):
             return False
 
     @classmethod
-    def send_receipt(self, document):
+    def send_receipt(self, buffer_xml):
 
         """
         Metodo que envia el XML al WS
         """
         self.logger.info('Enviando documento para recepcion SRI')
-        buf = BytesIO()
-        buf.write(document)
-        buffer_xml = base64.b64encode(document)
 
-        if not utils.check_service('prod'):
-            # TODO: implementar modo offline
-            raise Exception('Error SRI', 'Servicio SRI no disponible.')
-        
-        self.logger.info('ambiente: %s' % SriService.get_active_ws()[0])
-        
+        # self.logger.info('ambiente: %s' % SriService.get_active_ws()[0])
+        strbuffer = str(buffer_xml, 'utf-8')
         client = Client(SriService.get_active_ws()[0])
-        result = client.service.validarComprobante(buffer_xml)
+        result = client.service.validarComprobante(strbuffer)
         # self.logger.info('Estado de respuesta documento: %s' % result['estado'])
-        return True, 'Enviado', []
+        # return True, 'Enviado', []
         # validar esta parte
-        # errores = []
-        # if result['estado'] in ('RECIBIDA'):
-        #     return True, result['estado'], errores
-        # else:
-        #     for comp in result['comprobantes']:
-        #         for m in comp[1][0].mensajes:
-        #             rs = [m[1][0].tipo, m[1][0].mensaje]
-        #             rs.append(getattr(m[1][0], 'informacionAdicional', ''))
-        #             errores.append(' '.join(rs))
-        #     self.logger.error(errores)
-        #     return False, result.estado, ', '.join(errores)
+        errores = []
+        if result['estado'] in ('RECIBIDA'):
+            return True, result['estado'], errores
+        else:
+            for comp in result['comprobantes']:
+                for m in comp[1][0].mensajes:
+                    rs = [m[1][0].tipo, m[1][0].mensaje]
+                    rs.append(getattr(m[1][0], 'informacionAdicional', ''))
+                    errores.append(' '.join(rs))
+            self.logger.error(errores)
+            return False, result.estado, ', '.join(errores)
 
     def request_authorization(self, access_key):
         messages = []
@@ -118,7 +111,8 @@ class SriService(object):
     __AMBIENTE_PROD = '2'
     __ACTIVE_ENV = False
     # revisar el utils
-    __WS_TEST_RECEIV = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'
+    # __WS_TEST_RECEIV = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'
+    __WS_TEST_RECEIV = 'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'
     __WS_TEST_AUTH = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl'
 
     __WS_RECEIV = 'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'

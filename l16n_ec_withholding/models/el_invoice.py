@@ -7,7 +7,7 @@ from odoo import models
 from odoo.exceptions import (UserError)
 from . import utils
 from ..xades.sri import DocumentXML
-from ..xades.xades import Xades
+from ..xades.xades_sri import Xades
 
 
 class AccountInvoice(models.Model):
@@ -312,9 +312,7 @@ class AccountInvoice(models.Model):
             xades = Xades()
             file_pk12 = obj.company_id.electronic_signature
             password = obj.company_id.password_electronic_signature
-            # xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
-            xades_error = False
-            signed_document =""
+            xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
 
 
             # resul = queue.get()
@@ -328,13 +326,9 @@ class AccountInvoice(models.Model):
                 error_msg = signed_document
                 raise UserError(error_msg)
 
-            # ok, estado, errores  = inv_xml.send_receipt(signed_document)
-            ok = True
-            estado = 'Enviado'
-            errores = []
+            ok, estado, errores  = inv_xml.send_receipt(signed_document)
             logging.info('Factura Sri ' + estado)
-            self.autorization_state = estado
-            # obj.authorization_state = estado
+            self.authorization_state = estado
 
             if obj.company_id.env_service == '1':
                 obj.environment = 'PRUEBAS'

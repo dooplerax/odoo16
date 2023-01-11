@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-
-        <!--
-            Grupo de impuestos visible
-        -->
-
         <record id="view_account_retention_supplier_tree" model="ir.ui.view">
             <field name="name">account.retention.tree</field>
             <field name="model">account.retention</field>
             <field name="arch" type="xml">
-                <tree string="Retenciones" decoration-info="state == 'draft'">
+                <tree string="Retenciones">
                     <field name="name"/>
                     <field name="partner_id"/>
                     <field name="date"/>
