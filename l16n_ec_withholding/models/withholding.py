@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from datetime import datetime
 from odoo import (
     api,
     fields,
     models
 )
-from odoo import exceptions
-from odoo.exceptions import (UserError, ValidationError)
-
-from . import utils
+from odoo.exceptions import (UserError)
 
 
 class AccountWithdrawing(models.Model):

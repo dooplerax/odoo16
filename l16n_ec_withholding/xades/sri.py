@@ -8,7 +8,7 @@ from io import BytesIO
 from lxml import etree
 from lxml.etree import fromstring, DocumentInvalid
 
-from .xades import CheckDigit
+from .xades_sri import CheckDigit
 from ..models import utils
 try:
     from suds.client import Client
@@ -60,21 +60,14 @@ class DocumentXML(object):
             return False
 
     @classmethod
-    def send_receipt(self, document):
+    def send_receipt(self, buffer_xml):
 
         """
         Metodo que envia el XML al WS
         """
         self.logger.info('Enviando documento para recepcion SRI')
-        buf = BytesIO()
-        buf.write(document)
-        buffer_xml = base64.b64encode(document)
 
-        if not utils.check_service('prod'):
-            # TODO: implementar modo offline
-            raise Exception('Error SRI', 'Servicio SRI no disponible.')
-        
-        self.logger.info('ambiente: %s' % SriService.get_active_ws()[0])
+        # self.logger.info('ambiente: %s' % SriService.get_active_ws()[0])
         strbuffer = str(buffer_xml, 'utf-8')
         client = Client(SriService.get_active_ws()[0])
         result = client.service.validarComprobante(strbuffer)
@@ -118,7 +111,8 @@ class SriService(object):
     __AMBIENTE_PROD = '2'
     __ACTIVE_ENV = False
     # revisar el utils
-    __WS_TEST_RECEIV = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'
+    # __WS_TEST_RECEIV = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'
+    __WS_TEST_RECEIV = 'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'
     __WS_TEST_AUTH = 'https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl'
 
     __WS_RECEIV = 'https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl'

@@ -10,7 +10,7 @@ from odoo.exceptions import UserError
 
 from . import utils
 from ..xades.sri import DocumentXML
-from ..xades.xades import Xades
+from ..xades.xades_sri import Xades
 
 TEMPLATES = {
     'out_invoice': 'out_invoice.xml'
@@ -114,87 +114,54 @@ class AccountWithdrawing(models.Model):
      
     def action_generate_document(self):
 
-        # if self.authorization_sri == True:
-        #     raise UserError(u'El documento ya fue enviado al SRI')
-        #
-
-        self.authorization_sri = True
-        
-
+        if self.authorization_sri == True:
+            raise UserError(u'El documento ya fue enviado al SRI')
         error_msg = ''
-        # try:
-        for obj in self:
-            # self.check_date(obj.date)
-            self.check_before_sent()
-            if not obj.authorization_number:
-                access_key, emission_code = self._get_codes('account.retention')
-            else:
-                access_key = obj.authorization_number
-                emission_code = self.company_id.emission_code
+        try:
+            for obj in self:
 
-            ewithdrawing = self.render_document(obj, access_key, emission_code)
-            inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
-            inv_xml.validate_xml()
-            xades = Xades()
-            file_pk12 = obj.company_id.electronic_signature
-            password = obj.company_id.password_electronic_signature
+                self.check_before_sent()
+                if not obj.authorization_number:
+                    access_key, emission_code = self._get_codes('account.retention')
+                else:
+                    access_key = obj.authorization_number
+                    emission_code = self.company_id.emission_code
 
-            xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
-            # xades_error = False
-            # signed_document = ""
-            if xades_error:
-                error_msg = signed_document
-                raise UserError(error_msg)
-            
-            ok, estado, errores = inv_xml.send_receipt(signed_document)
-            obj.authorization_state = estado
+                ewithdrawing = self.render_document(obj, access_key, emission_code)
+                inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
+                inv_xml.validate_xml()
+                xades = Xades()
+                file_pk12 = obj.company_id.electronic_signature
+                password = obj.company_id.password_electronic_signature
 
-            if obj.company_id.env_service == '1':
-                obj.environment = 'PRUEBAS'
-            else:
-                obj.environment = 'PRODUCCION'
+                xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
 
-            obj.authorization_number = access_key
-        
+                if xades_error:
+                    error_msg = signed_document
+                    raise UserError(error_msg)
 
-            if not ok:
-                error_msg = errores
-                return False, errores
-            else:
-                obj.authorization_sri = True
+                ok, estado, errores = inv_xml.send_receipt(signed_document)
+                obj.authorization_state = estado
+
+                if obj.company_id.env_service == '1':
+                    obj.environment = 'PRUEBAS'
+                else:
+                    obj.environment = 'PRODUCCION'
+
+                obj.authorization_number = access_key
 
 
-            # for at in attac:
-            #     at.unlink()
-
-            # return self.print_retention()
-
-        # except Exception as e:
-        #     if error_msg != '':
-        #         return False, error_msg
-        #     return False, e.message
-
+                if not ok:
+                    error_msg = errores
+                    obj.authorization_sri = False
+                    return False, errores
+                else:
+                    obj.authorization_sri = True
+        except Exception as e:
+            raise UserError(e.args)
     
     def retention_print(self):
         return self.env['report'].get_action(
             self,
             'l10n_ec_einvoice.report_eretention'
         )
-
-
-# class AccountInvoice(models.Model):
-#     _inherit = 'account.invoice'
-
-    
-#     def action_generate_eretention(self):
-#         for obj in self:
-#             if not obj.journal_id.auth_ret_id.is_electronic:
-#                 return True
-#             obj.retention_id.action_generate_document()
-
-    
-#     def action_retention_create(self):
-#         super(AccountInvoice, self).action_retention_create()
-#         for obj in self:
-#             if obj.type in ['in_invoice', 'liq_purchase']:
-#                 self.action_generate_eretention()
