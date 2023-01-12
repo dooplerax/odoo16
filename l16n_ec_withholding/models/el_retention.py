@@ -114,53 +114,53 @@ class AccountWithdrawing(models.Model):
      
     def action_generate_document(self):
 
-        if self.authorization_sri == True:
-            raise UserError(u'El documento ya fue enviado al SRI')
+        # if self.authorization_sri == True:
+        #     raise UserError(u'El documento ya fue enviado al SRI')
         error_msg = ''
-        try:
-            for obj in self:
+        # try:
+        for obj in self:
 
-                # self.check_before_sent()
-                if not obj.authorization_number:
-                    access_key, emission_code = self._get_codes('account.retention')
-                else:
-                    access_key = obj.authorization_number
-                    emission_code = self.company_id.emission_code
+            # self.check_before_sent()
+            if not obj.authorization_number:
+                access_key, emission_code = self._get_codes('account.retention')
+            else:
+                access_key = obj.authorization_number
+                emission_code = self.company_id.emission_code
 
-                ewithdrawing = self.render_document(obj, access_key, emission_code)
-                inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
-                inv_xml.validate_xml()
-                xades = Xades()
-                file_pk12 = obj.company_id.electronic_signature
-                password = obj.company_id.password_electronic_signature
+            ewithdrawing = self.render_document(obj, access_key, emission_code)
+            inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
+            inv_xml.validate_xml()
+            xades = Xades()
+            file_pk12 = obj.company_id.electronic_signature
+            password = obj.company_id.password_electronic_signature
 
-                self._logger.info('p12 ',file_pk12)
+            self._logger.info('p12 ',file_pk12)
 
-                xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
-                self._logger.info('Documento ', signed_document)
-                if xades_error:
-                    error_msg = signed_document
-                    raise UserError(error_msg)
+            xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
+            self._logger.info('Documento ', signed_document)
+            if xades_error:
+                error_msg = signed_document
+                raise UserError(error_msg)
 
-                ok, estado, errores = inv_xml.send_receipt(signed_document)
-                obj.authorization_state = estado
+            ok, estado, errores = inv_xml.send_receipt(signed_document)
+            obj.authorization_state = estado
 
-                if obj.company_id.env_service == '1':
-                    obj.environment = 'PRUEBAS'
-                else:
-                    obj.environment = 'PRODUCCION'
+            if obj.company_id.env_service == '1':
+                obj.environment = 'PRUEBAS'
+            else:
+                obj.environment = 'PRODUCCION'
 
-                obj.authorization_number = access_key
+            obj.authorization_number = access_key
 
 
-                if not ok:
-                    error_msg = errores
-                    obj.authorization_sri = False
-                    return False, errores
-                else:
-                    obj.authorization_sri = True
-        except Exception as e:
-            raise UserError(e.args)
+            if not ok:
+                error_msg = errores
+                obj.authorization_sri = False
+                return False, errores
+            else:
+                obj.authorization_sri = True
+            # except Exception as e:
+            #     raise UserError(e.args)
     
     def retention_print(self):
         return self.env['report'].get_action(
