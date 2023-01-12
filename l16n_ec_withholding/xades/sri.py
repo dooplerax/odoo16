@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import base64
 import logging
 import os
-from io import BytesIO
 
 from lxml import etree
 from lxml.etree import fromstring, DocumentInvalid
 
 from .xades_sri import CheckDigit
-from ..models import utils
+
 try:
     from suds.client import Client
 except ImportError:
@@ -167,6 +165,7 @@ class SriService(object):
         """
         values: tuple ([], [])
         """
+        logging.info('create_access_key', values[0])
         env = self.get_active_env() if self.get_active_env() else 1
         dato = ''.join(values[0]+[env]+values[1])
         modulo = CheckDigit.compute_mod11(dato)
