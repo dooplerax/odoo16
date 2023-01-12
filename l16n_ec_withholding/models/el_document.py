@@ -7,6 +7,7 @@
 
 import base64
 import io
+import logging
 
 from odoo import fields, models
 from odoo.exceptions import Warning as UserError
@@ -31,7 +32,7 @@ class Edocument(models.AbstractModel):
     }
     SriServiceObj = SriService()
 
-    
+    _logger = logging.getLogger(_name)
 
     def get_auth(self, document):
         """
@@ -138,6 +139,7 @@ class Edocument(models.AbstractModel):
         """
         ak_temp = self.get_access_key(name)
         self.SriServiceObj.set_active_env(self.env.user.company_id.env_service)
+        self._logger.error('ak_temp', ak_temp)
         access_key = self.SriServiceObj.create_access_key(ak_temp)
         emission_code = self.company_id.emission_code
         return access_key, emission_code

@@ -69,7 +69,7 @@ class DocumentXML(object):
         strbuffer = str(buffer_xml, 'utf-8')
         client = Client(SriService.get_active_ws()[0])
         result = client.service.validarComprobante(strbuffer)
-        # self.logger.info('Estado de respuesta documento: %s' % result['estado'])
+
         # return True, 'Enviado', []
         # validar esta parte
         errores = []
