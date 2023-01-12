@@ -165,7 +165,7 @@ class SriService(object):
         """
         values: tuple ([], [])
         """
-        logging.info('create_access_key', values[0])
+        logging.error('create_access_key', values)
         env = self.get_active_env() if self.get_active_env() else 1
         dato = ''.join(values[0]+[env]+values[1])
         modulo = CheckDigit.compute_mod11(dato)
