@@ -120,7 +120,7 @@ class AccountWithdrawing(models.Model):
         try:
             for obj in self:
 
-                self.check_before_sent()
+                # self.check_before_sent()
                 if not obj.authorization_number:
                     access_key, emission_code = self._get_codes('account.retention')
                 else:
