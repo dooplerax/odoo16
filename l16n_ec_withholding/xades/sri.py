@@ -168,7 +168,9 @@ class SriService(object):
         values: tuple ([], [])
         """
         env = self.get_active_env()
-        # dato = ' '.join(values[0] + [env] + values[1])
+        logging.info('1',values)
+        logging.info('2',env)
+
         dato = ''.join(values[0]+[env]+values[1])
         modulo = CheckDigit.compute_mod11(dato)
         access_key = ''.join([dato, str(modulo)])
