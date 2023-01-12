@@ -114,19 +114,20 @@ class AccountWithdrawing(models.Model):
      
     def action_generate_document(self):
 
-        if self.authorization_sri == True:
-            raise UserError(u'El documento ya fue enviado al SRI')
+        # if self.authorization_sri == True:
+        #     raise UserError(u'El documento ya fue enviado al SRI')
         error_msg = ''
         try:
             for obj in self:
 
                 # self.check_before_sent()
+                self._logger.info('envio retencion electronica')
                 if not obj.authorization_number:
                     access_key, emission_code = self._get_codes('account.retention')
                 else:
                     access_key = obj.authorization_number
                     emission_code = self.company_id.emission_code
-
+                self._logger.info('autorizacion', obj.authorization_number)
                 ewithdrawing = self.render_document(obj, access_key, emission_code)
                 inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
                 inv_xml.validate_xml()
