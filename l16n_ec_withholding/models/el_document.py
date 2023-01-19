@@ -139,7 +139,6 @@ class Edocument(models.AbstractModel):
         """
         ak_temp = self.get_access_key(name)
         self.SriServiceObj.set_active_env(self.env.user.company_id.env_service)
-        self._logger.error('ak_temp', ak_temp)
         access_key = self.SriServiceObj.create_access_key(ak_temp)
         emission_code = self.company_id.emission_code
         return access_key, emission_code

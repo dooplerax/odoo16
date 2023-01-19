@@ -23,7 +23,7 @@ class AccountWithdrawing(models.Model):
     _logger = logging.getLogger(_name)
 
     def get_secuencial(self):
-        return getattr(self, 'name')[6:15]
+        return getattr(self, 'name')[8:17]
 
     def _info_withdrawing(self, withdrawing):
         """
@@ -35,13 +35,13 @@ class AccountWithdrawing(models.Model):
         if company.partner_id.property_account_position_id.name == u'Persona natural no obligada a llevar contabilidad':
             obligadoContabilidad = 'NO'
         infoCompRetencion = {
-            'fechaEmision': "{}/{}/{}".format(withdrawing.date.year, str(withdrawing.date.month).zfill(2), str(withdrawing.date.day).zfill(2)),
+            'fechaEmision': "{}/{}/{}".format(str(withdrawing.date.day).zfill(2),str(withdrawing.date.month).zfill(2),withdrawing.date.year),
             'dirEstablecimiento': company.street,
             'obligadoContabilidad': obligadoContabilidad,
             'tipoIdentificacionSujetoRetenido': utils.tipoIdentificacion[partner.l10n_latam_identification_type_id.display_name],
             'razonSocialSujetoRetenido': partner.name,
             'identificacionSujetoRetenido': partner.vat,
-            'periodoFiscal': str(withdrawing.date.year),
+            'periodoFiscal':"{}/{}".format(str(withdrawing.date.month).zfill(2),str(withdrawing.date.year)),
         }
         if company.company_registry and company.company_registry != 'NA':
             infoCompRetencion.update({'contribuyenteEspecial': company.company_registry})
@@ -69,7 +69,7 @@ class AccountWithdrawing(models.Model):
                 'porcentajeRetener': str(abs(line.tax_id.amount)),
                 'valorRetenido': '%.2f' % (abs(line.amount)),
                 'codDocSustento': retention.invoice_id.sustento_sri.code,
-                'numDocSustento': retention.invoice_id.l10n_latam_document_number,
+                'numDocSustento': retention.invoice_id.l10n_latam_document_number.replace('-',''),
                 'fechaEmisionDocSustento': "{}/{}/{}".format(
                                                              str(retention.invoice_id.date.day).zfill(2),
                                                               str(retention.invoice_id.date.month).zfill(2),
@@ -92,6 +92,8 @@ class AccountWithdrawing(models.Model):
         email = document.partner_id.email
         
         data.update({'emailCliente': email})
+        data.update({'importeTotal': abs(document.amount_total)})
+        data.update({'telefono': document.partner_id.phone if document.partner_id.phone else '-' })
         edocument = ewithdrawing_tmpl.render(data)
         return edocument
 

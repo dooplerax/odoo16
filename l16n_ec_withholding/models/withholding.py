@@ -27,28 +27,28 @@ class AccountWithdrawing(models.Model):
         self.val_ret_serv_20 = 0
         self.val_ret_serv_50 = 0
         self.val_ret_serv_100 = 0
-        # for tax in self.move_ids:
-        #     # if tax.base == 0:
-        #     #    self.recalcular_base(tax)
-
-        #  if tax.amount != None:
-        #      self.amount_valor_retencion += tax.amount  # / 0.30
-        #  if tax.tax_id.tax_group_id.code == 'isb':
-        #      self.isb += tax.amount
-        #  if tax.tax_id.tax_group_id.code == 'ret_vat_b':
-        #      if tax.tax_id.percent_report == '30':
-        #          self.val_ret_bienes += tax.amount
-        #      if tax.tax_id.percent_report == '10':
-        #          self.val_ret_bien_10 += tax.amount
-        #  if tax.tax_id.tax_group_id.code == 'ret_vat_srv':
-        #      if tax.tax_id.percent_report == '70':
-        #          self.val_ret_serv += tax.amount
-        #      if tax.tax_id.percent_report == '20':
-        #          self.val_ret_serv_20 += tax.amount
-        #      if tax.tax_id.percent_report == '50':
-        #          self.val_ret_serv_50 += tax.amount
-        #      if tax.tax_id.percent_report == '100':
-        #          self.val_ret_serv_100 += tax.amount
+        for tax in self.move_ids:
+            # if tax.base == 0:
+            #    self.recalcular_base(tax)
+            
+         if tax.amount != None:
+             self.amount_valor_retencion += tax.amount  # / 0.30
+         if tax.tax_id.tax_group_id.l10n_ec_type == 'ice':
+             self.isb += tax.amount
+         if tax.tax_id.tax_group_id.l10n_ec_type == 'withhold_vat':
+             if abs(int(tax.tax_id.amount)) == 30:
+                 self.amount += tax.amount
+             if abs(int(tax.tax_id.amount)) == 10:
+                 self.val_ret_bien_10 += tax.amount
+         if tax.tax_id.tax_group_id.l10n_ec_type == 'withhold_vat':
+             if abs(int(tax.tax_id.amount)) == 70:
+                 self.val_ret_serv += tax.amount
+             if abs(int(tax.tax_id.amount)) == 20:
+                 self.val_ret_serv_20 += tax.amount
+             if abs(int(tax.tax_id.amount)) == 50:
+                 self.val_ret_serv_50 += tax.amount
+             if abs(int(tax.tax_id.amount)) == 100:
+                 self.val_ret_serv_100 += tax.amount
 
         self.amount_total = sum(tax.amount for tax in self.move_ids)
 
@@ -324,8 +324,7 @@ class AccountWithdrawing(models.Model):
 
         move_name = move.name.split(' ')
 
-        move_name = "{}-RET-{}-{}".format(
-            move_name[0], self.company_id.id, move_name[1])
+        move_name = "RET-{}-{}".format(self.company_id.id, move_name[1])
         move.sudo().write({'name': move_name})
 
         self.sudo().write({'move_id': move.id})

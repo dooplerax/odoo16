@@ -62,7 +62,7 @@ class AnexoTransac(models.Model):
     }
     TIPO_IDENTIFICACION = {
         'pasaporte': '03',
-        'cedula': '02',
+        'Cédula': '02',
         'RUC': '01'
     }
     TP_ID_CLIENTE = {
@@ -74,8 +74,7 @@ class AnexoTransac(models.Model):
     CARACTERES_PERRMITIDOS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 '
     
     def formato_fecha(self, par):
-        temp = date_utils.parser.parse(par) 
-        fecha = "%s/%s/%s" % (str(temp.day).zfill(2), str(temp.month).zfill(2), temp.year)
+        fecha = "%s/%s/%s" % (str(par.day).zfill(2), str(par.month).zfill(2), par.year)
         return fecha
     
     def _lista_notas_credito(self, dateMonthStart, dateMonthEnd):
@@ -151,115 +150,34 @@ class AnexoTransac(models.Model):
 
         return total, resul_notas
 
-    def lista_ventas(self, dateMonthStart, dateMonthEnd):
-        list_ventas = self.env['account.move'].search([('state', 'in', ['paid', 'open'])
-                                                             , ('company_id', '=', self.env.user.company_id.id)
-                                                             , ('invoice_date', '>=', dateMonthStart),
-                                                          ('invoice_date', '<=', dateMonthEnd),
-                                                          ('move_type', 'in', ['out_invoice']),
-                                                        #   ('extracontable', '=', False)
-                                                          ])
-        ventas = {}
-        ventas_total = 0
-        for ven in list_ventas:
-            ventas_total += ven['amount_untaxed']
-            try:
-                ventas[ven.partner_id.id]['baseImponible'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['baseImponible']) + float(ven.amount_vat_cero)))
-                ventas[ven.partner_id.id]['baseImpGrav'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['baseImpGrav']) + float(ven.amount_vat)))
-                ventas[ven.partner_id.id]['montoIce'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['montoIce']) + ven.amount_ice))
-                ventas[ven.partner_id.id]['montoIva'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['montoIva']) + ven.amount_tax))
-
-                valorIva = float(ventas[ven.partner_id.id]['valorRetIva'])
-                retRent = float(ventas[ven.partner_id.id]['valorRetRenta'])
-
-                if ven.retention_id:
-                    if ven.retention_id.state == 'done':
-                        for impu in ven.retention_id.tax_ids:
-                            if impu.tax_id.tax_group_id.code == 'ret_ir':
-                                retRent += abs(impu.amount)
-                            if impu.tax_id.tax_group_id.code in ['ret_vat_srv', 'ret_vat_b']:
-                                valorIva += abs(impu.amount)
-
-                ventas[ven.partner_id.id]['numeroComprobantes'] += 1
-                ventas[ven.partner_id.id]['valorRetIva'] = str("{0:.2f}".format(valorIva))
-                ventas[ven.partner_id.id]['valorRetRenta'] = str("{0:.2f}".format(retRent))
-
-            except Exception:
-                ventas[ven.partner_id.id] = {}
-                ventas[ven.partner_id.id].update({'id': ven.id})
-                ventas[ven.partner_id.id].update({'tpIdCliente': self.TP_ID_CLIENTE[ven.partner_id.type_identifier]})
-                ventas[ven.partner_id.id].update({'idCliente': str(ven.partner_id.identifier)})
-                ventas[ven.partner_id.id].update({'parteRelVtas': 'NO'})
-                ventas[ven.partner_id.id].update({'tipoComprobante': str(ven.auth_inv_id.type_id.code)})
-                if self.env.user.company_id.type_invoice == '1':
-                    ventas[ven.partner_id.id].update({'tipoEmision': 'E'})
-                else:
-                    ventas[ven.partner_id.id].update({'tipoEmision': 'F'})
-
-                ventas[ven.partner_id.id].update({'numeroComprobantes': 1})
-                ventas[ven.partner_id.id].update({'baseNoGraIva': '0.00'})
-                ventas[ven.partner_id.id].update({'baseImponible': str("{0:.2f}".format(ven.amount_vat_cero))})
-                ventas[ven.partner_id.id].update({'baseImpGrav': str("{0:.2f}".format(ven.amount_vat))})
-                ventas[ven.partner_id.id].update({'montoIce': str("{0:.2f}".format(ven.amount_ice))})
-                ventas[ven.partner_id.id].update({'montoIva': str("{0:.2f}".format(ven.amount_tax))})
-                ventas[ven.partner_id.id].update({'formaPago': ven.epayment_id.code})
-
-                valorIva = 0
-                retRent = 0
-                if ven.retention_id:
-                    if ven.retention_id.state == 'done':
-                        for impu in ven.retention_id.tax_ids:
-                            if impu.tax_id.tax_group_id.code == 'ret_ir':
-                                retRent += abs(impu.amount)
-                            if impu.tax_id.tax_group_id.code in ['ret_vat_srv', 'ret_vat_b']:
-                                valorIva += abs(impu.amount)
-                ventas[ven.partner_id.id].update({'valorRetIva': str("{0:.2f}".format(abs(valorIva)))})
-                ventas[ven.partner_id.id].update({'valorRetRenta': str("{0:.2f}".format(abs(retRent)))})
-
-        total_notas, ventas_notas = self._lista_notas_credito(dateMonthStart, dateMonthEnd)
-        ventas_total -= total_notas
-
-        list_resul = []
-
-        for index, valor in ventas.items():
-            list_resul.append(valor)
-
-        for index, valor in ventas_notas.items():
-            list_resul.append(valor)
-
-        if self.env.user.company_id.type_invoice == '1':
-            ventas_total = 0.00
-        return ventas_total, list_resul
+    
 
     def lista_compras(self, dateMonthStart, dateMonthEnd):
         list_compras = []
 
-        compras = self.env['account.move'].search([('state', 'in', ['paid', 'open'])
-                                                         , ('company_id', '=', self.env.user.company_id.id)
-                                                         , ('invoice_date', '>=', dateMonthStart),
-                                                      ('invoice_date', '<=', dateMonthEnd),
-                                                      ('move_type', 'in', ['in_invoice', 'liq_purchase']),
-                                                    #   ('extracontable', '=', False)
+        compras = self.env['account.move'].search([
+            # ('state', 'in', ['posted', 'open']),
+                                                        ('company_id', '=', 2),
+                                                        ('invoice_date', '>=', dateMonthStart),
+                                                        ('invoice_date', '<=', dateMonthEnd),
+                                                        ('move_type', 'in', ['in_invoice', 'liq_purchase']),
+                                                        ('off_accounting', '=', False)
                                                       ]
                                                   )
 
         for comp in compras:
             temp = {}
-            temp.update({'codSustento': str(comp.sustento_id.code)})
-            temp.update({'tpIdProv': str(self.TIPO_IDENTIFICACION[comp.partner_id.type_identifier])})
-            temp.update({'idProv': str(comp.partner_id.identifier)})
+            temp.update({'codSustento': str(comp.sustento_sri.code)})
+            temp.update({'tpIdProv': str(self.TIPO_IDENTIFICACION[comp.partner_id.l10n_latam_identification_type_id.name])})
+            temp.update({'idProv': str(comp.partner_id.vat)})
             parteRel = 'NO'
-            if comp.partner_id.parte_rel:
-                parteRel = 'SI'
+            # if comp.partner_id.parte_rel:
+            #     parteRel = 'SI'
             temp.update({'parteRel': str(parteRel)})
 
-            temp.update({'tipoComprobante': str(comp.auth_inv_id.type_id.code)})
+            temp.update({'tipoComprobante': str(comp.l10n_latam_document_type_id.code)})
             temp.update({'tipoProv': False})
-            if self.TIPO_IDENTIFICACION[comp.partner_id.type_identifier] == '03':
+            if self.TIPO_IDENTIFICACION[comp.partner_id.l10n_latam_identification_type_id.name] == '03':
                 tipoProv = '01'
                 if comp.partner_id.company_type == 'company':
                     tipoProv = '02'
@@ -267,40 +185,40 @@ class AnexoTransac(models.Model):
                 temp.update({'denoProv':  self.update_razon_social(comp.partner_id.name)})
 
             temp.update({'fechaRegistro': self.formato_fecha(comp.invoice_date)})
-            temp.update({'establecimiento': str(comp.auth_inv_id.serie_entidad)})
-            temp.update({'puntoEmision': str(comp.auth_inv_id.serie_emision)})
-            if len(comp.reference) == 15:
+            temp.update({'establecimiento': str(comp.journal_id.l10n_ec_entity)})
+            temp.update({'puntoEmision': str(comp.journal_id.l10n_ec_emission)})
+            if len(comp.l10n_latam_document_number) == 15:
                 temp.update({'secuencial': str(comp.reference[6:15])})
                 temp.update({'establecimiento': str(comp.reference[0:3])})
                 temp.update({'puntoEmision': str(comp.reference[3:6])})
             else:
-                temp.update({'secuencial': str(comp.reference)})
+                temp.update({'secuencial': str(comp.l10n_latam_document_number)})
             temp.update({'fechaEmision': str(self.formato_fecha(comp.invoice_date))})
-            if comp.type =='liq_purchase':
-                if not comp.clave_acceso:
+            if comp.move_type =='liq_purchase':
+                if not comp.authorization_number:
                     raise ValidationError(
                         u'El documento de liquidacion de compra ' + comp.internal_inv_number + u' no tiene clave de acceso')
-                temp.update({'autorizacion': str(comp.clave_acceso)})
+                temp.update({'autorizacion': str(comp.authorization_number)})
             else:
-                if not comp.auth_number:
+                if not comp.authorization_number:
                     raise ValidationError(
                         "La factura de compra {} no tiene clave de acceso".format(comp.internal_inv_number))
-                temp.update({'autorizacion': str(comp.auth_number)})
+                temp.update({'autorizacion': str(comp.authorization_number)})
 
             temp.update({'baseNoGraIva': '0.00'})
             # str("{0:.2f}".format(comp.amount_vat_cero))}) # viene los valores con iva 0 o sin iva
-            temp.update({'baseImponible': str("{0:.2f}".format(comp.amount_vat_cero))})
-            temp.update({'baseImpGrav': str("{0:.2f}".format(comp.amount_vat))})
-            temp.update({'baseImpExe': '0.00'})
-            temp.update({'montoIce': str("{0:.2f}".format(comp.amount_ice))})
-            temp.update({'montoIva': str("{0:.2f}".format(comp.amount_tax))})
+            # temp.update({'baseImponible': str("{0:.2f}".format(comp.amount_vat_cero))})
+            # temp.update({'baseImpGrav': str("{0:.2f}".format(comp.amount_vat))})
+            # temp.update({'baseImpExe': '0.00'})
+            # temp.update({'montoIce': str("{0:.2f}".format(comp.amount_ice))})
+            # temp.update({'montoIva': str("{0:.2f}".format(comp.amount_tax))})
             totbasesImpReemb = 0
-            if comp.amount_pay >= 1000:
+            if comp.amount_paid >= 1000:
                 fpago = 'VALIDAR FACTURA'
                 if comp.epayment_id:
-                    fpago = comp.epayment_id.code
+                    fpago = comp.sustento_sri.code
                 temp.update({'formaPago': fpago})
-            if comp.sustento_id.code == '08':
+            if comp.sustento_sri.code == '08':
                 totbasesImpReemb = comp.amount_vat_cero
 
             temp.update({'totbasesImpReemb': str("{0:.2f}".format(totbasesImpReemb))})
@@ -322,8 +240,8 @@ class AnexoTransac(models.Model):
                 valRetServ100 += re.val_ret_serv_100
                 totalAmount = 0
                 temp.update({'totalAmount': False})
-                for impu in re.tax_ids:
-                    if impu.tax_id.tax_group_id.code == 'ret_ir':
+                for impu in re.move_ids:
+                    if impu.tax_id.tax_group_id.l10n_ec_type != 'withhold_vat':
                         existe = False
                         for temimpu in impu_retencion:
                             if temimpu['codRetAir'] == impu.tax_id.description:
@@ -339,20 +257,14 @@ class AnexoTransac(models.Model):
                             temp1.update({'valRetAir': str("{0:.2f}".format(abs(impu.amount)))})
                             impu_retencion.append(temp1)
                         totalAmount = totalAmount + abs(impu.amount)
-                temp.update({'estabRetencion1': str(re.auth_id.serie_entidad)})
-                temp.update({'ptoEmiRetencion1': str(re.auth_id.serie_emision)})
+                temp.update({'estabRetencion1': str(re.l10n_ec_retention_emission)})
+                temp.update({'ptoEmiRetencion1': str(re.l10n_ec_retention_entity)})
                 if re.name:
                     temp.update({'secRetencion1': str(re.name[6:len(re.name)])})
                 else:
                     temp.update({'secRetencion1': ''})
-                if re.auth_id.is_electronic:
-                    if re.clave_acceso:
-                        temp.update({'autRetencion1': str(re.clave_acceso)})
-                    else:
-                        raise ValidationError(
-                            u'El documentos de retencion ' + re.name + u' no tiene clave de acceso')  # noqa
-                else:
-                    temp.update({'autRetencion1': str(re.auth_id.name)})
+                    temp.update({'autRetencion1': str(re.authorization_number)})
+            
 
                 temp.update({'fechaEmiRet1': self.formato_fecha(re.date)})
 
@@ -382,39 +294,43 @@ class AnexoTransac(models.Model):
 
 
     def generate_file(self):
-        tmpl_path = os.path.join(os.path.dirname(__file__), 'template')
-        env = Environment(loader=FileSystemLoader(tmpl_path))
-        anexo_template = env.get_template(self.TEMPLATES['anexo_transaccional'])
+        try:
+            tmpl_path = os.path.join(os.path.dirname(__file__), 'template')
+            env = Environment(loader=FileSystemLoader(tmpl_path))
+            anexo_template = env.get_template(self.TEMPLATES['anexo_transaccional'])
 
-        dateMonthStart = "%s-%s-01" % (str(self.year), str(self.month))
-        dateMonthEnd = "%s-%s-%s" % (str(self.year), str(self.month), calendar.monthrange(int(self.year), int(self.month))[1])
+            dateMonthStart = "%s-%s-01" % (str(self.year), str(self.month))
+            dateMonthEnd = "%s-%s-%s" % (str(self.year), str(self.month), calendar.monthrange(int(self.year), int(self.month))[1])
 
-        compras = self.lista_compras(dateMonthStart, dateMonthEnd)
+            compras = self.lista_compras(dateMonthStart, dateMonthEnd)
 
-        ventas, list_ventas = self.lista_ventas(dateMonthStart, dateMonthEnd)
+            ventas = 0
+            list_ventas = []#self.lista_ventas(dateMonthStart, dateMonthEnd)
 
-        
-        data = {}
-        data.update({'id_informante': self.env.user.company_id.partner_id.vat})
-        data.update(
-            {'tipo_documento': self.TIPO_IDENTIFICACION_GENERAL[self.env.user.company_id.partner_id.l10n_latam_identification_type_id.name]})
+            
+            data = {}
+            data.update({'id_informante': self.env.user.company_id.partner_id.vat})
+            data.update(
+                {'tipo_documento': self.TIPO_IDENTIFICACION_GENERAL[self.env.user.company_id.partner_id.l10n_latam_identification_type_id.name]})
 
-        data.update({'razon_social': self.update_razon_social(self.env.user.company_id.partner_id.name)})
-        data.update({'manual': True})
-        data.update({'anio': self.year})
-        data.update({'mes': str(self.month).zfill(2)})
-        data.update({'totalVentas': "{0:.2f}".format(ventas)})
-        data.update({'codigoOperativo': 'IVA'})
-        data.update({'list_compras': compras})
-        data.update({'list_ventas': list_ventas})
-        
+            data.update({'razon_social': self.update_razon_social(self.env.user.company_id.partner_id.name)})
+            data.update({'manual': True})
+            data.update({'anio': self.year})
+            data.update({'mes': str(self.month).zfill(2)})
+            data.update({'totalVentas': "{0:.2f}".format(ventas)})
+            data.update({'codigoOperativo': 'IVA'})
+            data.update({'list_compras': compras})
+            data.update({'list_ventas': list_ventas})
+            
 
-        anexo = anexo_template.render(data)
+            anexo = anexo_template.render(data)
 
-        return self.write({
-            'txt_filename': 'Anexo Transaccional.xml',
-            'txt_binary': base64.standard_b64encode(anexo.encode('utf-8'))
-        })
+            return self.write({
+                'txt_filename': 'Anexo Transaccional.xml',
+                'txt_binary': base64.standard_b64encode(anexo.encode('utf-8'))
+            })
+        except Exception as e:
+            raise ValidationError(u'Error al generar el archivo XML: %s' % e)
         
     def name_get(self):
         result = []

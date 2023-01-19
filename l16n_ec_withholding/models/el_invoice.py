@@ -30,7 +30,7 @@ class AccountInvoice(models.Model):
         error_mesagge = ''
         # try:
         def fix_date(date):
-            d = "{}/{}/{}".format(date.year, str(date.month).zfill(2), str(date.day).zfill(2))
+            d = "{}/{}/{}".format(str(date.day).zfill(2),str(date.month).zfill(2),date.year )
             return d
 
         company = invoice.company_id
@@ -296,54 +296,51 @@ class AccountInvoice(models.Model):
         Genera la factura a enviar
         :return:
         """
-       # try:
-        for obj in self:
-            if obj.move_type not in ['out_invoice', 'out_refund', 'liq_purchase']:
-                continue
-            # self.check_date(obj.invoice_date)
-            # self.check_before_sent()
-            if not self.partner_id.vat:
-                raise UserError(u'El cliente no ha especificado la identificación')
-            access_key, emission_code = self._get_codes(name='account.move')
-            einvoice = self.render_document(obj, access_key, emission_code)
-            inv_xml = DocumentXML(einvoice, obj.move_type)
-            inv_xml.validate_xml()
+        if self.move_type not in ['out_invoice', 'out_refund', 'liq_purchase']:
+            return
+        if self.off_accounting:
+            raise UserError(u'La factura no se puede enviar porque está marcada como fuera de contabilidad')
+        try:
+            for obj in self:
+                if obj.move_type not in ['out_invoice', 'out_refund', 'liq_purchase']:
+                    continue
+                # self.check_date(obj.invoice_date)
+                # self.check_before_sent()
+                if not self.partner_id.vat:
+                    raise UserError(u'El cliente no ha especificado la identificación')
+                access_key, emission_code = self._get_codes(name='account.move')
+                einvoice = self.render_document(obj, access_key, emission_code)
+                inv_xml = DocumentXML(einvoice, obj.move_type)
+                inv_xml.validate_xml()
 
-            xades = Xades()
-            file_pk12 = obj.company_id.electronic_signature
-            password = obj.company_id.password_electronic_signature
-            xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
+                xades = Xades()
+                file_pk12 = obj.company_id.electronic_signature
+                password = obj.company_id.password_electronic_signature
+                xades_error, signed_document = xades.sign(einvoice, file_pk12, password)
+                obj.authorization_number = access_key
+                logging.info('Factura Error ' + str(xades_error))
+                if xades_error:
+                    error_msg = signed_document
+                    raise UserError(error_msg)
 
+                ok, estado, errores  = inv_xml.send_receipt(signed_document)
+                logging.info('Factura Sri ' + estado)
+                self.authorization_state = estado
 
-            # resul = queue.get()
-            # xades_error = resul[0]
-            #
-            # signed_document = resul[1]
-            # obj.signed_document = signed_document
-            obj.authorization_number = access_key
-            logging.info('Factura Error ' + str(xades_error))
-            if xades_error:
-                error_msg = signed_document
-                raise UserError(error_msg)
+                if obj.company_id.env_service == '1':
+                    obj.environment = 'PRUEBAS'
+                else:
+                    obj.environment = 'PRODUCCION'
 
-            ok, estado, errores  = inv_xml.send_receipt(signed_document)
-            logging.info('Factura Sri ' + estado)
-            self.authorization_state = estado
-
-            if obj.company_id.env_service == '1':
-                obj.environment = 'PRUEBAS'
-            else:
-                obj.environment = 'PRODUCCION'
-
-            if not ok:
-                error_msg = errores
-                return False, errores
-            else:
-                obj.authorization_sri = True
-            
-
-        #except Exception:
-        #    raise UserError(U'Error de conección')
+                if not ok:
+                    error_msg = errores
+                    return False, errores
+                else:
+                    obj.authorization_sri = True
+                
+        except Exception as e:
+            self._logger.Error('Error al generar la factura electrónica', e.args[0])
+            raise UserError(U'Error de conección')
 
     
     def invoice_print(self):
