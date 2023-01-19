@@ -23,7 +23,7 @@ class AccountWithdrawing(models.Model):
     _logger = logging.getLogger(_name)
 
     def get_secuencial(self):
-        return getattr(self, 'name')[6:15]
+        return getattr(self, 'name')[8:17]
 
     def _info_withdrawing(self, withdrawing):
         """
@@ -35,13 +35,13 @@ class AccountWithdrawing(models.Model):
         if company.partner_id.property_account_position_id.name == u'Persona natural no obligada a llevar contabilidad':
             obligadoContabilidad = 'NO'
         infoCompRetencion = {
-            'fechaEmision': "{}/{}/{}".format(withdrawing.date.year, str(withdrawing.date.month).zfill(2), str(withdrawing.date.day).zfill(2)),
+            'fechaEmision': "{}/{}/{}".format(str(withdrawing.date.day).zfill(2),str(withdrawing.date.month).zfill(2),withdrawing.date.year),
             'dirEstablecimiento': company.street,
             'obligadoContabilidad': obligadoContabilidad,
             'tipoIdentificacionSujetoRetenido': utils.tipoIdentificacion[partner.l10n_latam_identification_type_id.display_name],
             'razonSocialSujetoRetenido': partner.name,
             'identificacionSujetoRetenido': partner.vat,
-            'periodoFiscal': str(withdrawing.date.year),
+            'periodoFiscal':"{}/{}".format(str(withdrawing.date.month).zfill(2),str(withdrawing.date.year)),
         }
         if company.company_registry and company.company_registry != 'NA':
             infoCompRetencion.update({'contribuyenteEspecial': company.company_registry})
@@ -69,7 +69,7 @@ class AccountWithdrawing(models.Model):
                 'porcentajeRetener': str(abs(line.tax_id.amount)),
                 'valorRetenido': '%.2f' % (abs(line.amount)),
                 'codDocSustento': retention.invoice_id.sustento_sri.code,
-                'numDocSustento': retention.invoice_id.l10n_latam_document_number,
+                'numDocSustento': retention.invoice_id.l10n_latam_document_number.replace('-',''),
                 'fechaEmisionDocSustento': "{}/{}/{}".format(
                                                              str(retention.invoice_id.date.day).zfill(2),
                                                               str(retention.invoice_id.date.month).zfill(2),
@@ -92,6 +92,8 @@ class AccountWithdrawing(models.Model):
         email = document.partner_id.email
         
         data.update({'emailCliente': email})
+        data.update({'importeTotal': abs(document.amount_total)})
+        data.update({'telefono': document.partner_id.phone if document.partner_id.phone else '-' })
         edocument = ewithdrawing_tmpl.render(data)
         return edocument
 
@@ -117,52 +119,45 @@ class AccountWithdrawing(models.Model):
         # if self.authorization_sri == True:
         #     raise UserError(u'El documento ya fue enviado al SRI')
         error_msg = ''
-        try:
-            for obj in self:
 
-                # self.check_before_sent()
-                self._logger.info('envio retencion electronica')
-                if not obj.authorization_number:
-                    access_key, emission_code = self._get_codes('account.retention')
-                else:
-                    access_key = obj.authorization_number
-                    emission_code = self.company_id.emission_code
-                self._logger.info('autorizacion', obj.authorization_number)
-                ewithdrawing = self.render_document(obj, access_key, emission_code)
-                inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
-                inv_xml.validate_xml()
-                xades = Xades()
-                file_pk12 = obj.company_id.electronic_signature
-                password = obj.company_id.password_electronic_signature
+        # try:
+        for obj in self:
+            if not obj.authorization_number:
+                access_key, emission_code = self._get_codes('account.retention')
+            else:
+                access_key = obj.authorization_number
+                emission_code = self.company_id.emission_code
+            ewithdrawing = self.render_document(obj, access_key, emission_code)
+            inv_xml = DocumentXML(ewithdrawing, 'withdrawing')
+            inv_xml.validate_xml()
+            xades = Xades()
+            file_pk12 = obj.company_id.electronic_signature
+            password = obj.company_id.password_electronic_signature
+            obj.authorization_number = access_key
+            xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
+            if xades_error:
+                error_msg = signed_document
+                raise UserError(error_msg)
 
-                self._logger.info('p12 ',file_pk12)
+            ok, estado, errores = inv_xml.send_receipt(signed_document)
+            obj.authorization_state = estado
+            if obj.company_id.env_service == '1':
+                obj.environment = 'PRUEBAS'
+            else:
+                obj.environment = 'PRODUCCION'
 
-                xades_error, signed_document = xades.sign(ewithdrawing, file_pk12, password)
-                self._logger.info('Documento ', signed_document)
-                if xades_error:
-                    error_msg = signed_document
-                    raise UserError(error_msg)
+            if not ok:
+                error_msg = errores
+                obj.authorization_state = f"{estado}: {errores}"
+                obj.authorization_sri = False
+                return False, errores
+            else:
+                obj.authorization_sri = True
+        # except Exception as e:
+        #     raise UserError(e.args)
+        #
 
-                ok, estado, errores = inv_xml.send_receipt(signed_document)
-                obj.authorization_state = estado
-
-                if obj.company_id.env_service == '1':
-                    obj.environment = 'PRUEBAS'
-                else:
-                    obj.environment = 'PRODUCCION'
-
-                obj.authorization_number = access_key
-
-
-                if not ok:
-                    error_msg = errores
-                    obj.authorization_sri = False
-                    return False, errores
-                else:
-                    obj.authorization_sri = True
-        except Exception as e:
-            raise UserError(e.args)
-    
+      
     def retention_print(self):
         return self.env['report'].get_action(
             self,

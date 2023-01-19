@@ -7,6 +7,7 @@
 
 import base64
 import io
+import logging
 
 from odoo import fields, models
 from odoo.exceptions import Warning as UserError
@@ -31,7 +32,7 @@ class Edocument(models.AbstractModel):
     }
     SriServiceObj = SriService()
 
-    
+    _logger = logging.getLogger(_name)
 
     def get_auth(self, document):
         """

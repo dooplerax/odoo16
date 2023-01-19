@@ -24,16 +24,16 @@ class AccountMove(models.Model):
         Determina si hay impuestos de retenciones en las lineas de las factura
         :return:
         """
-        # try:
-        TAXES = ['withhold_vat','withhold_income_tax']
-        for tax in self.invoice_line_ids:
-            for tax_line in tax.tax_ids:
-                if tax_line.tax_group_id.l10n_ec_type in TAXES:
-                    self.has_retention = True
-                    return True
-        self.has_retention = False
-        # except:
-        #     self.has_retention = False
+        try:
+            TAXES = ['withhold_vat','withhold_income_tax']
+            for tax in self.invoice_line_ids:
+                for tax_line in tax.tax_ids:
+                    if tax_line.tax_group_id.l10n_ec_type in TAXES:
+                        self.has_retention = True
+                        return True
+            self.has_retention = False
+        except:
+            self.has_retention = False
     
     has_retention = fields.Boolean("Retencion" , compute='_check_retention'
                                    ,store=True)
@@ -41,11 +41,11 @@ class AccountMove(models.Model):
     retention_id = fields.Many2one('account.retention', string='Retención', readonly=True, copy=False)
     sustento_sri = fields.Many2one('l10n_ec.sri.payment', string='Sustento del Comprobante',  copy=True)
     epayment_id = fields.Many2one('account.epayment', 'Forma de Pago')
+    off_accounting = fields.Boolean('Fuera de Contabilidad', default=False)
     
     authorization_number = fields.Char(
         string='Clave de Acceso',
         size=64,
-        readonly=True,
         copy=False
     )
     

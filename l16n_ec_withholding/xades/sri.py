@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import base64
 import logging
 import os
-from io import BytesIO
 
 from lxml import etree
 from lxml.etree import fromstring, DocumentInvalid
 
 from .xades_sri import CheckDigit
-from ..models import utils
+
 try:
     from suds.client import Client
 except ImportError:
@@ -71,7 +69,7 @@ class DocumentXML(object):
         strbuffer = str(buffer_xml, 'utf-8')
         client = Client(SriService.get_active_ws()[0])
         result = client.service.validarComprobante(strbuffer)
-        # self.logger.info('Estado de respuesta documento: %s' % result['estado'])
+
         # return True, 'Enviado', []
         # validar esta parte
         errores = []
@@ -167,8 +165,8 @@ class SriService(object):
         """
         values: tuple ([], [])
         """
-        env = self.get_active_env()
-        # dato = ' '.join(values[0] + [env] + values[1])
+        logging.error('create_access_key', values)
+        env = self.get_active_env() if self.get_active_env() else 1
         dato = ''.join(values[0]+[env]+values[1])
         modulo = CheckDigit.compute_mod11(dato)
         access_key = ''.join([dato, str(modulo)])
