@@ -120,6 +120,7 @@ class AccountWithdrawing(models.Model):
         # if self.authorization_sri == True:
         #     raise UserError(u'El documento ya fue enviado al SRI')
         error_msg = ''
+
         # try:
         for obj in self:
             if obj.authorization_number:
@@ -156,6 +157,8 @@ class AccountWithdrawing(models.Model):
         # except Exception as e:
         #     raise UserError(e.args)
         #
+
+      
     def retention_print(self):
         return self.env['report'].get_action(
             self,
