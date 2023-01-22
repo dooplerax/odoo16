@@ -6,6 +6,7 @@ from datetime import datetime
 import xmlsig
 from cryptography.hazmat.primitives.serialization import pkcs12
 from lxml import etree
+
 from .xades import template, utils, ObjectIdentifier, XAdESContext
 from .xades.policy import ImpliedPolicy
 
