@@ -105,11 +105,10 @@ class Xades(object):
         ctx = XAdESContext(ImpliedPolicy(xmlsig.constants.TransformSha1))
         with open(path_p12, "rb") as key_file:
             ctx.load_pkcs12(pkcs12.load_key_and_certificates(key_file.read(), passwod.encode('utf-8')))
-            doc = ctx.sign(signature)
+            ctx.sign(signature)
+            # ctx.verify(signature)
 
-        doct_str = etree.tostring(root)
-        signature_str = etree.tostring(signature)
-        doct_str = b'<?xml version="1.0" encoding="UTF-8" standalone="no"?>' + doct_str
+        doct_str = etree.tostring(root,pretty_print=True, xml_declaration=True)
 
         buffer_xml = base64.b64encode(doct_str)
         return False, buffer_xml
