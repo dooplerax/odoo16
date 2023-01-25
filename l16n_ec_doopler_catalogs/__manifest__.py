@@ -18,6 +18,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
+        'wizard/sale_order_pop.xml',
 
     ],
     

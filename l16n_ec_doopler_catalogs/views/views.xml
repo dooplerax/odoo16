@@ -7,30 +7,30 @@
       <field name="arch" type="xml">
         <form string="Formulario Clase">
           <sheet>
-            <separator string="Información"/>
+            <separator string="Información" />
             <group>
               <group>
-                <field name="cl_name"/>
+                <field name="cl_name" />
               </group>
               <group>
-                <field name="cl_name_code"/>
+                <field name="cl_name_code" />
               </group>
             </group>
-        </sheet>
+          </sheet>
         </form>
       </field>
     </record>
     <!--Vista LIst de CLase-->
     <record id="cproduct_doclass_list_view" model="ir.ui.view">
-        <field name="name">cproduct.doclass.list</field>
-        <field name="model">cproduct.doclass</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <tree string="Class Pro">
-              <field name="cl_name" string="Clase"/>
-              <field name="cl_name_code" string="Código"/>
-            </tree>
-        </field>
+      <field name="name">cproduct.doclass.list</field>
+      <field name="model">cproduct.doclass</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Class Pro">
+          <field name="cl_name" string="Clase" />
+          <field name="cl_name_code" string="Código" />
+        </tree>
+      </field>
     </record>
 
     <!-- Vistas de Subclases Productos -->
@@ -40,33 +40,33 @@
       <field name="arch" type="xml">
         <form string="Formulario SubClase">
           <sheet>
-            <label class="oe_edit_only" for="scl_name" string="Subclase de producto"/>
+            <label class="oe_edit_only" for="scl_name" string="Subclase de producto" />
             <h2>
-              <field name="scl_name"/>
+              <field name="scl_name" />
             </h2>
             <group>
               <group>
-                <separator string="Información"/>
-                <field name="scl_name_code"/>
-                <field name="cl_product_id"/>
+                <separator string="Información" />
+                <field name="scl_name_code" />
+                <field name="cl_product_id" />
               </group>
             </group>
-        </sheet>
+          </sheet>
         </form>
       </field>
     </record>
     <!-- Vistas de List Subclases Productos -->
     <record id="subproduct_dosubclass_list_view" model="ir.ui.view">
-        <field name="name">subproduct.dosubclass.list</field>
-        <field name="model">subproduct.dosubclass</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <tree string="SubClass Pro">
-              <field name="scl_name" string="Subclase"/>
-              <field name="scl_name_code" string="Código"/>
-              <field name="cl_product_id" string="Clase"/>
-            </tree>
-        </field>
+      <field name="name">subproduct.dosubclass.list</field>
+      <field name="model">subproduct.dosubclass</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="SubClass Pro">
+          <field name="scl_name" string="Subclase" />
+          <field name="scl_name_code" string="Código" />
+          <field name="cl_product_id" string="Clase" />
+        </tree>
+      </field>
     </record>
 
     <!-- Vistas de Familia Productos -->
@@ -75,25 +75,24 @@
       <field name="model">fproduct.dofamily</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="f_name"/>
-          <field name="f_name_code"/>
-          <field name="scl_product_id"/>
+          <field name="f_name" />
+          <field name="f_name_code" />
+          <field name="scl_product_id" />
         </tree>
       </field>
     </record>
-      <record id="fproduct_dofamily_list_view" model="ir.ui.view">
-        <field name="name">fproduct.dofamily.list</field>
-        <field name="model">fproduct.dofamily</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <tree string="Familias Productos">
-              <field name="f_name" string="Familia"/>
-              <field name="f_name_code" string="Código"/>
-              <field name="scl_product_id" string="Subclase"/>
-            </tree>
-        </field>
+    <record id="fproduct_dofamily_list_view" model="ir.ui.view">
+      <field name="name">fproduct.dofamily.list</field>
+      <field name="model">fproduct.dofamily</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Familias Productos">
+          <field name="f_name" string="Familia" />
+          <field name="f_name_code" string="Código" />
+          <field name="scl_product_id" string="Subclase" />
+        </tree>
+      </field>
     </record>
-
 
 
     <!-- Vistas de Modelo Productos -->
@@ -102,23 +101,23 @@
       <field name="model">mproduct.domodel</field>
       <field name="arch" type="xml">
         <tree>
-          <field name="m_name"/>
-          <field name="m_name_code"/>
-          <field name="f_product_id"/>
+          <field name="m_name" />
+          <field name="m_name_code" />
+          <field name="f_product_id" />
         </tree>
       </field>
     </record>
-      <record id="mproduct_domodel_list_view" model="ir.ui.view">
-        <field name="name">mproduct.domodel.list</field>
-        <field name="model">mproduct.domodel</field>
-        <field name="priority">1</field>
-        <field name="arch" type="xml">
-            <tree string="SubClass Pro">
-              <field name="m_name" string="Modelo"/>
-              <field name="m_name_code" string="Código"/>
-              <field name="f_product_id" string="Familia"/>
-            </tree>
-        </field>
+    <record id="mproduct_domodel_list_view" model="ir.ui.view">
+      <field name="name">mproduct.domodel.list</field>
+      <field name="model">mproduct.domodel</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="SubClass Pro">
+          <field name="m_name" string="Modelo" />
+          <field name="m_name_code" string="Código" />
+          <field name="f_product_id" string="Familia" />
+        </tree>
+      </field>
     </record>
 
 
@@ -156,127 +155,99 @@
       <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem name="Catalogos de productos" id="ec_doopler_catalogs_menu_root"/>
+    <menuitem name="Catalogos de productos" id="ec_doopler_catalogs_menu_root" />
 
     <!-- menu categories -->
 
-    <menuitem name="Clases de producto" id="cproduct_doclass_menu" parent="stock.menu_product_in_config_stock" action="cproduct_doclass_action_window"/>
-    <menuitem name="Subclases de producto" id="subproduct_dosubclass_menu" parent="stock.menu_product_in_config_stock" action="subproduct_dosubclass_action_window"/>
-    <menuitem name="Familias de producto" id="fproduct_dofamily_menu" parent="stock.menu_product_in_config_stock" action="fproduct_dofamily_action_window"/>
-    <menuitem name="Modelos de producto" id="mproduct_domodel_menu" parent="stock.menu_product_in_config_stock" action="mproduct_domodel_action_window"/>
+    <menuitem name="Clases de producto" id="cproduct_doclass_menu"
+      parent="stock.menu_product_in_config_stock" action="cproduct_doclass_action_window" />
+    <menuitem name="Subclases de producto" id="subproduct_dosubclass_menu"
+      parent="stock.menu_product_in_config_stock" action="subproduct_dosubclass_action_window" />
+    <menuitem name="Familias de producto" id="fproduct_dofamily_menu"
+      parent="stock.menu_product_in_config_stock" action="fproduct_dofamily_action_window" />
+    <menuitem name="Modelos de producto" id="mproduct_domodel_menu"
+      parent="stock.menu_product_in_config_stock" action="mproduct_domodel_action_window" />
     <!-- actions -->
 
     <!-- Herencias de Vistas -->
     <record id="cproduct_template_inherit_form" model="ir.ui.view">
-            <field name="name">product.template.form.inherit</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"></field>
-            <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
-                <xpath expr="//group/field[@name='product_tooltip']" position="after">
-                    <field name="class_inherit" required="1"/>
-                    <field name="subclass_inherit" required="1" domain="[('cl_product_id','=',class_inherit)]"/>
-                    <field name="fa_class_inherit" required="1" domain="[('scl_product_id','=',subclass_inherit)]"/>
-                    <field name="mod_class_inherit" required="1" domain="[('f_product_id','=',fa_class_inherit)]"/>
-                </xpath>
-               
-                <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
-                    <attribute name="readonly">1</attribute>
+      <field name="name">product.template.form.inherit</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_form_view"></field>
+      <field name="priority" eval="8" />
+      <field name="arch" type="xml">
+        <xpath expr="//group/field[@name='product_tooltip']" position="after">
+          <field name="class_inherit" required="1" />
+          <field name="subclass_inherit" required="1" domain="[('cl_product_id','=',class_inherit)]" />
+          <field name="fa_class_inherit" required="1"
+            domain="[('scl_product_id','=',subclass_inherit)]" />
+          <field name="mod_class_inherit" required="1"
+            domain="[('f_product_id','=',fa_class_inherit)]" />
+        </xpath>
+
+        <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
+                    <attribute
+        name="readonly">1</attribute>
                 </xpath>  -->
-            </field>
-        </record>
+      </field>
+    </record>
     <record id="cproduct_template_inherit_form_2" model="ir.ui.view">
-            <field name="name">product.template.form.inherit.2</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"></field>
-            <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='purchase_ok']" position="before">
-                        <span class="d-inline-block">
-                            <field name="details_ok"/>
-                            <label for="details_ok"/>
-                        </span>
-                </xpath>
-               
-                <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                </xpath>  -->
-            </field>
-        </record>
+      <field name="name">product.template.form.inherit.2</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_form_view"></field>
+      <field name="priority" eval="8" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='purchase_ok']" position="before">
+          <span class="d-inline-block">
+            <field name="details_ok" />
+            <label for="details_ok" />
+          </span>
+        </xpath>
+      </field>
+    </record>
+
     <record id="sale_order_inherit_form_2" model="ir.ui.view">
-            <field name="name">sale.order.form.inherit</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"></field>
-            <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
+      <field name="name">sale.order.form.inherit</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form"></field>
+      <field name="priority" eval="8" />
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='name']" position="attributes">
+          <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//field[@name='product_template_id']" position="after">
+          <field name="product_details_ok" invisible="1" />
+          <field name="details_id" target="new"
+            attrs="{'invisible': [('product_details_ok','!=',True)],'required':[('product_details_ok','=',True)]}" />
+        </xpath>
+      </field>
+    </record>
 
-              
-              <page name='order_lines' position="after">
-                <page string="Detalles" name="details">
-                                  <tree>
-                                    <field name="detail_descripcion" />
-                                  </tree>
-                      <field name="cortinas_ids" string="Detalles">
+    <record id="cproduct_template_inherit_only_form" model="ir.ui.view">
+      <field name="name">product.template.only.form.inherit</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_only_form_view"></field>
+      <field name="priority" eval="8" />
+      <field name="arch" type="xml">
+        <xpath expr="//group/field[@name='default_code']" position="attributes">
+          <attribute name="readonly">1</attribute>
+        </xpath>
 
+      </field>
+    </record>
 
-                                  <form>
-                                    <sheet>
-                                    <group >
-                                        <group>
-                                          <field name="tipo_cortina"/>
-                                          <field name="material"/>
-                                          <field name="ancho"/>
-                                          <field name="alto"/>
-                                        </group>
-                                        <group >
-                                          <field name="ambiente"/>
-                                          <field name="enci"/>
-                                          <field name="mot"/>
-                                          <field name="clnt"/>
-                                        </group>
-                                      
-                                    </group>
-
-                                    </sheet>
-                                </form>
-                      
-                      </field>
-
-                </page>
-
-              </page>
-
-
-
-              
-            </field>
-
-        </record>
-        <record id="cproduct_template_inherit_only_form" model="ir.ui.view">
-            <field name="name">product.template.only.form.inherit</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_only_form_view"></field>
-            <field name="priority" eval="8"/>
-            <field name="arch" type="xml">
-                <xpath expr="//group/field[@name='default_code']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                </xpath>
-
-            </field>
-        </record>
-    
-        <record id="doopler_product_template_tree_view" model="ir.ui.view">
-          <field name="name">product.template.product.tree.inherit</field>
-          <field name="model">product.template</field>
-          <field name="inherit_id" ref="product.product_template_tree_view"/>
-          <field name="arch" type="xml">
-              <field name="categ_id" position="before">
-                  <field name="class_inherit" optional="show" string="Clase de producto"/>
-                  <field name="subclass_inherit" optional="show" string="Subclase de producto"/>
-                  <field name="fa_class_inherit" optional="show" string="Familia de producto"/>
-                  <field name="mod_class_inherit" optional="show" string="Modelo de producto"/>
-              </field>
-          </field>
-        </record>
+    <record id="doopler_product_template_tree_view" model="ir.ui.view">
+      <field name="name">product.template.product.tree.inherit</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_tree_view" />
+      <field name="arch" type="xml">
+        <field name="categ_id" position="before">
+          <field name="class_inherit" optional="show" string="Clase de producto" />
+          <field name="subclass_inherit" optional="show" string="Subclase de producto" />
+          <field name="fa_class_inherit" optional="show" string="Familia de producto" />
+          <field name="mod_class_inherit" optional="show" string="Modelo de producto" />
+        </field>
+      </field>
+    </record>
   </data>
 </odoo>
