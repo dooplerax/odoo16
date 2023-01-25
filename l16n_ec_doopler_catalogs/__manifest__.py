@@ -14,10 +14,12 @@
     'website': "https://citytech.ec",
     'category': 'Inventary',
     'version': '0.1',
-    'depends': ['base', 'mail', 'uom', 'product'],
+    'depends': ['base', 'mail', 'uom', 'product','sale'],
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
+        'wizard/sale_order_pop.xml',
+
     ],
     
     'demo': [

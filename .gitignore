@@ -127,3 +127,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 *.pyc
+l16n_ec_doopler_catalogs/__pycache__/*.pyc
+
+l16n_ec_doopler_catalogs/models/__pycache__/*.pyc
+l16n_ec_doopler_catalogs/models/__pycache__/catalogs_add_product.cpython-310.pyc

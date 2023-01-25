@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <data>
+          <!-- retenciones de compras -->
+          <record id="sale_oder_pop_action" model="ir.actions.act_window">
+               <field name="name">sale.order.pop</field>
+               <field name="res_model">sale.order.pop</field>
+               <field name="view_mode">tree,form</field>
+               <field name="target">new</field>
+          </record>
+     </data>
+</odoo>
