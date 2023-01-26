@@ -1,5 +1,5 @@
 from odoo import api, fields, models, _
-
+from odoo.exceptions import ValidationError
 
 class SaleOrderPop(models.Model):
     _name = 'sale.order.pop'
@@ -34,7 +34,7 @@ class SaleOrderPop(models.Model):
     @api.constrains('ancho', 'alto')
     def _check_values(self):
         if self.ancho <= 0.0 or self.alto <= 0.0:
-            raise UserWarning(_('Los valores deben ser mayores a cero.'))
+            raise ValidationError(_('Los valores deben ser mayores a cero.'))
 
     # product_id = fields.Many2one('product.template',string="product_id")
     # default_code=fields.Char('product.template',related='product_id.default_code')
