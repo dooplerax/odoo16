@@ -10,15 +10,15 @@
           <sheet>
             <group>
               <group>
+                <field name="name" required="1" />
                 <field name="tipo_cortina" required="1" />
-                <field name="material" required="1" />
                 <field name="ancho" required="1" />
                 <field name="alto" required="1" />
                 <field name="clnt" required="1" />
               </group>
               <group>
                 <field name="mando" required="1" />
-                <field name="ambiente" required="1" />
+                <field name="material" required="1" />
                 <field name="enci" required="1" />
                 <field name="mot" required="1" />
 
