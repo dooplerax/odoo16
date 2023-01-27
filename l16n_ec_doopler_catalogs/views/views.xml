@@ -212,12 +212,13 @@
       <field name="inherit_id" ref="sale.view_order_form"></field>
       <field name="priority" eval="8" />
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='name']" position="attributes">
+        <xpath expr="//tree/field[@name='name']" position="attributes">
           <attribute name="invisible">1</attribute>
         </xpath>
         <xpath expr="//field[@name='product_template_id']" position="after">
           <field name="product_details_ok" invisible="1" />
           <field name="details_id" target="new"
+            domain="[('id','=',False)]"
             attrs="{'invisible': [('product_details_ok','!=',True)],'required':[('product_details_ok','=',True)]}" />
         </xpath>
       </field>
