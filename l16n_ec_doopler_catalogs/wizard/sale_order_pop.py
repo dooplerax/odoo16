@@ -11,7 +11,7 @@ class SaleOrderPop(models.Model):
     ancho=fields.Float(string="Ancho",required=True,default=None)
     alto=fields.Float(string="Alto",required=True,default=None)
     mando=fields.Selection([('Izquierda','IZQUIERDA'),('Derecha','DERECHA')], string="Mando",required=True)
-    ambiente=fields.Char(string="Ambiente",required=True)
+    
     enci=fields.Boolean(string="Enci",required=True, default=False)
     mot=fields.Boolean(string="Mot",required=True, default=False)
     clnt=fields.Boolean(string="Clnt",required=True, default=False)
@@ -25,7 +25,7 @@ class SaleOrderPop(models.Model):
                 cat.ancho,
                 cat.alto,
                 cat.mando,
-                cat.ambiente,
+                cat.name,
                 cat.enci,
                 cat.mot,
                 cat.clnt,
