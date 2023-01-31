@@ -250,7 +250,6 @@
       </field>
     </record>
    <!-- VISTA DESCUENTOS -->
-    </record>
         <record id="descuentos_model_view_tree" model="ir.ui.view">
             <field name="name">descuentos.model.view.tree</field>
             <field name="model">descuentos.model</field>
