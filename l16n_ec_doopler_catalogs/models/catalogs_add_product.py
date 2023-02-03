@@ -74,7 +74,7 @@ class AddCatalogInProduct(models.Model):
             self.subclass_inherit.scl_name_code,
             self.fa_class_inherit.f_name_code,
             self.mod_class_inherit.m_name_code,
-            str_seq
+            str_seq=str_seq+1
         )
         return code
              
