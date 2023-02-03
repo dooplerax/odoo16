@@ -12,7 +12,7 @@ class AddCatalogInProduct(models.Model):
     fa_class_inherit = fields.Many2one('fproduct.dofamily', 'Familia de producto')
     mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto')
     sequence = fields.Integer("Secuencia", default=1)
-    details_ok = fields.Boolean('Detalles', default=True)
+    details_ok = fields.Boolean('Detalles', default=False)
 
 
     #@api.onchange('class_inherit')

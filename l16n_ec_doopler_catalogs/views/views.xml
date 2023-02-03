@@ -256,12 +256,13 @@
             <field name="arch" type="xml">
                 <tree string="">
                         <field name="category_id" string="Categoria del cliente" />
-                        <field name="f_product_id" string="Familia" />
-                        <field name="color" string="Color"/> 
+                        <field name="fa_class_inherit" string="Familia" />
+                        <field name="colores" string="Color"/> 
                         <field name="min_descuento" string="Min. Descuento"/>   
                         <field name="max_descuento" string="Max Descuento"/>   
                         <field name="fecha_inicio" string="Fecha de inicio"/>   
                         <field name="fecha_vencimiento" string="Fecha de vencimiento"/>   
+                        <field name="active" string="Estado"/>   
 
 
                 </tree>
@@ -271,16 +272,20 @@
         <field name="name">descuentos.model.view.form</field>
         <field name="model">descuentos.model</field>
         <field name="arch" type="xml">
+                    <div name="button_box" position="inside">
+                            <field name="active" widget="boolean_toggle" string="Activar"/>
+                    </div>
             <form string="">
                 <sheet>
                     <group>
-                        <field name="category_id" string="Categoria del cliente" />
-                        <field name="f_product_id" string="Familia" />
-                        <field name="color" string="Color"/> 
-                        <field name="min_descuento" string="Min. Descuento"/>   
-                        <field name="max_descuento" string="Max Descuento"/>   
-                        <field name="fecha_inicio" string="Fecha de inicio"/>   
-                        <field name="fecha_vencimiento" string="Fecha de vencimiento"/>   
+                        <field name="category_id" string="Categoria del cliente" required="1" />
+                        <!-- <field name="class_inherit" string="Familia" required="1"/> -->
+                        <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
+                        <field name="colores" string="Color" required="1"/> 
+                        <field name="min_descuento" string="Min. Descuento" required="1"/>   
+                        <field name="max_descuento" string="Max Descuento" required="1"/>   
+                        <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
+                        <field name="fecha_vencimiento" string="Fecha de vencimiento" required="1"/>   
                    
                     </group>
 
