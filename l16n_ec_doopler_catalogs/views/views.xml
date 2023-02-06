@@ -226,8 +226,8 @@
             class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
           </button>
         </xpath>
-        <xpath expr="//field[@name='note']" position="after">
-          <div class="alert alert-info grid col-lg-8" role="alert" style="width: 402px;">
+        <xpath expr="//group[@name='note_group']" position="after">
+          <div class="alert alert-info grid col-lg-8" role="alert" style="display:block">
             <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
           </div>
         </xpath>
