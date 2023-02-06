@@ -221,7 +221,7 @@
             attrs="{'invisible': [('product_details_ok','!=',True)]}" />
           <button name="create_details" data-tooltip="Adicionar detalle"
             title="Guarde el producto para poder agregarle detalles"
-            attrs="{'invisible':[('product_details_ok','!=',True)]]}"
+            attrs="{'invisible':[('product_details_ok','!=',True)]}"
             type="object" arial-label="Adicionar detalle" disabled="0"
             class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
           </button>
