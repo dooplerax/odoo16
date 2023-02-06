@@ -37,5 +37,13 @@ class SaleOrderPop(models.Model):
         if self.ancho <= 0.0 or self.alto <= 0.0:
             raise ValidationError(_('Los valores deben ser mayores a cero.'))
 
+    @api.model_create_multi
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals_list):
+        note = super(SaleOrderPop, self).create(vals_list)
+        sale_order_line = self.env['sale.order.line'].browse(self.env.context.get('sale_order_line'))
+        sale_order_line.write({'details_id': note.id})
+        return note
+             
     # product_id = fields.Many2one('product.template',string="product_id")
     # default_code=fields.Char('product.template',related='product_id.default_code')
