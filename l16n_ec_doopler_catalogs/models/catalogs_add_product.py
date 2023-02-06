@@ -1,13 +1,13 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
-#from ec_models import *
+
+# from ec_models import *
 
 
 class AddCatalogInProduct(models.Model):
     _inherit = 'product.template'
 
-
-    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto' )
+    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto')
     subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto')
     fa_class_inherit = fields.Many2one('fproduct.dofamily', 'Familia de producto')
     mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto')
@@ -74,7 +74,7 @@ class AddCatalogInProduct(models.Model):
             self.subclass_inherit.scl_name_code,
             self.fa_class_inherit.f_name_code,
             self.mod_class_inherit.m_name_code,
-            str_seq=str_seq+1
+            str_seq
         )
         return code
              
