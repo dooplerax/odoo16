@@ -5,5 +5,13 @@ access_fproduct_dofamily,fproduct_dofamily,model_fproduct_dofamily,base.group_us
 access_mproduct_domodel,mproduct_domodel,model_mproduct_domodel,base.group_user,1,1,1,1
 access_sale_order_pop,sale_order_pop,model_sale_order_pop,base.group_user,1,1,1,1
 access_descuentos_model,descuentos_model,model_descuentos_model,base.group_user,1,1,1,1
-
-
+access_product_color_catalogo,product_color_catalogo,model_product_color_catalogo,base.group_user,1,1,1,1
+access_product_textura_catalogo,product_textura_catalogo,model_product_textura_catalogo,base.group_user,1,1,1,1
+access_product_presentacion_catalogo,product_presentacion_catalogo,model_product_presentacion_catalogo,base.group_user,1,1,1,1
+access_product_pestania_catalogo,product_pestania_catalogo,model_product_pestania_catalogo,base.group_user,1,1,1,1
+access_product_ranura_catalogo,product_ranura_catalogo,model_product_ranura_catalogo,base.group_user,1,1,1,1
+access_product_mando_catalogo,product_mando_catalogo,model_product_mando_catalogo,base.group_user,1,1,1,1
+access_product_logo_catalogo,product_logo_catalogo,model_product_logo_catalogo,base.group_user,1,1,1,1
+access_product_visillo_catalogo,product_visillo_catalogo,model_product_visillo_catalogo,base.group_user,1,1,1,1
+access_product_composicion_catalogo,product_composicion_catalogo,model_product_composicion_catalogo,base.group_user,1,1,1,1
+access_product_unidad_catalogo,product_unidad_catalogo,model_product_unidad_catalogo,base.group_user,1,1,1,1

@@ -11,12 +11,14 @@ class Descuentos(models.Model):
     # class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto' )
     category_id=fields.Many2one('res.partner.category', string="Categoria del cliente",required=True) 
     fa_class_inherit = fields.Many2one('fproduct.dofamily', string="Familia")
-    colores=fields.Many2one('fproduct.dofamily',required=True)    
     min_descuento=fields.Float(string="Minimo descuento",required=True)
     max_descuento=fields.Float(string="Maximo descuento",required=True)
     fecha_inicio=fields.Date(string="Fecha Inicio",required=True)
     fecha_vencimiento=fields.Date(string="Fecha Vencimiento",required=True)
     active = fields.Boolean(string="Estado",default=True)
+    product_id=fields.Many2one("product.template",domain="[('class_inherit','=',1)]")
+    colores=fields.Many2one(related='product_id.colorTela',domain="[('id','=',1)]")    
+
     @api.constrains('min_descuento', 'max_descuento','fecha_inicio','fecha_vencimiento')
     def _check_values(self):
         if self.min_descuento <= 0.0 or self.min_descuento>100:
