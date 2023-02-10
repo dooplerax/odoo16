@@ -278,10 +278,7 @@
                     <group>
                         <field name="category_id" string="Categoria del cliente" required="1" />
                         <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
-                        <field name="product_id" string="Productos" required="1"/> 
-                  
                         <field name="colores" string="Color" required="1"/> 
-
                         <field name="min_descuento" string="Min. Descuento" required="1"/>   
                         <field name="max_descuento" string="Max Descuento" required="1"/>   
                         <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
@@ -313,7 +310,7 @@
       <field name="priority" eval="8" />
       <field name="arch" type="xml">
             <xpath expr="//page[@name='invoicing']" position="after" >
-                <page name="attributes_telas" string="Atributos Telas" attrs ="{'invisible':[('class_inherit','!=',1)],'required':[('class_inherit','=',1)]}">
+                <page name="attributes_telas" string="Atributos Telas" attrs ="{'invisible':[('class_inherit','!=',1)]}">
 
                   <group>
                     <group>
@@ -377,7 +374,7 @@
                     <group>
                       <field name="logoAccesorios"></field>
                       <field name="diametroPerfileria"></field>
-                      <field name="umdiametroA" string='Unidad de Medida Diametro' attrs="{'required':[('class_inherit','=',6)]}"></field>
+                      <field name="umdiametroA" string='Unidad de Medida Diametro' attrs="{'required':[('class_inherit','=',5)]}"></field>
 
                     </group>
                   </group>
