@@ -10,14 +10,14 @@ class Descuentos(models.Model):
     _description = "Descuentos"
     # class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto' )
     category_id=fields.Many2one('res.partner.category', string="Categoria del cliente",required=True) 
-    fa_class_inherit = fields.Many2one('fproduct.dofamily', string="Familia")
+    fa_class_inherit = fields.Many2one('fproduct.dofamily', string="Familia",domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]")
     min_descuento=fields.Float(string="Minimo descuento",required=True)
     max_descuento=fields.Float(string="Maximo descuento",required=True)
     fecha_inicio=fields.Date(string="Fecha Inicio",required=True)
     fecha_vencimiento=fields.Date(string="Fecha Vencimiento",required=True)
     active = fields.Boolean(string="Estado",default=True)
     color_id=fields.Many2one("product.template",domain="[('fa_class_inherit','=',fa_class_inherit)]")
-    colores=fields.Many2one(related='color_id.colorTela')
+    colores=fields.Many2one('product.color.catalogo')
 
 
     @api.constrains('min_descuento', 'max_descuento','fecha_inicio','fecha_vencimiento')
