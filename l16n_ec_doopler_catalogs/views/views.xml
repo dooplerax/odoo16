@@ -268,6 +268,7 @@
                 <tree>
                         <field name="category_id" string="Categoria del cliente" />
                         <field name="fa_class_inherit" string="Familia" />
+              
                         <field name="colores" string="Color"/> 
                         <field name="min_descuento" string="Min. Descuento"/>   
                         <field name="max_descuento" string="Max Descuento"/>   
@@ -281,14 +282,17 @@
         <field name="name">descuentos.model.view.form</field>
         <field name="model">descuentos.model</field>
         <field name="arch" type="xml">
+
+            <form>
             <div name="button_box" position="inside">
                 <field name="active" widget="boolean_toggle" string="Activar"/>
             </div>
-            <form>
                 <sheet>
                     <group>
                         <field name="category_id" string="Categoria del cliente" required="1" />
                         <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
+                        <field name="color_id" string="Color"/> 
+
                         <field name="colores" string="Color" required="1"/> 
                         <field name="min_descuento" string="Min. Descuento" required="1"/>   
                         <field name="max_descuento" string="Max Descuento" required="1"/>   

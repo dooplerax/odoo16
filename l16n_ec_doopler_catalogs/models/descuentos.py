@@ -16,8 +16,10 @@ class Descuentos(models.Model):
     fecha_inicio=fields.Date(string="Fecha Inicio",required=True)
     fecha_vencimiento=fields.Date(string="Fecha Vencimiento",required=True)
     active = fields.Boolean(string="Estado",default=True)
-    color_id=fields.Many2one("product.template",domain="[('fa_class_inherit','=',fa_class_inherit)]",store=True)
+    color_id=fields.Many2one("product.template",domain="[('fa_class_inherit','=',fa_class_inherit)]")
     colores=fields.Many2one(related='color_id.colorTela')
+
+
     @api.constrains('min_descuento', 'max_descuento','fecha_inicio','fecha_vencimiento')
     def _check_values(self):
         if self.min_descuento <= 0.0 or self.min_descuento>100:
