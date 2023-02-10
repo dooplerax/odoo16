@@ -17,7 +17,7 @@ class Descuentos(models.Model):
     fecha_vencimiento=fields.Date(string="Fecha Vencimiento",required=True)
     active = fields.Boolean(string="Estado",default=True)
     color_id=fields.Many2one("product.template",domain="[('fa_class_inherit','=',fa_class_inherit)]")
-    colores=fields.Many2one(related='color_id.colorTela',domain="[('id','=',color_id.colorTela)]")
+    colores=fields.Many2one(related='color_id.colorTela')
 
 
     @api.constrains('min_descuento', 'max_descuento','fecha_inicio','fecha_vencimiento')
