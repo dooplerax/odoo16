@@ -291,7 +291,7 @@
                     <group>
                         <field name="category_id" string="Categoria del cliente" required="1" />
                         <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
-                        <field name="color_id" string="Color"/> 
+                        <!-- <field name="color_id" string="Color"/>  -->
 
                         <field name="colores" string="Color" required="1"/> 
                         <field name="min_descuento" string="Min. Descuento" required="1"/>   
@@ -346,8 +346,8 @@
                       <field name="aperturaTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
                     </group>
                     <group>
-                      <field name="umrollo" string='Unidad de Medida rollo' attrs="{'required':[('class_inherit','=',1)]}"></field>
-                      <field name="umfranja" string='Unidad de Medida franja' attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="umrollo" string='Unidad de Medida Rollo' attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="umfranja" string='Unidad de Medida Franja' attrs="{'required':[('class_inherit','=',1)]}"></field>
 
                     </group>
                   </group>
@@ -720,13 +720,13 @@
     </record>
 
     <menuitem name="Mandos" id="product_mando_catalogo_menu"
-    parent="menu_atributos_in_config_stock" action="product_mando_catalogo_action_window"/>  
+    parent="menu_atributos_in_config_stock" action="product_mando_catalogo_action_window"/>
 <!-- VISTA CATALOGOS logo -->
     <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
         <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
     </menuitem> -->
 
-      <record model="ir.ui.view" id="product_mando_catalogo_form_view">
+      <record model="ir.ui.view" id="product_logo_catalogo_form_view">
         <field name="name">product.logo.catalogo.view.form</field>
         <field name="model">product.logo.catalogo</field>
         <field name="arch" type="xml">
