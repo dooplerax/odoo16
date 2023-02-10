@@ -260,5 +260,542 @@
         </field>
       </field>
     </record>
+   <!-- VISTA DESCUENTOS -->
+        <record model="ir.ui.view" id="descuentos_model_view_tree">
+            <field name="name">descuentos.model.view.tree</field>
+            <field name="model">descuentos.model</field>
+            <field name="arch" type="xml">
+                <tree>
+                        <field name="category_id" string="Categoria del cliente" />
+                        <field name="fa_class_inherit" string="Familia" />
+                        <field name="colores" string="Color"/> 
+                        <field name="min_descuento" string="Min. Descuento"/>   
+                        <field name="max_descuento" string="Max Descuento"/>   
+                        <field name="fecha_inicio" string="Fecha de inicio"/>   
+                        <field name="fecha_vencimiento" string="Fecha de vencimiento"/>   
+                        <field name="active" string="Estado"/>   
+                </tree>
+            </field>
+        </record>
+    <record model="ir.ui.view" id="descuentos_model_view_form" >
+        <field name="name">descuentos.model.view.form</field>
+        <field name="model">descuentos.model</field>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <field name="active" widget="boolean_toggle" string="Activar"/>
+            </div>
+            <form>
+                <sheet>
+                    <group>
+                        <field name="category_id" string="Categoria del cliente" required="1" />
+                        <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
+                        <field name="colores" string="Color" required="1"/> 
+                        <field name="min_descuento" string="Min. Descuento" required="1"/>   
+                        <field name="max_descuento" string="Max Descuento" required="1"/>   
+                        <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
+                        <field name="fecha_vencimiento" string="Fecha de vencimiento" required="1"/>   
+                   
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="descuentos_model_action">
+      <field name="name">Modelos de Productos</field>
+      <field name="res_model">descuentos.model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem id="account_descuentos_menu" name="Descuentos" groups="account.group_account_manager" parent="account.menu_finance_configuration">
+        <menuitem id="menu_action_descuentos" name="Descuentos" action="descuentos_model_action" groups="account.group_account_manager" />
+    </menuitem>
+
+
+    <record id="cproduct_template_inherit_form_2" model="ir.ui.view">
+      <field name="name">product.template.form.inherit.2</field>
+      <field name="model">product.template</field>
+      <field name="inherit_id" ref="product.product_template_form_view"></field>
+      <field name="priority" eval="8" />
+      <field name="arch" type="xml">
+            <xpath expr="//page[@name='invoicing']" position="after" >
+                <page name="attributes_telas" string="Atributos Telas" attrs ="{'invisible':[('class_inherit','!=',1)]}">
+
+                  <group>
+                    <group>
+                      <field name="colorTela" attrs="{'required':[('class_inherit','=',1)]}" />
+                      <field name="visilloTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="texturaTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="composicionTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+
+
+                    </group>
+                    <group>
+                      <field name="pesoTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="presentacionTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="anchorolloTela" attrs="{'required':[('class_inherit','=',1)]}">
+                      </field>
+
+                      <field name="anchofranjaTela"></field>
+                      <field name="aperturaTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                    </group>
+                    <group>
+                      <field name="umrollo" string='Unidad de Medida rollo' attrs="{'required':[('class_inherit','=',1)]}"></field>
+                      <field name="umfranja" string='Unidad de Medida franja' attrs="{'required':[('class_inherit','=',1)]}"></field>
+
+                    </group>
+                  </group>
+
+                </page>
+
+                <page name="attributes_perfileria" string="Atributos Perfileria" attrs ="{'invisible':[('class_inherit','!=',6)]}">
+
+                  <group>
+                    <group>
+                      <field name="colorPerfileria" attrs="{'required':[('class_inherit','=',6)]}"></field>
+                      <field name="pestaniaPerfileria" ></field>
+                      <field name="ranuraPerfileria" ></field>
+                      <field name="medidaRanuraPerfileria" ></field>
+
+
+                    </group>
+                    <group>
+                      <field name="longitudPerfileria" attrs="{'required':[('class_inherit','=',6)]}"></field>
+                      <field name="diametroPerfileria"></field>
+                      <field name="umlongitud" string='Unidad de Medida Longitud' attrs="{'required':[('class_inherit','=',6)]}"></field>
+                      <field name="umdiametro" string='Unidad de Medida Diametro' attrs="{'required':[('class_inherit','=',6)]}"></field>
+
+                    </group>
+
+                  </group>
+
+                </page>
+                <page name="attributes_accesorios" string="Atributos Accesorios" attrs ="{'invisible':[('class_inherit','!=',5)]}" >
+
+                  <group>
+                    <group>
+                      <field name="colorAccesorios" attrs="{'required':[('class_inherit','=',5)]}"></field>
+                      <field name="mandoAccesorios" ></field>
+
+
+
+                    </group>
+                    <group>
+                      <field name="logoAccesorios"></field>
+                      <field name="diametroPerfileria"></field>
+                      <field name="umdiametroA" string='Unidad de Medida Diametro' attrs="{'required':[('class_inherit','=',5)]}"></field>
+
+                    </group>
+                  </group>
+
+
+                </page>
+            </xpath>
+      </field>
+    </record>
+    <menuitem id="menu_atributos_in_config_stock" name="Atributos de Productos" parent="stock.menu_stock_config_settings" sequence="5"/>
+
+<!-- VISTA CATALOGOS COLORES -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_color_catalogo_form_view">
+        <field name="name">product.color.catalogo.view.form</field>
+        <field name="model">product.color.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo colores">
+            <sheet>
+              <separator string="Colores" />
+              <group>
+                <group>
+                  <field name="colorTel" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_color_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.color.catalogo.list</field>
+      <field name="model">product.color.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Color">
+          <field name="colorTel" string="Color" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_color_catalogo_action_window">
+      <field name="name">Colores</field>
+      <field name="res_model">product.color.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Colores" id="product_color_catalogo_menu"
+      parent="menu_atributos_in_config_stock" action="product_color_catalogo_action_window" />
+<!-- VISTA CATALOGOS VISILLO -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_visillo_catalogo_form_view">
+        <field name="name">product.visillo.catalogo.view.form</field>
+        <field name="model">product.visillo.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Visillo">
+            <sheet>
+              <separator string="Visillo" />
+              <group>
+                <group>
+                  <field name="visillo" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_visillo_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.visillo.catalogo.list</field>
+      <field name="model">product.visillo.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Visillo">
+          <field name="visillo" string="Visillo" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_visillo_catalogo_action_window">
+      <field name="name">Visillos</field>
+      <field name="res_model">product.visillo.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Visillos" id="product_visillo_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_visillo_catalogo_action_window"/>
+<!-- VISTA CATALOGOS TEXTURA -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_textura_catalogo_form_view">
+        <field name="name">product.textura.catalogo.view.form</field>
+        <field name="model">product.textura.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Textura">
+            <sheet>
+              <separator string="Textura" />
+              <group>
+                <group>
+                  <field name="textura" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_textura_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.textura.catalogo.list</field>
+      <field name="model">product.textura.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Textura">
+          <field name="textura" string="Textura" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_textura_catalogo_action_window">
+      <field name="name">Textura</field>
+      <field name="res_model">product.textura.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Texturas" id="product_textura_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_textura_catalogo_action_window"/>
+
+<!-- VISTA CATALOGOS Composicion -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_composicion_catalogo_form_view">
+        <field name="name">product.composicion.catalogo.view.form</field>
+        <field name="model">product.composicion.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Composicion">
+            <sheet>
+              <separator string="Composicion" />
+              <group>
+                <group>
+                  <field name="composicion" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_composicion_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.composicion.catalogo.list</field>
+      <field name="model">product.composicion.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Composicion">
+          <field name="composicion" string="Composicion" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_composicion_catalogo_action_window">
+      <field name="name">Composicion</field>
+      <field name="res_model">product.composicion.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Composiciones" id="product_composicion_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_composicion_catalogo_action_window"/>
+<!-- VISTA CATALOGOS presentacion -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_presentacion_catalogo_form_view">
+        <field name="name">product.presentacion.catalogo.view.form</field>
+        <field name="model">product.presentacion.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Presentacion">
+            <sheet>
+              <separator string="Presentacion" />
+              <group>
+                <group>
+                  <field name="presentacion" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_presentacion_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.presentacion.catalogo.list</field>
+      <field name="model">product.presentacion.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Presentacion">
+          <field name="presentacion" string="Presentacion" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_presentacion_catalogo_action_window">
+      <field name="name">Presentacion</field>
+      <field name="res_model">product.presentacion.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Presentaciones" id="product_presentacion_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_presentacion_catalogo_action_window"/>
+<!-- VISTA CATALOGOS pestania -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_pestania_catalogo_form_view">
+        <field name="name">product.pestania.catalogo.view.form</field>
+        <field name="model">product.pestania.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Pestañas">
+            <sheet>
+              <separator string="Pestañas" />
+              <group>
+                <group>
+                  <field name="pestania" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_pestania_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.pestania.catalogo.list</field>
+      <field name="model">product.pestania.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Pestañas">
+          <field name="pestania" string="Pestañas" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_pestania_catalogo_action_window">
+      <field name="name">Pestañas</field>
+      <field name="res_model">product.pestania.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Pestañas" id="product_pestania_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_pestania_catalogo_action_window"/>
+<!-- VISTA CATALOGOS ranura -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_ranura_catalogo_form_view">
+        <field name="name">product.ranura.catalogo.view.form</field>
+        <field name="model">product.ranura.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Ranuras">
+            <sheet>
+              <separator string="Ranuras" />
+              <group>
+                <group>
+                  <field name="ranura" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_ranura_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.ranura.catalogo.list</field>
+      <field name="model">product.ranura.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Ranuras">
+          <field name="ranura" string="Ranuras" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_ranura_catalogo_action_window">
+      <field name="name">Ranuras</field>
+      <field name="res_model">product.ranura.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Ranuras" id="product_ranura_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_ranura_catalogo_action_window"/>
+<!-- VISTA CATALOGOS mando -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_mando_catalogo_form_view">
+        <field name="name">product.mando.catalogo.view.form</field>
+        <field name="model">product.mando.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Mandos">
+            <sheet>
+              <separator string="Mandos" />
+              <group>
+                <group>
+                  <field name="mando" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_mando_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.mando.catalogo.list</field>
+      <field name="model">product.mando.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Mandos">
+          <field name="mando" string="Mandos" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_mando_catalogo_action_window">
+      <field name="name">Mandos</field>
+      <field name="res_model">product.mando.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Mandos" id="product_mando_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_mando_catalogo_action_window"/>  
+<!-- VISTA CATALOGOS logo -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_mando_catalogo_form_view">
+        <field name="name">product.logo.catalogo.view.form</field>
+        <field name="model">product.logo.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Logos">
+            <sheet>
+              <separator string="Logos" />
+              <group>
+                <group>
+                  <field name="logo" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_logo_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.logo.catalogo.list</field>
+      <field name="model">product.logo.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Logos">
+          <field name="logo" string="Logos" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_logo_catalogo_action_window">
+      <field name="name">Logos</field>
+      <field name="res_model">product.logo.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Logos" id="product_logo_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_logo_catalogo_action_window"/>
+<!-- VISTA CATALOGOS unidades -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_unidad_catalogo_form_view">
+        <field name="name">product.unidad.catalogo.view.form</field>
+        <field name="model">product.unidad.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Unidades de medida">
+            <sheet>
+              <separator string="Unidades" />
+              <group>
+                <group>
+                  <field name="unidad" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_unidad_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.unidad.catalogo.list</field>
+      <field name="model">product.unidad.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Unidades">
+          <field name="unidad" string="Unidades" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_unidad_catalogo_action_window">
+      <field name="name">Unidades</field>
+      <field name="res_model">product.unidad.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Unidades" id="product_unidad_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_unidad_catalogo_action_window"/>
   </data>
 </odoo>
