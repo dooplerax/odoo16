@@ -20,7 +20,8 @@
         </form>
       </field>
     </record>
-    <!--Vista LIst de CLase-->
+    <!--Vista
+    LIst de CLase-->
     <record id="cproduct_doclass_list_view" model="ir.ui.view">
       <field name="name">cproduct.doclass.list</field>
       <field name="model">cproduct.doclass</field>
@@ -205,20 +206,30 @@
         </xpath>
       </field>
     </record>
-
+    <!--  aca esamos trabajando-->
     <record id="sale_order_inherit_form_2" model="ir.ui.view">
       <field name="name">sale.order.form.inherit</field>
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"></field>
       <field name="priority" eval="8" />
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='name']" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
-        <xpath expr="//field[@name='product_template_id']" position="after">
+        <xpath expr="//tree/field[@name='name']" position="replace">
+          <field name="name" invisible="1" />
           <field name="product_details_ok" invisible="1" />
-          <field name="details_id" target="new"
-            attrs="{'invisible': [('product_details_ok','!=',True)],'required':[('product_details_ok','=',True)]}" />
+          <field name="details_name" attrs="{'invisible': [('product_details_ok','!=',False)]}" />
+          <field name="details_id" target="new" domain="[('id','=',False)]"
+            attrs="{'invisible': [('product_details_ok','!=',True)]}" />
+          <button name="create_details" data-tooltip="Adicionar detalle"
+            title="Guarde el producto para poder agregarle detalles"
+            attrs="{'invisible':[('product_details_ok','!=',True)],'disabled':[('product_details_ok','!=',True)]}"
+            type="object" arial-label="Adicionar detalle" disabled="0"
+            class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
+          </button>
+        </xpath>
+        <xpath expr="//group[@name='note_group']" position="after">
+          <div class="alert alert-info grid col-lg-8" role="alert" style="display:block">
+            <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
+          </div>
         </xpath>
       </field>
     </record>
