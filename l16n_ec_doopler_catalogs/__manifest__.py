@@ -18,12 +18,13 @@
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
+        'views/product_template.xml',
         'wizard/sale_order_pop.xml',
     ],
     
-    'demo': [
-        'demo/demo.xml',
-    ],
+    # 'demo': [
+    #     'demo/demo.xml',
+    # ],
     'installable': True,
     'auto_install': False,
     'license': 'LGPL-3',
