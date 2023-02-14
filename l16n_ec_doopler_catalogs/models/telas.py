@@ -36,6 +36,7 @@ class ProductAccesorios(models.Model):
     umdiametroA=fields.Many2one('product.unidad.catalogo',string='Unidad de medida')
 
 
+
 class CatalogoColores(models.Model):
     _name= 'product.color.catalogo'
     _description = 'Colores'
