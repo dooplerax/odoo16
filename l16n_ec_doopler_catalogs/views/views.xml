@@ -186,12 +186,11 @@
             attrs="{'invisible': [('product_details_ok','!=',True)]}" />
           <button name="create_details" data-tooltip="Adicionar detalle"
             title="Guarde el producto para poder agregarle detalles"
-            attrs="{'invisible':[('product_details_ok','!=',True)],'disabled':[('product_details_ok','!=',True)]}"
-            type="object" arial-label="Adicionar detalle" disabled="0"
-            class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
+            attrs="{'invisible':[('product_details_ok','!=',True)]}"
+            type="object" arial-label="Adicionar detalle"  class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
           </button>
         </xpath>
-        <xpath expr="//group[@name='note_group']" position="after">
+        <xpath expr="//notebook" position="before">
           <div class="alert alert-info grid col-lg-8" role="alert" style="display:block">
             <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
           </div>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-
     <record model="ir.ui.view" id="sale_oder_pop_form">
       <field name="name">sale.order.pop.form</field>
       <field name="model">sale.order.pop</field>
@@ -21,7 +20,6 @@
                 <field name="material" required="1" />
                 <field name="enci" required="1" />
                 <field name="mot" required="1" />
-
               </group>
             </group>
           </sheet>
