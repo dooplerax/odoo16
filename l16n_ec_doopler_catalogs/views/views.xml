@@ -222,11 +222,10 @@
         <field name="arch" type="xml">
 
             <form>
-            <div name="button_box" position="inside">
-                <field name="active" widget="boolean_toggle" string="Activar"/>
-            </div>
                 <sheet>
                     <group>
+                        <field name="active" widget="boolean_toggle"/>
+
                         <field name="category_id" string="Categoria del cliente" required="1" />
                         <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
                         <!-- <field name="color_id" string="Color"/>  -->
@@ -245,7 +244,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="descuentos_model_action">
-      <field name="name">Modelos de Productos</field>
+      <field name="name">Descuentos</field>
       <field name="res_model">descuentos.model</field>
       <field name="view_mode">tree,form</field>
     </record>
