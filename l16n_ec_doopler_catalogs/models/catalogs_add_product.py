@@ -36,8 +36,7 @@ class AddCatalogInProduct(models.Model):
     def write(self, vals):  
         vals['default_code'] = self._generate_product_code()
         producto = super(AddCatalogInProduct, self).write(vals)
-        
-        pass
+        return producto
              
         
     @api.onchange('class_inherit')
