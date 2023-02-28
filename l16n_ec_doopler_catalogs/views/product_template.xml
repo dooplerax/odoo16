@@ -75,23 +75,23 @@
                     <page name="attributes_telas" string="Atributos Telas"
                           attrs="{'invisible':[('class_inherit','!=',1)]}">
                         <group>
-                            <group>
-                                <field name="colorTela" attrs="{'required':[('class_inherit','=',1)]}"/>
-                                <field name="visilloTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
-                                <field name="texturaTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
-                                <field name="composicionTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                            <group col="3">
+                                <field name="colorTela" attrs="{'required':[('class_inherit','=',1)]}" widget='selection'/>
+                                <field name="visilloTela" widget='selection'></field>
+                                <field name="texturaTela" attrs="{'required':[('class_inherit','=',1)]}" widget='selection' ></field>
+                                <field name="composicionTela" attrs="{'required':[('class_inherit','=',1)]}" widget='selection'></field>
                             </group>
-                            <group>
+                            <group col="3">
                                 <field name="pesoTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
-                                <field name="presentacionTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                                <field name="presentacionTela" attrs="{'required':[('class_inherit','=',1)]}" widget='selection'></field>
                                 <field name="anchorolloTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
                                 <field name="anchofranjaTela"></field>
-                                <field name="aperturaTela" attrs="{'required':[('class_inherit','=',1)]}"></field>
+                                <field name="aperturaTela" attrs="{'required':[('class_inherit','=',1)]}" widget="percentage"></field>
                             </group>
-                            <group>
-                                <field name="umrollo" string='Unidad de Medida Rollo'
+                            <group col="3">
+                                <field name="uom_id" string='Unidad de Medida Rollo'
                                        attrs="{'required':[('class_inherit','=',1)]}"></field>
-                                <field name="umfranja" string='Unidad de Medida Franja'
+                                <field name="uom_id" string='Unidad de Medida Franja'
                                        attrs="{'required':[('class_inherit','=',1)]}"></field>
                             </group>
                         </group>
@@ -102,7 +102,7 @@
                           attrs="{'invisible':[('class_inherit','!=',6)]}">
                         <group>
                             <group>
-                                <field name="colorPerfileria" attrs="{'required':[('class_inherit','=',6)]}"></field>
+                                <field name="colorPerfileria" attrs="{'required':[('class_inherit','=',6)]}" widget='selection'></field>
                                 <field name="pestaniaPerfileria"></field>
                                 <field name="ranuraPerfileria"></field>
                                 <field name="medidaRanuraPerfileria"></field>
@@ -110,9 +110,9 @@
                             <group>
                                 <field name="longitudPerfileria" attrs="{'required':[('class_inherit','=',6)]}"></field>
                                 <field name="diametroPerfileria"></field>
-                                <field name="umlongitud" string='Unidad de Medida Longitud'
+                                <field name="uom_id" string='Unidad de Medida Longitud'
                                        attrs="{'required':[('class_inherit','=',6)]}"></field>
-                                <field name="umdiametro" string='Unidad de Medida Diametro'
+                                <field name="uom_id" string='Unidad de Medida Diametro'
                                        attrs="{'required':[('class_inherit','=',6)]}"></field>
                             </group>
                         </group>
@@ -121,13 +121,13 @@
                           attrs="{'invisible':[('class_inherit','!=',5)]}">
                         <group>
                             <group>
-                                <field name="colorAccesorios" attrs="{'required':[('class_inherit','=',5)]}"></field>
-                                <field name="mandoAccesorios"></field>
+                                <field name="colorAccesorios" attrs="{'required':[('class_inherit','=',5)]}" widget='selection'></field>
+                                <field name="mandoAccesorios" widget='selection'></field>
                             </group>
                             <group>
                                 <field name="logoAccesorios"></field>
                                 <field name="diametroPerfileria"></field>
-                                <field name="umdiametroA" string='Unidad de Medida Diametro'
+                                <field name="uom_id" string='Unidad de Medida Diametro'
                                        attrs="{'required':[('class_inherit','=',5)]}"></field>
                             </group>
                         </group>

@@ -225,16 +225,23 @@
                 <sheet>
                     <group>
                         <field name="active" widget="boolean_toggle"/>
+                        <group >
+                             <field name="category_id" string="Categoria del cliente" required="1" />
+                              <field name="subclass_inherit" string="Subclase" required="1"/>
+                              <field name="colores" string="Color" required="1" />
+                              <field name="min_descuento" string="Min. Descuento" required="1"/>   
+                              <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
 
-                        <field name="category_id" string="Categoria del cliente" required="1" />
-                        <field name="fa_class_inherit" string="Familia" required="1" domain="[('scl_product_id.cl_product_id.cl_name','=','TELAS')]"/>
-                        <!-- <field name="color_id" string="Color"/>  -->
+                        </group>
+                        <group >
+                              <field name="fa_class_inherit" string="Familia" required="1"/>
+                              <field name="max_descuento" string="Max Descuento" required="1"/>   
+                              <field name="fecha_vencimiento" string="Fecha de vencimiento" required="1"/>   
+                        </group>
+                     
+                     
 
-                        <field name="colores" string="Color" required="1"/> 
-                        <field name="min_descuento" string="Min. Descuento" required="1"/>   
-                        <field name="max_descuento" string="Max Descuento" required="1"/>   
-                        <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
-                        <field name="fecha_vencimiento" string="Fecha de vencimiento" required="1"/>   
+
                    
                     </group>
 
@@ -618,45 +625,6 @@
 
     <menuitem name="Logos" id="product_logo_catalogo_menu"
     parent="menu_atributos_in_config_stock" action="product_logo_catalogo_action_window"/>
-<!-- VISTA CATALOGOS unidades -->
-    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
-        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
-    </menuitem> -->
 
-      <record model="ir.ui.view" id="product_unidad_catalogo_form_view">
-        <field name="name">product.unidad.catalogo.view.form</field>
-        <field name="model">product.unidad.catalogo</field>
-        <field name="arch" type="xml">
-          <form string="Unidades de medida">
-            <sheet>
-              <separator string="Unidades" />
-              <group>
-                <group>
-                  <field name="unidad" />
-                </group>
-              </group>
-            </sheet>
-          </form>
-        </field>
-      </record>
-    <record id="product_unidad_catalogo_list_view" model="ir.ui.view">
-      <field name="name">product.unidad.catalogo.list</field>
-      <field name="model">product.unidad.catalogo</field>
-      <field name="priority">1</field>
-      <field name="arch" type="xml">
-        <tree string="Unidades">
-          <field name="unidad" string="Unidades" />
-        </tree>
-      </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="product_unidad_catalogo_action_window">
-      <field name="name">Unidades</field>
-      <field name="res_model">product.unidad.catalogo</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem name="Unidades" id="product_unidad_catalogo_menu"
-    parent="menu_atributos_in_config_stock" action="product_unidad_catalogo_action_window"/>
   </data>
 </odoo>
