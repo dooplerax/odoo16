@@ -3,6 +3,7 @@ from odoo.exceptions import (UserError)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
+    dirEntrega=fields.Char(string="Direccion de entrega")
     
     def action_confirm(self):
         for line in self.order_line:

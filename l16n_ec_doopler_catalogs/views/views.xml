@@ -195,6 +195,11 @@
             <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
           </div>
         </xpath>
+        <xpath expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']" position="before">
+            <field name="dirEntrega" string="Direccion de entrega"/>
+        </xpath>
+
+
       </field>
     </record>
 
