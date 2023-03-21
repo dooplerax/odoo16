@@ -34,6 +34,20 @@ class SaleOrderLine(models.Model):
             'id': self.details_id.id,
             }
         
-             
 
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id', 'product_id.m2')
+    def _compute_amount(self):
+        for line in self:
+            price = line.price_unit * (1 - (line.discount or 0.0) / 100.0)
+            taxes = line.tax_id.compute_all(price, line.order_id.currency_id, line.product_uom_qty, product=line.product_id, partner=line.order_id.partner_shipping_id)
+            line.update({
+                'price_tax': sum(t.get('amount', 0.0) for t in taxes.get('taxes', [])),
+                'price_total': taxes['total_included'] * (line.product_id.m2 or 1),
+                'price_subtotal': taxes['total_excluded'],
+            })
 
+    @api.onchange('product_id', 'product_uom', 'product_uom_qty')
+    def _onchange_product_id_check_availability(self):
+        res = super(SaleOrderLine, self)._onchange_product_id_check_availability()
+        self._compute_amount()
+        return res
