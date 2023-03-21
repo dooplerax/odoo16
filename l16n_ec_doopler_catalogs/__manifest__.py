@@ -19,7 +19,7 @@
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/product_template.xml',
-        'views/cotizacion.xml',
+        'views/reporte/cotizacion.xml',
         'wizard/sale_order_pop.xml',
     ],
     
