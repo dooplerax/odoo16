@@ -195,6 +195,11 @@
             <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
           </div>
         </xpath>
+        <xpath expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']" position="before">
+            <field name="dirEntrega" string="Direccion de entrega"/>
+        </xpath>
+
+
       </field>
     </record>
 
@@ -224,18 +229,18 @@
             <form>
                 <sheet>
                     <group>
-                        <field name="active" widget="boolean_toggle"/>
+                        <field name="active" string="Activo/Inactivo" widget="boolean_toggle"/>
                         <group >
                              <field name="category_id" string="Categoria del cliente" required="1" />
                               <field name="subclass_inherit" string="Subclase" required="1"/>
                               <field name="colores" string="Color" required="1" />
-                              <field name="min_descuento" string="Min. Descuento" required="1"/>   
+                              <field name="min_descuento" string="Min. Descuento" required="1" widget="percentage"/>   
                               <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
 
                         </group>
                         <group >
                               <field name="fa_class_inherit" string="Familia" required="1"/>
-                              <field name="max_descuento" string="Max Descuento" required="1"/>   
+                              <field name="max_descuento" string="Max Descuento" required="1" widget="percentage"/>   
                               <field name="fecha_vencimiento" string="Fecha de vencimiento" required="1"/>   
                         </group>
                      
@@ -465,86 +470,7 @@
 
     <menuitem name="Presentaciones" id="product_presentacion_catalogo_menu"
     parent="menu_atributos_in_config_stock" action="product_presentacion_catalogo_action_window"/>
-<!-- VISTA CATALOGOS pestania -->
-    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
-        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
-    </menuitem> -->
 
-      <record model="ir.ui.view" id="product_pestania_catalogo_form_view">
-        <field name="name">product.pestania.catalogo.view.form</field>
-        <field name="model">product.pestania.catalogo</field>
-        <field name="arch" type="xml">
-          <form string="Catalogo Pestañas">
-            <sheet>
-              <separator string="Pestañas" />
-              <group>
-                <group>
-                  <field name="pestania" />
-                </group>
-              </group>
-            </sheet>
-          </form>
-        </field>
-      </record>
-    <record id="product_pestania_catalogo_list_view" model="ir.ui.view">
-      <field name="name">product.pestania.catalogo.list</field>
-      <field name="model">product.pestania.catalogo</field>
-      <field name="priority">1</field>
-      <field name="arch" type="xml">
-        <tree string="Pestañas">
-          <field name="pestania" string="Pestañas" />
-        </tree>
-      </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="product_pestania_catalogo_action_window">
-      <field name="name">Pestañas</field>
-      <field name="res_model">product.pestania.catalogo</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem name="Pestañas" id="product_pestania_catalogo_menu"
-    parent="menu_atributos_in_config_stock" action="product_pestania_catalogo_action_window"/>
-<!-- VISTA CATALOGOS ranura -->
-    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
-        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
-    </menuitem> -->
-
-      <record model="ir.ui.view" id="product_ranura_catalogo_form_view">
-        <field name="name">product.ranura.catalogo.view.form</field>
-        <field name="model">product.ranura.catalogo</field>
-        <field name="arch" type="xml">
-          <form string="Catalogo Ranuras">
-            <sheet>
-              <separator string="Ranuras" />
-              <group>
-                <group>
-                  <field name="ranura" />
-                </group>
-              </group>
-            </sheet>
-          </form>
-        </field>
-      </record>
-    <record id="product_ranura_catalogo_list_view" model="ir.ui.view">
-      <field name="name">product.ranura.catalogo.list</field>
-      <field name="model">product.ranura.catalogo</field>
-      <field name="priority">1</field>
-      <field name="arch" type="xml">
-        <tree string="Ranuras">
-          <field name="ranura" string="Ranuras" />
-        </tree>
-      </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="product_ranura_catalogo_action_window">
-      <field name="name">Ranuras</field>
-      <field name="res_model">product.ranura.catalogo</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem name="Ranuras" id="product_ranura_catalogo_menu"
-    parent="menu_atributos_in_config_stock" action="product_ranura_catalogo_action_window"/>
 <!-- VISTA CATALOGOS mando -->
     <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
         <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
@@ -585,46 +511,7 @@
 
     <menuitem name="Mandos" id="product_mando_catalogo_menu"
     parent="menu_atributos_in_config_stock" action="product_mando_catalogo_action_window"/>
-<!-- VISTA CATALOGOS logo -->
-    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
-        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
-    </menuitem> -->
 
-      <record model="ir.ui.view" id="product_logo_catalogo_form_view">
-        <field name="name">product.logo.catalogo.view.form</field>
-        <field name="model">product.logo.catalogo</field>
-        <field name="arch" type="xml">
-          <form string="Catalogo Logos">
-            <sheet>
-              <separator string="Logos" />
-              <group>
-                <group>
-                  <field name="logo" />
-                </group>
-              </group>
-            </sheet>
-          </form>
-        </field>
-      </record>
-    <record id="product_logo_catalogo_list_view" model="ir.ui.view">
-      <field name="name">product.logo.catalogo.list</field>
-      <field name="model">product.logo.catalogo</field>
-      <field name="priority">1</field>
-      <field name="arch" type="xml">
-        <tree string="Logos">
-          <field name="logo" string="Logos" />
-        </tree>
-      </field>
-    </record>
-
-    <record model="ir.actions.act_window" id="product_logo_catalogo_action_window">
-      <field name="name">Logos</field>
-      <field name="res_model">product.logo.catalogo</field>
-      <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem name="Logos" id="product_logo_catalogo_menu"
-    parent="menu_atributos_in_config_stock" action="product_logo_catalogo_action_window"/>
 
   </data>
 </odoo>

@@ -46,3 +46,10 @@ class SaleOrderPop(models.Model):
         sale_order_line = self.env['sale.order.line'].browse(self.env.context.get('sale_order_line'))
         sale_order_line.write({'details_id': note.id})
         return note
+    
+    m2 = fields.Float(string="M2", compute="_compute_m2")
+
+    @api.depends('ancho', 'alto')
+    def _compute_m2(self):
+        for record in self:
+            record.m2 = record.ancho * record.alto

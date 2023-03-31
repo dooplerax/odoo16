@@ -13,7 +13,12 @@ class AddCatalogInProduct(models.Model):
     mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto')
     sequence = fields.Integer("Secuencia", default=1)
     details_ok = fields.Boolean('Detalles', default=False)
+    m2 = fields.Float(string='m2', compute='_compute_m2', store=True)
 
+    @api.depends('anchorolloTela')
+    def _compute_m2(self):
+        for record in self:
+            record.m2 = record.anchorolloTela * record.anchorolloTela
 
     #@api.onchange('class_inherit')
     #def _onchange_sclass(self):

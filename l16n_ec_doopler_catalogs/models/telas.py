@@ -13,14 +13,14 @@ class ProductTelas(models.Model):
     anchorolloTela=fields.Float(string='Ancho de Rollo')
     anchofranjaTela=fields.Float(string='Ancho de franja')
     aperturaTela=fields.Float(string='Apertura')
-    umrollo=fields.Many2one('product.unidad.catalogo',string='Unidad de medida')
+    umrollo=fields.Many2one('product.template',related='uom_id',string='Unidad de medida')
     umfranja=fields.Many2one('product.unidad.catalogo',string='Unidad de medida')
 
 class ProductPerfileria(models.Model):
     _inherit= 'product.template'
     colorPerfileria=fields.Many2one('product.color.catalogo',string="Colores")
-    pestaniaPerfileria=fields.Many2one('product.pestania.catalogo',string="Pestañas")
-    ranuraPerfileria=fields.Many2one('product.ranura.catalogo',string='Ranura')
+    pestaniaPerfileria=fields.Boolean(string="Pestañas",default=False)
+    ranuraPerfileria=fields.Boolean(string='Ranura',default=False)
     longitudPerfileria=fields.Float(string='Longitud')
     diametroPerfileria=fields.Float(string='Diametro')
     medidaRanuraPerfileria=fields.Float(string='Medida Ranura')
@@ -32,7 +32,7 @@ class ProductAccesorios(models.Model):
     _inherit= 'product.template'
     colorAccesorios=fields.Many2one('product.color.catalogo',string="Colores")
     mandoAccesorios=fields.Many2one('product.mando.catalogo',string="Mandos")
-    logoAccesorios=fields.Many2one('product.logo.catalogo',string="Logos")
+    logoAccesorios=fields.Boolean(string="Logos",default=False)
     diametroAccesorios=fields.Float(string='Diametro')
     umdiametroA=fields.Many2one('product.unidad.catalogo',string='Unidad de medida')
 
@@ -141,29 +141,7 @@ class CatalogoPresentacion(models.Model):
         return super(CatalogoPresentacion, self).unlink()
         
 
-class CatalogoPestania(models.Model):
-    _name= 'product.pestania.catalogo'
-    _description = 'Pestañas'
-    _rec_name = 'pestania'
-    pestania = fields.Char('Pestañas', required=True,unique=True, ondelete='restrict')
-    @api.onchange('pestania')
-    def set_caps(self):        
-        if self.pestania:
-            self.pestania=str(self.pestania).upper()
-        else:
-            self.pestania=''
 
-class CatalogoRanura(models.Model):
-    _name= 'product.ranura.catalogo'
-    _description = 'Ranuras'
-    _rec_name = 'ranura'
-    ranura = fields.Char('Ranuras', required=True,unique=True, ondelete='restrict')
-    @api.onchange('ranura')
-    def set_caps(self):        
-        if self.ranura:
-            self.ranura=str(self.ranura).upper()
-        else:
-            self.ranura=''
 
 class CatalogoMando(models.Model):
     _name= 'product.mando.catalogo'
@@ -190,17 +168,7 @@ class CatalogoMando(models.Model):
         # Llama al método padre para continuar con la eliminación
         return super(CatalogoMando, self).unlink()
 
-class CatalogoLogo(models.Model):
-    _name= 'product.logo.catalogo'
-    _description = 'Logos'
-    _rec_name = 'logo'
-    logo = fields.Char('Logos', required=True,unique=True, ondelete='restrict')
-    @api.onchange('logo')
-    def set_caps(self):        
-        if self.logo:
-            self.logo=str(self.logo).upper()
-        else:
-            self.logo=''
+
 
 class CatalogoComposicion(models.Model):
     _name= 'product.composicion.catalogo'

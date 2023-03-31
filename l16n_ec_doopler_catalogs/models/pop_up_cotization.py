@@ -3,6 +3,7 @@ from odoo.exceptions import (UserError)
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
     
+    dirEntrega=fields.Char(string="Direccion de entrega")
     
     def action_confirm(self):
         for line in self.order_line:
@@ -19,6 +20,7 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     
     product_details_ok = fields.Boolean(string='Product Details',related='product_template_id.details_ok')
+    metros2=fields.Float(related='product_template_id.m2')
     details_id = fields.Many2one('sale.order.pop', string='Detalle del producto',required=False, ondelete='cascade')
     details_name = fields.Char(string='Descripción')
     def create_details(self):
@@ -32,7 +34,6 @@ class SaleOrderLine(models.Model):
             'res_id': self.details_id.id,
             'id': self.details_id.id,
             }
-        
-             
 
 
+    
