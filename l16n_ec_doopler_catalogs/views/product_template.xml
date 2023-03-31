@@ -106,7 +106,7 @@
                         <group class="oe_inline">
                             <group class="oe_inline">
                                 <field name="colorPerfileria" attrs="{'required':[('class_inherit','=',6)]}" widget='selection'></field>
-                                <field name="pestaniaPerfileria"></field>
+<!--                                 <field name="pestaniaPerfileria"></field> -->
                                 <field name="ranuraPerfileria"></field>
                                 <field name="medidaRanuraPerfileria"></field>
                             </group>
