@@ -42,6 +42,15 @@ class AccountMove(models.Model):
     sustento_sri = fields.Many2one('l10n_ec.sri.payment', string='Sustento del Comprobante',  copy=True)
     epayment_id = fields.Many2one('account.epayment', 'Forma de Pago')
     off_accounting = fields.Boolean('Fuera de Contabilidad', default=False)
+       # === Date fields === #
+    invoice_date = fields.Date(
+        string='Invoice/Bill Date',
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+        index=True,
+        copy=False,
+        default=fields.Date.context_today,
+        )
     
     authorization_number = fields.Char(
         string='Clave de Acceso',

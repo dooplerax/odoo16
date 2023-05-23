@@ -1,19 +1,24 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models
 
-#from ec_models import *
+
+# from ec_models import *
 
 
 class AddCatalogInProduct(models.Model):
     _inherit = 'product.template'
 
-
-    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto' )
+    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto')
     subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto')
     fa_class_inherit = fields.Many2one('fproduct.dofamily', 'Familia de producto')
     mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto')
     sequence = fields.Integer("Secuencia", default=1)
-    details_ok = fields.Boolean('Detalles', default=True)
+    details_ok = fields.Boolean('Detalles', default=False)
+    m2 = fields.Float(string='m2', compute='_compute_m2', store=True)
 
+    @api.depends('anchorolloTela')
+    def _compute_m2(self):
+        for record in self:
+            record.m2 = record.anchorolloTela * record.anchorolloTela
 
     #@api.onchange('class_inherit')
     #def _onchange_sclass(self):
@@ -36,8 +41,7 @@ class AddCatalogInProduct(models.Model):
     def write(self, vals):  
         vals['default_code'] = self._generate_product_code()
         producto = super(AddCatalogInProduct, self).write(vals)
-        
-        pass
+        return producto
              
         
     @api.onchange('class_inherit')
