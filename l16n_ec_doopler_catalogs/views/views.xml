@@ -20,7 +20,8 @@
         </form>
       </field>
     </record>
-    <!--Vista LIst de CLase-->
+    <!--Vista
+    LIst de CLase-->
     <record id="cproduct_doclass_list_view" model="ir.ui.view">
       <field name="name">cproduct.doclass.list</field>
       <field name="model">cproduct.doclass</field>
@@ -169,85 +170,348 @@
       parent="stock.menu_product_in_config_stock" action="mproduct_domodel_action_window" />
     <!-- actions -->
 
-    <!-- Herencias de Vistas -->
-    <record id="cproduct_template_inherit_form" model="ir.ui.view">
-      <field name="name">product.template.form.inherit</field>
-      <field name="model">product.template</field>
-      <field name="inherit_id" ref="product.product_template_form_view"></field>
-      <field name="priority" eval="8" />
-      <field name="arch" type="xml">
-        <xpath expr="//group/field[@name='product_tooltip']" position="after">
-          <field name="class_inherit" required="1" />
-          <field name="subclass_inherit" required="1" domain="[('cl_product_id','=',class_inherit)]" />
-          <field name="fa_class_inherit" required="1"
-            domain="[('scl_product_id','=',subclass_inherit)]" />
-          <field name="mod_class_inherit" required="1"
-            domain="[('f_product_id','=',fa_class_inherit)]" />
-        </xpath>
 
-        <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
-                    <attribute
-        name="readonly">1</attribute>
-                </xpath>  -->
-      </field>
-    </record>
-    <record id="cproduct_template_inherit_form_2" model="ir.ui.view">
-      <field name="name">product.template.form.inherit.2</field>
-      <field name="model">product.template</field>
-      <field name="inherit_id" ref="product.product_template_form_view"></field>
-      <field name="priority" eval="8" />
-      <field name="arch" type="xml">
-        <xpath expr="//field[@name='purchase_ok']" position="before">
-          <span class="d-inline-block">
-            <field name="details_ok" />
-            <label for="details_ok" />
-          </span>
-        </xpath>
-      </field>
-    </record>
-
+    <!--  aca esamos trabajando-->
     <record id="sale_order_inherit_form_2" model="ir.ui.view">
       <field name="name">sale.order.form.inherit</field>
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form"></field>
       <field name="priority" eval="8" />
       <field name="arch" type="xml">
-        <xpath expr="//field[@name='name']" position="attributes">
-          <attribute name="invisible">1</attribute>
-        </xpath>
-        <xpath expr="//field[@name='product_template_id']" position="after">
+        <xpath expr="//tree/field[@name='name']" position="replace">
+          <field name="name" invisible="1" />
           <field name="product_details_ok" invisible="1" />
-          <field name="details_id" target="new"
-            attrs="{'invisible': [('product_details_ok','!=',True)],'required':[('product_details_ok','=',True)]}" />
+          <field name="details_name" attrs="{'invisible': [('product_details_ok','!=',False)]}" />
+          <field name="details_id" target="new" domain="[('id','=',False)]"
+            attrs="{'invisible': [('product_details_ok','!=',True)]}" />
+          <button name="create_details" data-tooltip="Adicionar detalle"
+            title="Guarde el producto para poder agregarle detalles"
+            attrs="{'invisible':[('product_details_ok','!=',True)]}"
+            type="object" arial-label="Adicionar detalle"  class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
+          </button>
         </xpath>
+        <xpath expr="//notebook" position="before">
+          <div class="alert alert-info grid col-lg-8" role="alert" style="display:block">
+            <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
+          </div>
+        </xpath>
+        <xpath expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']" position="before">
+            <field name="dirEntrega" string="Direccion de entrega"/>
+        </xpath>
+
+
       </field>
     </record>
 
-    <record id="cproduct_template_inherit_only_form" model="ir.ui.view">
-      <field name="name">product.template.only.form.inherit</field>
-      <field name="model">product.template</field>
-      <field name="inherit_id" ref="product.product_template_only_form_view"></field>
-      <field name="priority" eval="8" />
-      <field name="arch" type="xml">
-        <xpath expr="//group/field[@name='default_code']" position="attributes">
-          <attribute name="readonly">1</attribute>
-        </xpath>
+   <!-- VISTA DESCUENTOS -->
+        <record model="ir.ui.view" id="descuentos_model_view_tree">
+            <field name="name">descuentos.model.view.tree</field>
+            <field name="model">descuentos.model</field>
+            <field name="arch" type="xml">
+                <tree>
+                        <field name="category_id" string="Categoria del cliente" />
+                        <field name="fa_class_inherit" string="Familia" />
+              
+                        <field name="colores" string="Color"/> 
+                        <field name="min_descuento" string="Min. Descuento"/>   
+                        <field name="max_descuento" string="Max Descuento"/>   
+                        <field name="fecha_inicio" string="Fecha de inicio"/>   
+                        <field name="fecha_vencimiento" string="Fecha de vencimiento"/>   
+                        <field name="active" string="Estado"/>   
+                </tree>
+            </field>
+        </record>
+    <record model="ir.ui.view" id="descuentos_model_view_form" >
+        <field name="name">descuentos.model.view.form</field>
+        <field name="model">descuentos.model</field>
+        <field name="arch" type="xml">
 
-      </field>
-    </record>
+            <form>
+                <sheet>
+                    <group>
+                        <field name="active" string="Activo/Inactivo" widget="boolean_toggle"/>
+                        <group >
+                             <field name="category_id" string="Categoria del cliente" required="1" />
+                              <field name="subclass_inherit" string="Subclase" required="1"/>
+                              <field name="colores" string="Color" required="1" />
+                              <field name="min_descuento" string="Min. Descuento" required="1" widget="percentage"/>   
+                              <field name="fecha_inicio" string="Fecha de inicio" required="1"/>   
 
-    <record id="doopler_product_template_tree_view" model="ir.ui.view">
-      <field name="name">product.template.product.tree.inherit</field>
-      <field name="model">product.template</field>
-      <field name="inherit_id" ref="product.product_template_tree_view" />
-      <field name="arch" type="xml">
-        <field name="categ_id" position="before">
-          <field name="class_inherit" optional="show" string="Clase de producto" />
-          <field name="subclass_inherit" optional="show" string="Subclase de producto" />
-          <field name="fa_class_inherit" optional="show" string="Familia de producto" />
-          <field name="mod_class_inherit" optional="show" string="Modelo de producto" />
+                        </group>
+                        <group >
+                              <field name="fa_class_inherit" string="Familia" required="1"/>
+                              <field name="max_descuento" string="Max Descuento" required="1" widget="percentage"/>   
+                              <field name="fecha_vencimiento" string="Fecha de vencimiento" required="1"/>   
+                        </group>
+                     
+                     
+
+
+                   
+                    </group>
+
+                </sheet>
+            </form>
         </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="descuentos_model_action">
+      <field name="name">Descuentos</field>
+      <field name="res_model">descuentos.model</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem id="account_descuentos_menu" name="Descuentos" groups="account.group_account_manager" parent="account.menu_finance_configuration">
+        <menuitem id="menu_action_descuentos" name="Descuentos" action="descuentos_model_action" groups="account.group_account_manager" />
+    </menuitem>
+
+
+
+    <menuitem id="menu_atributos_in_config_stock" name="Atributos de Productos" parent="stock.menu_stock_config_settings" sequence="5"/>
+
+<!-- VISTA CATALOGOS COLORES -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_color_catalogo_form_view">
+        <field name="name">product.color.catalogo.view.form</field>
+        <field name="model">product.color.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo colores">
+            <sheet>
+              <separator string="Colores" />
+              <group>
+                <group>
+                  <field name="colorTel" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_color_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.color.catalogo.list</field>
+      <field name="model">product.color.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Color">
+          <field name="colorTel" string="Color" />
+        </tree>
       </field>
     </record>
+
+    <record model="ir.actions.act_window" id="product_color_catalogo_action_window">
+      <field name="name">Colores</field>
+      <field name="res_model">product.color.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Colores" id="product_color_catalogo_menu"
+      parent="menu_atributos_in_config_stock" action="product_color_catalogo_action_window" />
+<!-- VISTA CATALOGOS VISILLO -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_visillo_catalogo_form_view">
+        <field name="name">product.visillo.catalogo.view.form</field>
+        <field name="model">product.visillo.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Visillo">
+            <sheet>
+              <separator string="Visillo" />
+              <group>
+                <group>
+                  <field name="visillo" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_visillo_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.visillo.catalogo.list</field>
+      <field name="model">product.visillo.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Visillo">
+          <field name="visillo" string="Visillo" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_visillo_catalogo_action_window">
+      <field name="name">Visillos</field>
+      <field name="res_model">product.visillo.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Visillos" id="product_visillo_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_visillo_catalogo_action_window"/>
+<!-- VISTA CATALOGOS TEXTURA -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_textura_catalogo_form_view">
+        <field name="name">product.textura.catalogo.view.form</field>
+        <field name="model">product.textura.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Textura">
+            <sheet>
+              <separator string="Textura" />
+              <group>
+                <group>
+                  <field name="textura" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_textura_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.textura.catalogo.list</field>
+      <field name="model">product.textura.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Textura">
+          <field name="textura" string="Textura" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_textura_catalogo_action_window">
+      <field name="name">Textura</field>
+      <field name="res_model">product.textura.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Texturas" id="product_textura_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_textura_catalogo_action_window"/>
+
+<!-- VISTA CATALOGOS Composicion -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_composicion_catalogo_form_view">
+        <field name="name">product.composicion.catalogo.view.form</field>
+        <field name="model">product.composicion.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Composicion">
+            <sheet>
+              <separator string="Composicion" />
+              <group>
+                <group>
+                  <field name="composicion" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_composicion_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.composicion.catalogo.list</field>
+      <field name="model">product.composicion.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Composicion">
+          <field name="composicion" string="Composicion" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_composicion_catalogo_action_window">
+      <field name="name">Composicion</field>
+      <field name="res_model">product.composicion.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Composiciones" id="product_composicion_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_composicion_catalogo_action_window"/>
+<!-- VISTA CATALOGOS presentacion -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_presentacion_catalogo_form_view">
+        <field name="name">product.presentacion.catalogo.view.form</field>
+        <field name="model">product.presentacion.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Presentacion">
+            <sheet>
+              <separator string="Presentacion" />
+              <group>
+                <group>
+                  <field name="presentacion" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_presentacion_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.presentacion.catalogo.list</field>
+      <field name="model">product.presentacion.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Presentacion">
+          <field name="presentacion" string="Presentacion" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_presentacion_catalogo_action_window">
+      <field name="name">Presentacion</field>
+      <field name="res_model">product.presentacion.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Presentaciones" id="product_presentacion_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_presentacion_catalogo_action_window"/>
+
+<!-- VISTA CATALOGOS mando -->
+    <!-- <menuitem id="stock_atributos_menu" name="Atributos de productos" groups="stock.menu_stock_config_settings"  sequence="3">
+        <menuitem id="menu_action_atributos" name="Descuentos" action="descuentos_model_action" groups="stock.menu_stock_config_settings" sequence="10"/>
+    </menuitem> -->
+
+      <record model="ir.ui.view" id="product_mando_catalogo_form_view">
+        <field name="name">product.mando.catalogo.view.form</field>
+        <field name="model">product.mando.catalogo</field>
+        <field name="arch" type="xml">
+          <form string="Catalogo Mandos">
+            <sheet>
+              <separator string="Mandos" />
+              <group>
+                <group>
+                  <field name="mando" />
+                </group>
+              </group>
+            </sheet>
+          </form>
+        </field>
+      </record>
+    <record id="product_mando_catalogo_list_view" model="ir.ui.view">
+      <field name="name">product.mando.catalogo.list</field>
+      <field name="model">product.mando.catalogo</field>
+      <field name="priority">1</field>
+      <field name="arch" type="xml">
+        <tree string="Mandos">
+          <field name="mando" string="Mandos" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="product_mando_catalogo_action_window">
+      <field name="name">Mandos</field>
+      <field name="res_model">product.mando.catalogo</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Mandos" id="product_mando_catalogo_menu"
+    parent="menu_atributos_in_config_stock" action="product_mando_catalogo_action_window"/>
+
+
   </data>
 </odoo>

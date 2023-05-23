@@ -97,7 +97,7 @@ class DoModelCatalog(models.Model):
     f_product_id = fields.Many2one('fproduct.dofamily', string="Familia")
     
     _sql_constraints = [
-        ('f_name_code_uniq', 'unique (m_name_code)', "Código ya registrado!"),
+        ('f_mproduct_name_code_uniq', 'unique (m_name_code)', "Código ya registrado!"),
     ]
 
 
