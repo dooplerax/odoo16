@@ -101,7 +101,7 @@ class AccountStatementsWizard(models.Model):
         workbook.save(fp)
         fp.seek(0)
         export_id = self.env['download.xlsx'].create(
-            {'excel_file': base64.encodestring(fp.getvalue()), 'file_name': 'Estado de cuentas.xls'})
+            {'excel_file': base64.encodebytes(fp.getvalue()), 'file_name': 'Estado de cuentas.xls'})
         fp.close()
         return {
             'type': 'ir.actions.act_window',
