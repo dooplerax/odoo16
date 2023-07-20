@@ -1,5 +1,6 @@
 from odoo import api, fields, models
-
+from odoo.exceptions import ValidationError
+from odoo import api, fields, models, _
 
 # from ec_models import *
 
@@ -8,86 +9,123 @@ class AddCatalogInProduct(models.Model):
     _inherit = 'product.template'
 
     class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto')
-    subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto')
-    fa_class_inherit = fields.Many2one('fproduct.dofamily', 'Familia de producto')
-    mod_class_inherit = fields.Many2one('mproduct.domodel', 'Modelo de producto')
-    sequence = fields.Integer("Secuencia", default=1)
+    subclass_inherit = fields.Many2one(
+        'subproduct.dosubclass', 'Subclase de producto')
+    fa_class_inherit = fields.Many2one(
+        'fproduct.dofamily', 'Familia de producto')
+    mod_class_inherit = fields.Many2one(
+        'mproduct.domodel', 'Modelo de producto')
     details_ok = fields.Boolean('Detalles', default=False)
     m2 = fields.Float(string='m2', compute='_compute_m2', store=True)
+    default_code = fields.Char(string='Internal Reference', required=True, copy=False,
+                               readonly=True, default=lambda self: _('New'))
 
     @api.depends('anchorolloTela')
     def _compute_m2(self):
+        """
+        Calcula el valor del campo 'm2' basado en el campo 'anchorolloTela'.
+        """
         for record in self:
             record.m2 = record.anchorolloTela * record.anchorolloTela
 
-    #@api.onchange('class_inherit')
-    #def _onchange_sclass(self):
-        #for record in self.class_inherit:
+    # @api.onchange('class_inherit')
+    # def _onchange_sclass(self):
+        # for record in self.class_inherit:
         #    if record.cl_name:
         #        return {'domain': {'subclass_inherit': [('subclass_inherit','=',1)]}}
-        #contador = 0
+        # contador = 0
 
     # counter_se = fields.Char("contador s", default=lambda self: _('New'))
     # codes = fields.Char('Code', default=lambda self: _('New'), track_visibility='onchange')
 
-    @api.model_create_multi
-    def create(self, vals_list):
-        producto = super(AddCatalogInProduct, self).create(vals_list)
-        sequense = producto._calculate_sequence()
-        code =self._generate_product_code(sequense)
-        producto.write({'default_code': code, "sequence": sequense})
-        return producto
-    
-    def write(self, vals):  
-        vals['default_code'] = self._generate_product_code()
-        producto = super(AddCatalogInProduct, self).write(vals)
-        return producto
-             
-        
     @api.onchange('class_inherit')
     def change_class_inehrit(self):
+        """
+        Evento que se dispara cuando cambia la clase heredada.
+
+        Reinicia los valores de las clases relacionadas y actualiza el código por defecto.
+        """
         self.subclass_inherit = False
         self.fa_class_inherit = False
         self.mod_class_inherit = False
-        self.default_code = self._generate_product_code()
-    
+
     @api.onchange('subclass_inherit')
     def change_subclass_inherit(self):
+        """
+        Evento que se dispara cuando cambia la subclase heredada.
+
+        Reinicia los valores de las clases relacionadas y actualiza el código por defecto.
+        """
         self.fa_class_inherit = False
         self.mod_class_inherit = False
-        self.default_code = self._generate_product_code()
-    
+
     @api.onchange('fa_class_inherit')
     def change_fa_class_inherit(self):
-        
+        """
+        Evento que se dispara cuando cambia la familia heredada.
+
+        Reinicia los valores de las clases relacionadas y actualiza el código por defecto.
+        """
         self.mod_class_inherit = False
-        self.default_code = self._generate_product_code()
-    
+
     @api.onchange('mod_class_inherit')
     def change_mod_class_inherit(self):
-        self.default_code = self._generate_product_code()
-        
-    def _generate_product_code(self,sequence = None):
-        if sequence:
-            str_seq = str(sequence).zfill(4)
-        else:
-            str_seq = str(self.sequence if self.sequence else 0).zfill(4)
-        
-        code = "{}-{}-{}-{}-{}".format(
+        """
+        Evento que se dispara cuando cambia el modelo heredado.
+
+        Actualiza el código por defecto.
+        """
+
+    @api.model
+    def _generate_product_code(self):
+        """
+        Genera el código de producto en función de las clases relacionadas y el número de secuencia.
+
+        :return: El código de producto generado.
+        """
+        self.ensure_one()  # Asegurarse de que solo se procesa un registro a la vez
+
+        base_code = "{}-{}-{}-{}".format(
             self.class_inherit.cl_name_code,
             self.subclass_inherit.scl_name_code,
-            self.fa_class_inherit.f_name_code,
-            self.mod_class_inherit.m_name_code,
-            str_seq
+            self.fa_class_inherit.f_name_code or "000",
+            self.mod_class_inherit.m_name_code
         )
-        return code
-             
 
-    def _calculate_sequence(self):
-        self.ensure_one()
-        sql = """
-            select max("sequence")  from product_template pt 
+        # Obtener el registro original sin cambios
+        original_record = self._origin
+
+        existing_codes = self.env['product.template'].search([
+            ('default_code', 'ilike', '{}-%'.format(base_code)),
+            ('id', '!=', original_record.id)  # Excluir el registro original sin cambios
+        ], order='default_code')
+
+        existing_numbers = []
+        for code in existing_codes:
+            parts = code.default_code.split('-')
+            if len(parts) >= 2 and parts[-1].isdigit():
+                existing_numbers.append(int(parts[-1]))
+
+        str_seq = '0001'
+        while int(str_seq) in existing_numbers:
+            str_seq = str(int(str_seq) + 1).zfill(4)
+
+        code = "{}-{}".format(base_code, str_seq)
+        return code
+
+    @api.depends('class_inherit', 'subclass_inherit', 'fa_class_inherit', 'mod_class_inherit')
+    def _compute_default_code(self):
+        for record in self:
+            record.default_code = record._generate_product_code()
+
+    @api.constrains('default_code')
+    def _check_unique_default_code(self):
         """
-        self.env.cr.execute(sql)
-        value = self.env.cr.fetchone()
-        return value[0] + 1 if value[0] else 1
+        Valida que el código por defecto sea único en los productos existentes.
+
+        :raises: ValidationError si el código por defecto ya existe en otro producto.
+        """
+        for record in self:
+            if self.search([('default_code', '=', record.default_code), ('id', '!=', record.id)]):
+                raise ValidationError(
+                    'Un producto con esa Referencia Interna ya existe.')

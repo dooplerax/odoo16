@@ -2,6 +2,7 @@
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import AccessError
 
 
 
@@ -33,6 +34,18 @@ class DoClassCatalog(models.Model):
 
     #Relaciones entre tablas subclase
     scl_product_ids = fields.One2many('subproduct.dosubclass','cl_product_id', string='Subclases')
+    @api.onchange('cl_name', 'cl_name_code')
+    def convert_to_uppercase(self):
+        if self.cl_name_code:
+            self.cl_name_code = self.cl_name_code.upper()
+        if self.cl_name:
+            self.cl_name = self.cl_name.upper()
+
+    @api.model
+    def create(self, vals):
+        if not self.env.user.has_group('stock.group_stock_manager'):
+            raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoClassCatalog, self).create(vals)
 
     @api.ondelete(at_uninstall=False)
     def check_del_class(self):
@@ -40,6 +53,11 @@ class DoClassCatalog(models.Model):
             if clpro.scl_product_ids:
                 raise ValidationError(_("No se puede eliminar debido que forma parte de otro catálogo o producto"))
 
+    @api.constrains('cl_name_code')
+    def check_cl_name_code(self):
+        for record in self:
+            if len(record.cl_name_code) != 4:
+                raise ValidationError("El código de clase debe tener exactamente 4 letras/dígitos.")
 
 class DoSubClassCatalog(models.Model):
     _name = 'subproduct.dosubclass'
@@ -59,12 +77,30 @@ class DoSubClassCatalog(models.Model):
         ('scl_name_code_uniq', 'unique (scl_name_code)', "Código ya registrado!"),
     ]
 
+    @api.onchange('scl_name', 'scl_name_code')
+    def convert_to_uppercase(self):
+        if self.scl_name:
+            self.scl_name = self.scl_name.upper()
+        if self.scl_name_code:
+            self.scl_name_code = self.scl_name_code.upper()
+
     @api.ondelete(at_uninstall=False)
     def check_del_class(self):
         for sclpro in self:
             if sclpro.f_product_ids:
                 raise ValidationError(_("No se puede eliminar debido que forma parte de otro catálogo o producto"))
 
+    @api.model
+    def create(self, vals):
+        if not self.env.user.has_group('stock.group_stock_manager'):
+            raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoSubClassCatalog, self).create(vals)
+    
+    @api.constrains('scl_name_code')
+    def check_scl_name_code(self):
+        for record in self:
+            if len(record.scl_name_code) != 4:
+                raise ValidationError("El código de subclase debe tener exactamente 4 letras/dígitos.")
 
 class DoFamilyCatalog(models.Model):
     _name = 'fproduct.dofamily'
@@ -83,6 +119,24 @@ class DoFamilyCatalog(models.Model):
         ('f_name_code_uniq', 'unique (f_name_code)', "Código ya registrado!"),
     ]
 
+    @api.onchange('f_name', 'f_name_code')
+    def convert_to_uppercase(self):
+        if self.f_name:
+            self.f_name = self.f_name.upper()
+        if self.f_name_code:
+            self.f_name_code = self.f_name_code.upper()
+
+    @api.model
+    def create(self, vals):
+        if not self.env.user.has_group('stock.group_stock_manager'):
+            raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoFamilyCatalog, self).create(vals)
+
+    @api.constrains('f_name_code')
+    def check_f_name_code(self):
+        for record in self:
+            if len(record.f_name_code) != 4:
+                raise ValidationError("El código de familia debe tener exactamente 4 letras/dígitos.")
 
 
 class DoModelCatalog(models.Model):
@@ -91,7 +145,7 @@ class DoModelCatalog(models.Model):
     _rec_name = 'm_name'
 
     m_name = fields.Char('Modelo de producto', required=True)
-    m_name_code = fields.Char('Código de Modelo', required=True, size=4, unique=True)
+    m_name_code = fields.Char('Código de Modelo', required=True, size=3, unique=True)
 
     #Apunta a Familia
     f_product_id = fields.Many2one('fproduct.dofamily', string="Familia")
@@ -99,7 +153,25 @@ class DoModelCatalog(models.Model):
     _sql_constraints = [
         ('f_mproduct_name_code_uniq', 'unique (m_name_code)', "Código ya registrado!"),
     ]
+    
+    @api.onchange('m_name', 'm_name_code')
+    def convert_to_uppercase(self):
+        if self.m_name:
+            self.m_name = self.m_name.upper()
+        if self.m_name_code:
+            self.m_name_code = self.m_name_code.upper()
 
+    @api.model
+    def create(self, vals):
+        if not self.env.user.has_group('stock.group_stock_manager'):
+            raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoModelCatalog, self).create(vals)
+
+    @api.constrains('m_name_code')
+    def check_m_name_code(self):
+        for record in self:
+            if len(record.m_name_code) != 3:
+                raise ValidationError("El código de modelo debe tener exactamente 3 letras/dígitos.")
 
 
 
