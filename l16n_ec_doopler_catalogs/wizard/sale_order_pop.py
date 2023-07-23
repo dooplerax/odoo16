@@ -12,28 +12,30 @@ class SaleOrderPop(models.Model):
     material = fields.Many2one("product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
     ancho = fields.Float(string="Ancho", required=True, default=None)
     alto = fields.Float(string="Alto", required=True, default=None)
-    mando = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha', 'DERECHA')], string="Mando", required=True)
+    mando = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha', 'DERECHA'), ('Ambos', 'AMBOS')], string="Mando", required=True)
     # ambiente = fields.Char(string="Ambiente", required=True)
-    encj = fields.Boolean(string="Encj", required=True, default=False)
-    mot = fields.Boolean(string="Mot", required=True, default=False)
-    clnt = fields.Boolean(string="Clnt", required=True, default=False)
+    encj = fields.Boolean(string="ENCJ.", required=True, default=False)
+    mot = fields.Boolean(string="MOT.", required=True, default=False)
+    clnt = fields.Boolean(string="CLNT.", required=True, default=False)
 
     def name_get(self):
         result = []
         for cat in self:
-            name = "Tipo de cortina: {} / Materiales: {} / Ancho: {} / Alto: {} / Mando: {} / Ambiente: {} / Encj: {} / Mot: {} /  Clnt: {}".format(
+            material_name = cat.material.name if cat.material else ""
+            name = "Tipo de cortina: {} / Materiales: {} / Ancho: {} / Alto: {} / Mando: {} / Ambiente: {} / ENCJ.: {} / MOT.: {} /  CLNT.: {}".format(
                 cat.tipo_cortina,
-                cat.material,
+                material_name,
                 cat.ancho,
                 cat.alto,
                 cat.mando,
                 cat.name,
-                cat.encj,
-                cat.mot,
-                cat.clnt,
+                "Sí" if cat.encj else "No",
+                "Sí" if cat.mot else "No",
+                "Sí" if cat.clnt else "No",
             ) 
             result.append((cat.id, name))
         return result
+
     @api.constrains('ancho', 'alto')
     def _check_values(self):
         if self.ancho <= 0.0 or self.alto <= 0.0:
