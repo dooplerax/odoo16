@@ -45,7 +45,29 @@ class DoClassCatalog(models.Model):
     def create(self, vals):
         if not self.env.user.has_group('stock.group_stock_manager'):
             raise AccessError("No tiene permisos para crear un catálogo.")
+
+        # Verificar si ya existe una clase por defecto llamada "TELAS"
+        default_class = self.env['cproduct.doclass'].search([('cl_name', '=', 'TELAS')])
+        if default_class:
+            raise ValidationError("La clase por defecto 'TELAS' ya ha sido creada.")
+
+        # Establecer valores predeterminados para la clase por defecto "TELAS"
+        if not vals.get('cl_name'):
+            vals['cl_name'] = 'TELAS'
+        if not vals.get('cl_name_code'):
+            vals['cl_name_code'] = 'TELA'
         return super(DoClassCatalog, self).create(vals)
+
+    def write(self, vals):
+        if self.cl_name == 'TELAS' or self.cl_name_code == 'TELA':
+            raise AccessError("No tiene permisos para editar la clase por defecto 'TELAS'.")
+        return super(DoClassCatalog, self).write(vals)
+
+    def unlink(self):
+        default_class = self.env['cproduct.doclass'].search([('cl_name', '=', 'TELAS')])
+        if default_class and self.id == default_class.id:
+            raise AccessError("No tiene permisos para eliminar la clase por defecto 'TELAS'.")
+        return super(DoClassCatalog, self).unlink()
 
     @api.ondelete(at_uninstall=False)
     def check_del_class(self):
