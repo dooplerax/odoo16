@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="custom_mail_activity_form_inherit" model="ir.ui.view">
-            <field name="name">custom.mail.activity.form.inherit</field>
+        <record id="your_view_id" model="ir.ui.view">
+            <field name="name">mail.mail_activity_view_form_popup.doopler</field>
             <field name="model">mail.activity</field>
             <field name="inherit_id" ref="mail.mail_activity_view_form_popup" />
+            <field name="mode">primary</field>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='user_id']" position="replace">
-                    <field name="display_user_id" string="Asignado a" readonly="False"
-                        translate="true" />
-                </xpath>
-            </field>
-        </record>
-        <record model="ir.ui.view" id="view_crm_lead_form">
-            <field name="name">crm.lead.form</field>
-            <field name="model">crm.lead</field>
-            <field name="inherit_id" ref="crm.crm_lead_view_form" />
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='user_id']" position="replace">
-                    <field name="display_user_id" string="Asignado a"
-                        context="{'default_res_model': 'crm.lead', 'default_res_id': active_id}"
-                        translate="true" />
+                    <field name="display_user_id" readonly="0"
+                        options="{'no_create': True, 'no_open': True}" />
                 </xpath>
             </field>
         </record>
