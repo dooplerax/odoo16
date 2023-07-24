@@ -1,5 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_sale_activity, Sales: Create Activity,mail.model_mail_activity,group_sale_manager,1,0,1,0
-access_sale_lead_create, Sales: Create Lead,crm.model_crm_lead, group_sale_manager,1,0,1,0
-access_sale_lead_write, Sales: Write Lead,crm.model_crm_lead, group_sale_manager,1,1,0,0
-access_sale_salesman_all_leads, Salesman - All Leads,crm.model_crm_lead, group_sale_salesman_all_leads,1,0,0,0
+access_sale_create_activity,Access Sale Create Activity,mail.model_mail_activity,base.group_user,1,1,1,0
+access_sale_create_lead,Access Sale Create Lead,crm.model_crm_lead,base.group_user,1,1,1,0
