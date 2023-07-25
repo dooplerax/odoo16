@@ -95,7 +95,7 @@
                 Fecha de entrega:
               </p>
               <p>
-                <span t-field="doc.validity_date" t-options='{"widget": "date"}' />
+                <span t-field="doc.commitment_date" t-options='{"widget": "date"}' />
               </p>
             </div>
           </div>
@@ -115,49 +115,60 @@
                 <th name="th_total" class="text-start">TOTAL</th>
               </tr>
             </thead>
+            <!--             <t t-if="line.display_type != 'line_note'"> -->
             <tbody>
               <t t-set="group_totals" t-value="doc.get_group_totals()" />
               <t t-foreach="group_totals" t-as="group">
-                <tr>
-                  <td>
-                    <span t-esc="round(group['quantity_extra'], 2)" />
-                  </td>
-                  <td>
-                    <span t-esc="group['tipo_cortina']" />
-                  </td>
-                  <td>
-                    <span t-esc="group['name']" />
-                  </td>
-                  <td>
-                    <span t-esc="group['price_unit']" />
-                  </td>
-                  <td>
-                    <span t-esc="round(group['price_subtotal_extra'], 2)" />
-                  </td>
-                  <td>
-                    <!-- Calcula el IVA -->
-                    <t t-set="iva"
-                      t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
-                    <span t-esc="round(iva, 2)" />
-                  </td>
-                  <td>
-                    <span t-esc="round(group['price_total_extra'], 2)" />
-                  </td>
-                </tr>
+                <t t-if="group['display_type'] != 'line_note'">
+                  <tr>
+                    <td>
+                      <span t-esc="round(group['quantity_extra'], 2)" />
+                    </td>
+                    <td>
+                      <span t-esc="group['tipo_cortina']" />
+                    </td>
+                    <td>
+                      <span t-esc="group['name']" />
+                    </td>
+                    <td>
+                      <span t-esc="group['price_unit']" />
+                    </td>
+                    <td>
+                      <span t-esc="round(group['price_subtotal_extra'], 2)" />
+                    </td>
+                    <td>
+                      <!-- Calcula el IVA -->
+                      <t t-set="iva"
+                        t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
+                      <span t-esc="round(iva, 2)" />
+                    </td>
+                    <td>
+                      <span t-esc="round(group['price_total_extra'], 2)" />
+                    </td>
+                  </tr>
+                </t>
               </t>
             </tbody>
+            <!-- </t> -->
           </table>
         </div>
 
-
-        <div
-          class="row">
-          <p class="fw-bold">Observaciones:</p>
-          <!-- <p t-field="doc.description" /> -->
-          <div class="row"
-            style="border: 2px solid black; margin-top: 20px;  padding: 15px;padding-top: 25px;">
+        <t t-if="line.display_type == 'line_note'">
+          <div class="row">
+            <p class="fw-bold">Observaciones:</p>
+            <div class="row"
+              style="border: 2px solid black; margin-top: 20px; width:98%; margin: auto;padding: 15px; padding-top: 25px;">
+              <t t-foreach="doc.order_line" t-as="line">
+                <t t-if="line.display_type == 'line_note'">
+                  <p>
+                    <span t-field="line.name" />
+                  </p>
+                </t>
+              </t>
+            </div>
           </div>
-        </div>
+        </t>
+
 
         <!-- Recuadro para el "Recibido del Cliente" -->
         <div
@@ -221,10 +232,9 @@
           </tr>
         </thead>
       </xpath>
-      <xpath
-        expr="//tbody" position="replace">
+      <xpath expr="//tbody" position="replace">
         <tbody>
-          <tr t-foreach="doc.order_line" t-as="line">
+          <tr t-foreach="doc.order_line" t-as="line" t-if="line.display_type != 'line_note'">
 
             <!-- <td>
               <span t-field="line.sequence" />

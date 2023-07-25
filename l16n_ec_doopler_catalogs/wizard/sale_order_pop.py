@@ -112,6 +112,7 @@ from odoo import api, fields, models, _
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
+    """ name = fields.Char(string="Título", default="Nuevo Registro", readonly=True) """
 
     def get_group_totals(self):
         group_totals = []
@@ -131,6 +132,7 @@ class SaleOrder(models.Model):
                     'price_subtotal_extra': line.price_subtotal_extra,
                     'price_total_extra': line.price_total_extra,
                     'price_unit': line.price_unit,
+                    'display_type': line.display_type,
                 }
 
         for key, value in groups.items():

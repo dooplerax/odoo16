@@ -29,16 +29,25 @@ class SaleOrderLine(models.Model):
     details_name = fields.Char(string='Descripción')
 
     def create_details(self):
-        return {
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'sale.order.pop',
-            'type': 'ir.actions.act_window',
-            'target': 'new',
-            'context': {'sale_order_line': self.id},
-            'res_id': self.details_id.id,
-            'id': self.details_id.id,
-        }
+        if self.details_id:
+            return {
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'sale.order.pop',
+                'type': 'ir.actions.act_window',
+                'target': 'current',
+                'res_id': self.details_id.id,
+            }
+        else:
+            return {
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'sale.order.pop',
+                'type': 'ir.actions.act_window',
+                'target': 'new',
+                'context': {'sale_order_line': self.id},
+            }
+
 
     order_id_extra = fields.Many2one(
         'sale.order', string='Order Extra', compute='_compute_order_id_extra', store=True)
