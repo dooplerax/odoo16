@@ -162,10 +162,9 @@
             <!-- </t> -->
           </table>
         </div>
-        
         <div class="row">
           <p class="fw-bold">Observaciones:</p>
-          <div class="col-6" style="border: 2px solid black; margin-top: 20px; padding: 10px;">
+          <div class="col-6" style="border: 2px solid black; margin-top: 20px; padding: 10px; width: 100%; word-wrap: break-word;">
             <t t-foreach="doc.order_line" t-as="line">
               <t t-if="line.display_type == 'line_note'">
                 <p style="margin-bottom: 5px;">
@@ -175,7 +174,8 @@
             </t>
           </div>
         </div>
-
+        
+        
 
         <!-- Recuadro para el "Recibido del Cliente" -->
         <div
