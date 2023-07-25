@@ -241,18 +241,23 @@
               <td>
                 <span t-field="line.orden" />
               </td>
-      
+
               <td>
                 <t t-if="line.details_id">
-                  <span t-field="line.details_id.name" />
+                  <span t-field="line.details_id.tipo_cortina" />
                 </t>
                 <t t-if="not line.details_id">
                   <span t-field="line.product_id.name" />
+
                 </t>
               </td>
-      
+
               <td>
-                <span t-field="line.details_id.tipo_cortina" />
+                <t t-if="line.details_id.material">
+                  <span t-esc="line.product_id.name" />
+                </t>
+                <t t-if="not line.details_id.material">
+                 </t>
               </td>
               <td>
                 <t t-if="line.details_id.ancho is not None">
@@ -294,7 +299,7 @@
           </tr>
         </tbody>
       </xpath>
-      
+
 
     </template>
   </data>
