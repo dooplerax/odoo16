@@ -119,7 +119,7 @@
             <tbody>
               <t t-set="group_totals" t-value="doc.get_group_totals()" />
               <t t-foreach="group_totals" t-as="group">
-                <t t-if="line.display_type not in ['line_note', 'line_section']">
+                <t t-if="group['display_type'] not in ['line_note', 'line_section']">
                   <tr>
                     <td>
                       <span t-esc="round(group['quantity_extra'], 2)" />
