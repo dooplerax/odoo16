@@ -104,6 +104,36 @@ class SaleOrderLine(models.Model):
     @api.depends('order_id')
     def _compute_items(self):
         for order in self.mapped('order_id'):
-            lines = order.order_line.sorted('sequence')
-            for index, line in enumerate(lines):
+            order_lines = order.order_line.sorted('sequence')
+            for index, line in enumerate(order_lines):
                 line.items = index + 1
+
+from odoo import api, fields, models, _
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    def get_group_totals(self):
+        group_totals = []
+        groups = {}
+
+        for line in self.order_line:
+            group_key = f"{line.details_id.tipo_cortina}_{line.product_id_extra.name}"
+            if group_key in groups:
+                groups[group_key]['quantity_extra'] += line.quantity_extra
+                groups[group_key]['price_subtotal_extra'] += line.price_subtotal_extra
+                groups[group_key]['price_total_extra'] += line.price_total_extra
+            else:
+                groups[group_key] = {
+                    'tipo_cortina': line.details_id.tipo_cortina,
+                    'name': line.product_id_extra.name,
+                    'quantity_extra': line.quantity_extra,
+                    'price_subtotal_extra': line.price_subtotal_extra,
+                    'price_total_extra': line.price_total_extra,
+                    'price_unit': line.price_unit,
+                }
+
+        for key, value in groups.items():
+            group_totals.append(value)
+
+        return group_totals

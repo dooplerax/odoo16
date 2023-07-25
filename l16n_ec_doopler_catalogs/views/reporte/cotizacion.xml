@@ -14,10 +14,7 @@
         <div></div>
       </xpath>
       <xpath expr="//div[@class='oe_structure']" position="replace">
-
-        <!-- Verificación para datos del cliente -->
         <t t-if="doc.partner_id">
-          <!-- Datos del cliente en tres columnas -->
           <div class="row">
             <div class="col-4">
               <xpath expr="//h2" position="replace">
@@ -103,8 +100,6 @@
             </div>
           </div>
         </t>
-
-
       </xpath>
       <xpath expr="//div[@t-if='doc.signature']" position="before">
         <div class="table-responsive">
@@ -121,41 +116,40 @@
               </tr>
             </thead>
             <tbody>
-              <tr t-foreach="doc.order_line" t-as="line">
-
-                <td>
-                  <span t-field="line.quantity_extra" />
-                </td>
-                <td>
-                  <span t-field="line.details_id.tipo_cortina" />
-                </td>
-                <td>
-                  <span t-field="line.product_id_extra.name" />
-                </td>
-                <td>
-                  <t t-if="line.price_unit_extra is not None">
-                    <span t-esc="line.price_unit_extra" />
-                  </t>
-                </td>
-                <td>
-                  <t t-if="line.price_subtotal_extra is not None">
-                    <span t-esc="line.price_subtotal_extra" />
-                  </t>
-                </td>
-                <td>
-                  <t t-if="line.price_total is not None and line.price_subtotal is not None">
-                    <span t-esc="round(line.price_total - line.price_subtotal, 2)" />
-                  </t>
-                </td>
-                <td>
-                  <t t-if="line.price_total_extra is not None">
-                    <span t-esc="line.price_total_extra" />
-                  </t>
-                </td>
-              </tr>
+              <t t-set="group_totals" t-value="doc.get_group_totals()" />
+              <t t-foreach="group_totals" t-as="group">
+                <tr>
+                  <td>
+                    <span t-esc="round(group['quantity_extra'], 2)" />
+                  </td>
+                  <td>
+                    <span t-esc="group['tipo_cortina']" />
+                  </td>
+                  <td>
+                    <span t-esc="group['name']" />
+                  </td>
+                  <td>
+                    <span t-esc="group['price_unit']" />
+                  </td>
+                  <td>
+                    <span t-esc="round(group['price_subtotal_extra'], 2)" />
+                  </td>
+                  <td>
+                    <!-- Calcula el IVA -->
+                    <t t-set="iva"
+                      t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
+                    <span t-esc="round(iva, 2)" />
+                  </td>
+                  <td>
+                    <span t-esc="round(group['price_total_extra'], 2)" />
+                  </td>
+                </tr>
+              </t>
             </tbody>
           </table>
         </div>
+
+
         <div
           class="row">
           <p class="fw-bold">Observaciones:</p>
@@ -241,9 +235,7 @@
             <td>
               <span t-field="line.orden" />
             </td>
-            <td>
-              <span t-field="line.order_id.name" />
-            </td>
+
             <td>
               <span t-field="line.details_id.tipo_cortina" />
             </td>
