@@ -125,10 +125,20 @@
                       <span t-esc="round(group['quantity_extra'], 2)" />
                     </td>
                     <td>
-                      <span t-esc="group['tipo_cortina']" />
+                      <t t-if="group['tipo_cortina']">
+                        <span t-esc="group['tipo_cortina']" />
+                      </t>
+                      <t t-if="not group['tipo_cortina']">
+                        <span t-esc="group['name'] or ''" />
+                      </t>
                     </td>
                     <td>
-                      <span t-esc="group['name']" />
+                      <t t-if="group['name'] and group['tipo_cortina']">
+                        <span t-esc="group['name']" />
+                      </t>
+                      <t t-if="not group['name'] and not group['tipo_cortina']">
+                        <span> </span>
+                      </t>
                     </td>
                     <td>
                       <span t-esc="group['price_unit']" />
@@ -153,22 +163,19 @@
           </table>
         </div>
 
-        <t t-if="line.display_type == 'line_note'">
-          <div class="row">
-            <p class="fw-bold">Observaciones:</p>
-            <div class="row"
-              style="border: 2px solid black; margin-top: 20px; width:98%; margin: auto;padding: 15px; padding-top: 25px;">
-              <t t-foreach="doc.order_line" t-as="line">
-                <t t-if="line.display_type == 'line_note'">
-                  <p>
-                    <span t-field="line.name" />
-                  </p>
-                </t>
+        <div class="row">
+          <p class="fw-bold">Observaciones:</p>
+          <div class="row"
+            style="border: 2px solid black; margin-top: 20px; width:99%; margin: auto; padding: 15px; padding-top: 25px; border-collapse: collapse;">
+            <t t-foreach="doc.order_line" t-as="line">
+              <t t-if="line.display_type == 'line_note'">
+                <p>
+                  <span t-field="line.name" />
+                </p>
               </t>
-            </div>
+            </t>
           </div>
-        </t>
-
+        </div>
 
         <!-- Recuadro para el "Recibido del Cliente" -->
         <div
@@ -248,7 +255,6 @@
                 </t>
                 <t t-if="not line.details_id">
                   <span t-field="line.product_id.name" />
-
                 </t>
               </td>
 
@@ -257,7 +263,7 @@
                   <span t-esc="line.product_id.name" />
                 </t>
                 <t t-if="not line.details_id.material">
-                 </t>
+                </t>
               </td>
               <td>
                 <t t-if="line.details_id.ancho is not None">
