@@ -211,8 +211,7 @@
           </div>
         </div>
       </xpath>
-      <xpath expr="//thead"
-        position="replace">
+      <xpath expr="//thead" position="replace">
         <thead style="display: table-row-group">
           <tr>
             <th name="th_items" class="text-start">ITEMS</th>
@@ -234,64 +233,68 @@
       </xpath>
       <xpath expr="//tbody" position="replace">
         <tbody>
-          <tr t-foreach="doc.order_line" t-as="line" t-if="line.display_type != 'line_note'">
-
-            <!-- <td>
-              <span t-field="line.sequence" />
-            </td> -->
-            <td>
-              <span t-field="line.items" t-options='{"widget": "text"}' />
-            </td>
-            <td>
-              <span t-field="line.orden" />
-            </td>
-
-            <td>
-              <span t-field="line.details_id.tipo_cortina" />
-            </td>
-
-            <td>
-              <span t-field="line.product_id.name" />
-            </td>
-            <td>
-              <t t-if="line.details_id.ancho is not None">
-                <span t-esc="line.details_id.ancho" />
-              </t>
-            </td>
-            <td>
-              <t t-if="line.details_id.alto is not None">
-                <span t-esc="line.details_id.alto" />
-              </t>
-            </td>
-            <td>
-              <span t-field="line.details_id.mando" />
-            </td>
-            <td>
-              <t t-if="line.product_uom_qty is not None">
-                <span t-esc="line.product_uom_qty" />
-              </t>
-            </td>
-            <td>
-              <span t-field="line.price_unit" />
-            </td>
-            <td>
-              <span t-field="line.price_subtotal" />
-            </td>
-            <td>
-              <span t-field="line.details_id.name" />
-            </td>
-            <td>
-              <input type="checkbox" t-att-checked="line.details_id.encj" disabled="disabled" />
-            </td>
-            <td>
-              <input type="checkbox" t-att-checked="line.details_id.mot" disabled="disabled" />
-            </td>
-            <td>
-              <input type="checkbox" t-att-checked="line.details_id.clnt" disabled="disabled" />
-            </td>
+          <tr t-foreach="doc.order_line" t-as="line">
+            <t t-if="line.display_type != 'line_note'">
+              <td>
+                <span t-field="line.items" t-options='{"widget": "text"}' />
+              </td>
+              <td>
+                <span t-field="line.orden" />
+              </td>
+      
+              <td>
+                <t t-if="line.details_id">
+                  <span t-field="line.details_id.name" />
+                </t>
+                <t t-if="not line.details_id">
+                  <span t-field="line.product_id.name" />
+                </t>
+              </td>
+      
+              <td>
+                <span t-field="line.details_id.tipo_cortina" />
+              </td>
+              <td>
+                <t t-if="line.details_id.ancho is not None">
+                  <span t-esc="line.details_id.ancho" />
+                </t>
+              </td>
+              <td>
+                <t t-if="line.details_id.alto is not None">
+                  <span t-esc="line.details_id.alto" />
+                </t>
+              </td>
+              <td>
+                <span t-field="line.details_id.mando" />
+              </td>
+              <td>
+                <t t-if="line.product_uom_qty is not None">
+                  <span t-esc="line.product_uom_qty" />
+                </t>
+              </td>
+              <td>
+                <span t-field="line.price_unit" />
+              </td>
+              <td>
+                <span t-field="line.price_subtotal" />
+              </td>
+              <td>
+                <span t-field="line.details_id.name" />
+              </td>
+              <td>
+                <input type="checkbox" t-att-checked="line.details_id.encj" disabled="disabled" />
+              </td>
+              <td>
+                <input type="checkbox" t-att-checked="line.details_id.mot" disabled="disabled" />
+              </td>
+              <td>
+                <input type="checkbox" t-att-checked="line.details_id.clnt" disabled="disabled" />
+              </td>
+            </t>
           </tr>
         </tbody>
       </xpath>
+      
 
     </template>
   </data>
