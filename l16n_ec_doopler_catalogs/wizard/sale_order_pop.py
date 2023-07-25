@@ -112,7 +112,7 @@ from odoo import api, fields, models, _
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
-    """ name = fields.Char(string="Título", default="Nuevo Registro", readonly=True) """
+    name = fields.Char(string="Título", default="Nuevo Registro", readonly=True)
 
     def get_group_totals(self):
         group_totals = []
