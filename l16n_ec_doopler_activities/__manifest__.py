@@ -10,9 +10,10 @@
     'category': 'CRM/Activities',
     'website': "https://citytech.ec",
     'images' : [],
-    'depends' : ['base','mail','crm'],
+    'depends' : ['base','mail','crm','sale'],
     'data': [
-            "views/mail.activity.view.form.popup.inherited.xml"
+            'security/ir.model.access.csv',
+            'views/mail.activity.view.form.popup.inherited.xml'
         ],
     'installable': True,
     'application': True,

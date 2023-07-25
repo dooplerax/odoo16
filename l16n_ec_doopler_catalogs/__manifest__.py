@@ -18,8 +18,8 @@
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
-        'views/product_template.xml',
         'views/reporte/cotizacion.xml',
+        'views/product_template.xml',
         'wizard/sale_order_pop.xml',
     ],
     

@@ -92,7 +92,6 @@ class AddCatalogInProduct(models.Model):
             self.mod_class_inherit.m_name_code
         )
 
-        # Obtener el registro original sin cambios
         original_record = self._origin
 
         existing_codes = self.env['product.template'].search([

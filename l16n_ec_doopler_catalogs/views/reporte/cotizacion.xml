@@ -1,7 +1,5 @@
 <odoo>
   <data>
-    <!-- Inherit from the existing report template -->
-    <!-- Hereda el informe original de cotización -->
     <template id="report_saleorder_document_custom" inherit_id="sale.report_saleorder_document">
       <xpath expr="//t[@t-set='address']" position="replace">
         <!-- Bloque vacío para reemplazar 'address' -->
@@ -15,12 +13,8 @@
         <!-- Bloque vacío para reemplazar el contenido del elemento 'h2' -->
         <div></div>
       </xpath>
-      <!-- Sobrescribe el contenido del informe original de cotización -->
       <xpath expr="//div[@class='oe_structure']" position="replace">
-
-        <!-- Verificación para datos del cliente -->
         <t t-if="doc.partner_id">
-          <!-- Datos del cliente en tres columnas -->
           <div class="row">
             <div class="col-4">
               <xpath expr="//h2" position="replace">
@@ -106,19 +100,62 @@
             </div>
           </div>
         </t>
-
-        <!-- Campo grande para notas de la cotización -->
-
       </xpath>
       <xpath expr="//div[@t-if='doc.signature']" position="before">
+        <div class="table-responsive">
+          <table class="table table-sm mt-3">
+            <thead>
+              <tr>
+                <th name="th_cantidad" class="text-start">CANTIDAD</th>
+                <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
+                <th name="th_material" class="text-start">MATERIAL</th>
+                <th name="th_precio_unitario" class="text-start">PRECIO UNITARIO</th>
+                <th name="th_subtotal" class="text-start">SUBTOTAL</th>
+                <th name="th_iva" class="text-start">IVA</th>
+                <th name="th_total" class="text-start">TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-set="group_totals" t-value="doc.get_group_totals()" />
+              <t t-foreach="group_totals" t-as="group">
+                <tr>
+                  <td>
+                    <span t-esc="round(group['quantity_extra'], 2)" />
+                  </td>
+                  <td>
+                    <span t-esc="group['tipo_cortina']" />
+                  </td>
+                  <td>
+                    <span t-esc="group['name']" />
+                  </td>
+                  <td>
+                    <span t-esc="group['price_unit']" />
+                  </td>
+                  <td>
+                    <span t-esc="round(group['price_subtotal_extra'], 2)" />
+                  </td>
+                  <td>
+                    <!-- Calcula el IVA -->
+                    <t t-set="iva"
+                      t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
+                    <span t-esc="round(iva, 2)" />
+                  </td>
+                  <td>
+                    <span t-esc="round(group['price_total_extra'], 2)" />
+                  </td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </div>
+
 
         <div
           class="row">
           <p class="fw-bold">Observaciones:</p>
           <!-- <p t-field="doc.description" /> -->
           <div class="row"
-            style="border: 2px solid black; margin-top: 20px;  padding: 15px;padding-top: 25px;"> <!--
-          Aumentar el padding a 15px -->
+            style="border: 2px solid black; margin-top: 20px;  padding: 15px;padding-top: 25px;">
           </div>
         </div>
 
@@ -134,17 +171,15 @@
             <div class="row">
               <div class="col-6">
                 <p class="fw-bold">Nombres y apellidos: ………………………………………</p>
-                <!-- Colocar el campo correspondiente del cliente aquí -->
               </div>
               <div class="col-6">
                 <p class="fw-bold">Firma: ………………………………………</p>
-                <!-- Colocar el campo correspondiente de la firma aquí -->
               </div>
             </div>
             <div class="row">
               <div class="col-6">
                 <p class="fw-bold">Fecha: ………………………………………</p>
-                <!-- Colocar el campo correspondiente de la fecha aquí -->
+
               </div>
             </div>
             <p class="fw-bold">NOTA: Una vez salida la mercadería del Almacén, no se aceptan
@@ -186,21 +221,24 @@
           </tr>
         </thead>
       </xpath>
-      <!-- Reemplaza el contenido dentro del elemento <tbody> -->
       <xpath
         expr="//tbody" position="replace">
         <tbody>
           <tr t-foreach="doc.order_line" t-as="line">
-            <td>
+
+            <!-- <td>
               <span t-field="line.sequence" />
+            </td> -->
+            <td>
+              <span t-field="line.items" t-options='{"widget": "text"}' />
             </td>
             <td>
-              <span t-field="line.order_id.name" />
+              <span t-field="line.orden" />
             </td>
+
             <td>
               <span t-field="line.details_id.tipo_cortina" />
-            </td>  <!-- Cambio a
-            tipo_cortina -->
+            </td>
 
             <td>
               <span t-field="line.product_id.name" />
@@ -209,23 +247,20 @@
               <t t-if="line.details_id.ancho is not None">
                 <span t-esc="line.details_id.ancho" />
               </t>
-            </td>  <!--
-            Mostrar el ancho si no es None -->
+            </td>
             <td>
               <t t-if="line.details_id.alto is not None">
                 <span t-esc="line.details_id.alto" />
               </t>
-            </td>  <!-- Mostrar
-            el alto si no es None -->
+            </td>
             <td>
               <span t-field="line.details_id.mando" />
             </td>
             <td>
-              <t t-if="line.details_id.m2 is not None">
-                <span t-esc="line.details_id.m2" />
+              <t t-if="line.product_uom_qty is not None">
+                <span t-esc="line.product_uom_qty" />
               </t>
-            </td>  <!-- Mostrar
-            el m2 si no es None -->
+            </td>
             <td>
               <span t-field="line.price_unit" />
             </td>
@@ -234,9 +269,7 @@
             </td>
             <td>
               <span t-field="line.details_id.name" />
-            </td> <!-- Agregar el campo
-            "Ambiente" -->
-            <!-- Celdas con información de los campos booleanos como checkboxes deshabilitados -->
+            </td>
             <td>
               <input type="checkbox" t-att-checked="line.details_id.encj" disabled="disabled" />
             </td>
@@ -248,58 +281,6 @@
             </td>
           </tr>
         </tbody>
-
-
-        <!-- New table -->
-        <div class="table-responsive">
-          <table class="table table-sm mt-3">
-            <thead>
-              <tr>
-                <th name="th_cantidad" class="text-start">CANTIDAD</th>
-                <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
-                <th name="th_material" class="text-start">MATERIAL</th>
-                <th name="th_precio_unitario" class="text-start">PRECIO UNITARIO</th>
-                <th name="th_subtotal" class="text-start">SUBTOTAL</th>
-                <th name="th_iva" class="text-start">IVA</th>
-                <th name="th_total" class="text-start">TOTAL</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr t-foreach="doc.order_line" t-as="line">
-                <td>
-                  <span t-field="line.quantity_extra" />
-                </td>
-                <td>
-                  <span t-field="line.name_extra" />
-                </td>
-                <td>
-                  <span t-field="line.product_id_extra.name" />
-                </td>
-                <td>
-                  <t t-if="line.price_unit_extra is not None">
-                    <span t-esc="line.price_unit_extra" />
-                  </t>
-                </td>
-                <td>
-                  <t t-if="line.price_subtotal_extra is not None">
-                    <span t-esc="line.price_subtotal_extra" />
-                  </t>
-                </td>
-                <td>
-                  <t t-if="line.price_total is not None and line.price_subtotal is not None">
-                    <span t-esc="round(line.price_total - line.price_subtotal, 2)" />
-                  </t>
-                </td>
-                <td>
-                  <t t-if="line.price_total_extra is not None">
-                    <span t-esc="line.price_total_extra" />
-                  </t>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
       </xpath>
 
     </template>
