@@ -1,9 +1,5 @@
 from odoo import models, fields, api
 from odoo.tools.translate import _
-<<<<<<< HEAD
-=======
-
->>>>>>> F2777
 
 
 
@@ -35,28 +31,6 @@ class MailActivity(models.Model):
                 activity.display_user_id = display_user_id
 
     def _get_display_user_id(self, res_model, res_id):
-<<<<<<< HEAD
-        """
-        Obtiene el user_id del recurso relacionado según el modelo y el ID de recurso.
-
-        Si el modelo es 'res.partner', se obtiene directamente el user_id del res.partner.
-        De lo contrario, se asume que existe una relación con res.partner y se obtiene el user_id del partner_id relacionado.
-        Si no hay un display_user_id asignado, se devuelve el ID del usuario actual.
-        """
-        display_user_id = False
-        if res_model == 'res.partner':
-            partner = self.env['res.partner'].sudo().browse(res_id)
-            display_user_id = partner.user_id.id
-        else:
-            related_partner = self.env[res_model].sudo().browse(
-                res_id).partner_id
-            if related_partner:
-                display_user_id = related_partner.user_id.id
-
-        if not display_user_id:
-            display_user_id = self.env.user.id
-
-=======
         display_user_id = False
         if res_model == 'res.partner':
             partner = self.env['res.partner'].browse(res_id)
@@ -71,22 +45,10 @@ class MailActivity(models.Model):
                 display_user_id = lead.user_id.id
         if not display_user_id:
             display_user_id = self.env.user.id
->>>>>>> F2777
         return display_user_id
 
     @api.model
     def create(self, vals):
-<<<<<<< HEAD
-        """
-        Crea una nueva actividad.
-
-        Si se proporciona un display_user_id, se establece como user_id en el registro creado.
-        """
-        display_user_id = vals.get('display_user_id')
-        if display_user_id:
-            vals['user_id'] = display_user_id
-        return super(MailActivity, self).create(vals)
-=======
         # Obtener el ID del modelo del diccionario 'vals'
         res_model_id = vals.get('res_model_id')
         model_obj = self.env['ir.model']
@@ -143,7 +105,6 @@ class MailActivity(models.Model):
             return activity
         else:
             return super(MailActivity, self).create(vals)
->>>>>>> F2777
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
@@ -189,8 +150,6 @@ class CrmLead(models.Model):
         if not current_user.has_group('sales_team.group_sale_manager') and not current_user.has_group('sales_team.group_sale_salesman_all_leads'):
             args.append(('user_id', '=', current_user.id))
         return super(CrmLead, self).search(args, offset=offset, limit=limit, order=order, count=count)
-<<<<<<< HEAD
-=======
 
         """elif res_model == 'account.move' and display_user_id:
             activity = super(MailActivity, self).create(vals)
@@ -214,4 +173,3 @@ class CrmLead(models.Model):
                     vals['res_id'] = lead.id
                     activity = super(MailActivity, self).create(vals)
             return activity """
->>>>>>> F2777
