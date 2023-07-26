@@ -19,6 +19,7 @@ class AddCatalogInProduct(models.Model):
     m2 = fields.Float(string='m2', compute='_compute_m2', store=True)
     default_code = fields.Char(string='Internal Reference', required=True, copy=False,
                                readonly=True, default=lambda self: _('New'))
+    classification = fields.Boolean('Clasificación', default=False)
 
     @api.depends('anchorolloTela')
     def _compute_m2(self):
@@ -83,36 +84,58 @@ class AddCatalogInProduct(models.Model):
 
         :return: El código de producto generado.
         """
+
         self.ensure_one()  # Asegurarse de que solo se procesa un registro a la vez
+        if not self.classification:
+            # Generar el número de secuencia de 5 dígitos sin considerar las clases relacionadas
+            existing_codes = self.env['product.template'].search([
+                ('classification', '=', False),
+                # Buscar códigos de producto de 5 dígitos
+                ('default_code', 'ilike', '_____')
+            ], order='default_code')
 
-        base_code = "{}-{}-{}-{}".format(
-            self.class_inherit.cl_name_code,
-            self.subclass_inherit.scl_name_code,
-            self.fa_class_inherit.f_name_code or "000",
-            self.mod_class_inherit.m_name_code
-        )
+            existing_numbers = []
+            for code in existing_codes:
+                if code.default_code.isdigit() and len(code.default_code) == 5:
+                    existing_numbers.append(int(code.default_code))
 
-        original_record = self._origin
+            str_seq = '00001'
+            while int(str_seq) in existing_numbers:
+                str_seq = str(int(str_seq) + 1).zfill(5)
 
-        existing_codes = self.env['product.template'].search([
-            ('default_code', 'ilike', '{}-%'.format(base_code)),
-            ('id', '!=', original_record.id)  # Excluir el registro original sin cambios
-        ], order='default_code')
+            return str_seq
 
-        existing_numbers = []
-        for code in existing_codes:
-            parts = code.default_code.split('-')
-            if len(parts) >= 2 and parts[-1].isdigit():
-                existing_numbers.append(int(parts[-1]))
+        else:
 
-        str_seq = '0001'
-        while int(str_seq) in existing_numbers:
-            str_seq = str(int(str_seq) + 1).zfill(4)
+            base_code = "{}-{}-{}-{}".format(
+                self.class_inherit.cl_name_code,
+                self.subclass_inherit.scl_name_code,
+                self.fa_class_inherit.f_name_code or "000",
+                self.mod_class_inherit.m_name_code
+            )
 
-        code = "{}-{}".format(base_code, str_seq)
-        return code
+            original_record = self._origin
 
-    @api.depends('class_inherit', 'subclass_inherit', 'fa_class_inherit', 'mod_class_inherit')
+            existing_codes = self.env['product.template'].search([
+                ('default_code', 'ilike', '{}-%'.format(base_code)),
+                # Excluir el registro original sin cambios
+                ('id', '!=', original_record.id)
+            ], order='default_code')
+
+            existing_numbers = []
+            for code in existing_codes:
+                parts = code.default_code.split('-')
+                if len(parts) >= 2 and parts[-1].isdigit():
+                    existing_numbers.append(int(parts[-1]))
+
+            str_seq = '0001'
+            while int(str_seq) in existing_numbers:
+                str_seq = str(int(str_seq) + 1).zfill(4)
+
+            code = "{}-{}".format(base_code, str_seq)
+            return code
+
+    @api.depends('class_inherit', 'subclass_inherit', 'fa_class_inherit', 'mod_class_inherit', 'classification')
     def _compute_default_code(self):
         for record in self:
             record.default_code = record._generate_product_code()
@@ -128,3 +151,21 @@ class AddCatalogInProduct(models.Model):
             if self.search([('default_code', '=', record.default_code), ('id', '!=', record.id)]):
                 raise ValidationError(
                     'Un producto con esa Referencia Interna ya existe.')
+
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    @api.onchange('classification')
+    def _onchange_classification(self):
+        """ if not self.classification:
+            self.class_inherit.required = False
+            self.subclass_inherit.required = False
+            self.fa_class_inherit.required = False
+            self.mod_class_inherit.required = False
+        else:
+            self.class_inherit.required = True
+            self.subclass_inherit.required = True
+            self.fa_class_inherit.required = True
+            self.mod_class_inherit.required = True
+            pass """

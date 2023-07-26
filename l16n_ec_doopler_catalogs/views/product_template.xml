@@ -7,16 +7,21 @@
             <field name="inherit_id" ref="product.product_template_form_view"></field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
+                <!-- Campo class_inherit y campos relacionados ocultos cuando classification es
+                False -->
                 <xpath expr="//group/field[@name='product_tooltip']" position="after">
-                    <field name="class_inherit" required="1" />
-                    <field name="subclass_inherit" required="1"
+                    <field name="class_inherit"
+                        attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}" />
+                    <field name="subclass_inherit"
+                        attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}"
                         domain="[('cl_product_id','=',class_inherit)]" />
-                    <field name="fa_class_inherit" required="1"
+                    <field name="fa_class_inherit"
+                        attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}"
                         domain="[('scl_product_id','=',subclass_inherit)]" />
-                    <field name="mod_class_inherit" required="1"
+                    <field name="mod_class_inherit"
+                        attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}"
                         domain="[('f_product_id','=',fa_class_inherit)]" />
                 </xpath>
-
                 <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
                             <attribute
                 name="readonly">1</attribute>
@@ -33,6 +38,10 @@
                     <span class="d-inline-block">
                         <field name="details_ok" />
                         <label for="details_ok" />
+                    </span>
+                    <span class="d-inline-block">
+                        <field name="classification" />
+                        <label for="classification" />
                     </span>
                 </xpath>
             </field>
