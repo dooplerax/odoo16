@@ -9,6 +9,8 @@
             <field name="arch" type="xml">
                 <!-- Campo class_inherit y campos relacionados ocultos cuando classification es
                 False -->
+                <field name="classification" invisible="1"/> <!-- Agregar el campo classification invisible -->
+
                 <xpath expr="//group/field[@name='product_tooltip']" position="after">
                     <field name="class_inherit"
                         attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}" />
