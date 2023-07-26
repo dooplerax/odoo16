@@ -9,9 +9,14 @@
             <field name="arch" type="xml">
                 <!-- Campo class_inherit y campos relacionados ocultos cuando classification es
                 False -->
-                <field name="classification" invisible="1"/> <!-- Agregar el campo classification invisible -->
-
+                <xpath expr="//field[@name='purchase_ok']" position="before">
+                    <span class="d-inline-block">
+                        <field name="classification" />
+                        <label for="classification" />
+                    </span>
+                </xpath>
                 <xpath expr="//group/field[@name='product_tooltip']" position="after">
+                    <field name="classification" invisible="1"/> <!-- Agregar el campo classification invisible -->
                     <field name="class_inherit"
                         attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}" />
                     <field name="subclass_inherit"
@@ -36,16 +41,10 @@
             <field name="inherit_id" ref="product.product_template_form_view"></field>
             <field name="priority" eval="8" />
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='purchase_ok']" position="before">
-                    <span class="d-inline-block">
-                        <field name="details_ok" />
-                        <label for="details_ok" />
-                    </span>
-                    <span class="d-inline-block">
-                        <field name="classification" />
-                        <label for="classification" />
-                    </span>
-                </xpath>
+                <span class="d-inline-block">
+                    <field name="details_ok" />
+                    <label for="details_ok" />
+                </span>
             </field>
         </record>
         <record id="cproduct_template_inherit_only_form" model="ir.ui.view">
