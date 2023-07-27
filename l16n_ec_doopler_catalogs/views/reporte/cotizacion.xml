@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-4 mb-1">
+            <div class="col-4 mr-3">
               <p class="fw-bold">
                 Emitido por:
               </p>
@@ -48,7 +48,7 @@
                 <span t-field="doc.partner_id.phone" />
               </p>
             </div>
-            <div class="col-4 mb-1">
+            <div class="col-4 mr-3">
               <p class="fw-bold">
                 Cliente:
               </p>
@@ -73,7 +73,7 @@
                 </t>
               </p>
             </div>
-            <div class="col-4 mb-1">
+            <div class="col-4 mb-3">
               <p class="fw-bold">
                 Fecha:
               </p>
