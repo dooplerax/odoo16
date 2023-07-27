@@ -86,7 +86,14 @@ class AddCatalogInProduct(models.Model):
         """
 
         self.ensure_one()  # Asegurarse de que solo se procesa un registro a la vez
-        if not self.classification:
+        # Obtener el código guardado en la base de datos
+        original_default_code = self._origin.default_code if self._origin else False
+
+        # Si ya tiene un código personalizado de 5 dígitos, devolverlo
+        if original_default_code and not self.classification and len(original_default_code) == 5:
+            return original_default_code
+            
+        elif not self.classification:
             # Generar el número de secuencia de 5 dígitos sin considerar las clases relacionadas
             existing_codes = self.env['product.template'].search([
                 ('classification', '=', False),

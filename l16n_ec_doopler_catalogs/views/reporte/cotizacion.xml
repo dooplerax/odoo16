@@ -18,14 +18,17 @@
           <div class="row">
             <div class="col-4">
               <xpath expr="//h2" position="replace">
-                <h2 class="mt-4">
+                <h2 class="">
                   <t t-if="env.context.get('proforma', False) or is_pro_forma">Pro-Forma Factura # </t>
                   <t t-elif="doc.state in ['draft','sent']">Cotización Nro.: </t>
                   <t t-else="">Pedido # </t>
                   <span t-field="doc.name" />
                 </h2>
               </xpath>
-
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4">
               <p class="fw-bold">
                 Emitido por:
               </p>
@@ -181,7 +184,7 @@
 
         <!-- Recuadro para el "Recibido del Cliente" -->
         <div
-          class="row">
+          class="row" style="margin-bottom:20px;">
           <div class="col-6"></div>
           <div class="col-6" style="border: 2px solid black; margin-top: 20px; padding: 10px;">
             <p class="fw-bold">Recibido del Cliente</p>
@@ -224,7 +227,7 @@
         <thead style="display: table-row-group">
           <tr>
             <th name="th_items" class="text-start">ITEMS</th>
-            <th name="th_orden" class="text-start">ORDEN</th>
+            <!-- <th name="th_orden" class="text-start">ORDEN</th> -->
             <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
             <th name="th_material" class="text-start">MATERIAL</th>
             <th name="th_ancho" class="text-start">ANCHO</th>
@@ -233,7 +236,7 @@
             <th name="th_cant_m2" class="text-start">CANT. / M2</th>
             <th name="th_valor" class="text-start">VALOR</th>
             <th name="th_subtotal" class="text-start">SUBTOTAL</th>
-            <th name="th_ambiente" class="text-start">AMBIENTE</th>
+            <!-- <th name="th_ambiente" class="text-start">AMBIENTE</th> -->
             <th name="th_encj" class="text-start">ENCJ</th>
             <th name="th_mot" class="text-start">MOT</th>
             <th name="th_clnt" class="text-start">CLNT</th>
@@ -247,9 +250,9 @@
               <td>
                 <span t-if="line.items" t-field="line.items" t-options='{"widget": "text"}' />
               </td>
-              <td>
+              <!-- <td>
                 <span t-field="line.orden" />
-              </td>
+              </td> -->
               <td>
                 <t t-if="line.details_id">
                   <span t-field="line.details_id.tipo_cortina" />
@@ -261,7 +264,7 @@
 
               <td>
                 <t t-if="line.details_id.material">
-                  <span t-esc="line.product_id.name" />
+                  <span t-esc="line.details_id.material.name" />
                 </t>
                 <t t-if="not line.details_id.material">
                 </t>
@@ -290,9 +293,9 @@
               <td>
                 <span t-field="line.price_subtotal" />
               </td>
-              <td>
+              <!-- <td>
                 <span t-field="line.details_id.name" />
-              </td>
+              </td> -->
               <td>
                 <input type="checkbox" t-att-checked="line.details_id.encj" disabled="disabled" />
               </td>

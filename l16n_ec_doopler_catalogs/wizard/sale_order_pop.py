@@ -74,8 +74,8 @@ class SaleOrderLine(models.Model):
                 line.product_uom_qty = line.m2
             else:
                 super(SaleOrderLine, line)._compute_product_uom_qty()
-
-    orden = fields.Char(string="Orden", readonly=True, store=True, default='')
+    # Codigo para generar número de orden en cotización, se comenta por correcciones del ticket 2868
+    """ orden = fields.Char(string="Orden", readonly=True, store=True, default='')
     latest_order_number = fields.Integer(
         string="Latest Order Number", compute="_compute_latest_order_number", store=True)
 
@@ -96,19 +96,17 @@ class SaleOrderLine(models.Model):
         vals['orden'] = str(next_order_number).zfill(5)
         new_record = super(SaleOrderLine, self).create(vals)
 
-        return new_record
+        return new_record """
 
-    items = fields.Integer(
-        string="Items", compute="_compute_items", store=True)
+    items = fields.Integer(string="Items", compute="_compute_items", store=True)
 
     @api.depends('order_id')
     def _compute_items(self):
         for order in self.mapped('order_id'):
-            order_lines = order.order_line.sorted('sequence')
+            order_lines = order.order_line.filtered(lambda x: x.display_type not in ['line_note', 'line_section']).sorted('sequence')
             for index, line in enumerate(order_lines):
                 line.items = index + 1
 
-from odoo import api, fields, models, _
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -125,16 +123,17 @@ class SaleOrder(models.Model):
                 groups[group_key]['price_subtotal_extra'] += line.price_subtotal_extra
                 groups[group_key]['price_total_extra'] += line.price_total_extra
             else:
+                name = line.details_id.material.name if line.details_id.material.name else line.product_id_extra.name
                 groups[group_key] = {
                     'tipo_cortina': line.details_id.tipo_cortina,
-                    'name': line.product_id_extra.name,
+                    'name': name,
                     'quantity_extra': line.quantity_extra,
                     'price_subtotal_extra': line.price_subtotal_extra,
                     'price_total_extra': line.price_total_extra,
                     'price_unit': line.price_unit,
                     'display_type': line.display_type,
                 }
-
+        """ 'name': line.product_id_extra.name, """
         for key, value in groups.items():
             group_totals.append(value)
 
