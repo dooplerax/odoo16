@@ -18,7 +18,7 @@
           <div class="row">
             <div class="col-4">
               <xpath expr="//h2" position="replace">
-                <h2 class="">
+                <h2 class="mt-1">
                   <t t-if="env.context.get('proforma', False) or is_pro_forma">Pro-Forma Factura # </t>
                   <t t-elif="doc.state in ['draft','sent']">Cotización Nro.: </t>
                   <t t-else="">Pedido # </t>
@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-4">
+            <div class="col-4 mb-1">
               <p class="fw-bold">
                 Emitido por:
               </p>
@@ -48,7 +48,7 @@
                 <span t-field="doc.partner_id.phone" />
               </p>
             </div>
-            <div class="col-4">
+            <div class="col-4 mb-1">
               <p class="fw-bold">
                 Cliente:
               </p>
@@ -73,7 +73,7 @@
                 </t>
               </p>
             </div>
-            <div class="col-4">
+            <div class="col-4 mb-1">
               <p class="fw-bold">
                 Fecha:
               </p>
