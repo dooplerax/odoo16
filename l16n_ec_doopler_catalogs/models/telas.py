@@ -1,6 +1,13 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError,ValidationError
 
+class ProductAttribute(models.Model):
+    _inherit = 'product.attribute'
+
+    class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto')
+    subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto')
+
+
 class ProductTelas(models.Model):
     _inherit= 'product.template'
     colorTela=fields.Many2one('product.color.catalogo',string="Colores")

@@ -1,6 +1,7 @@
 from odoo import api, fields, models
 from odoo.exceptions import ValidationError
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, exceptions
+from odoo.exceptions import UserError
 
 # from ec_models import *
 
@@ -92,7 +93,7 @@ class AddCatalogInProduct(models.Model):
         # Si ya tiene un código personalizado de 5 dígitos, devolverlo
         if original_default_code and not self.classification and len(original_default_code) == 5:
             return original_default_code
-            
+
         elif not self.classification:
             # Generar el número de secuencia de 5 dígitos sin considerar las clases relacionadas
             existing_codes = self.env['product.template'].search([
@@ -159,13 +160,65 @@ class AddCatalogInProduct(models.Model):
                 raise ValidationError(
                     'Un producto con esa Referencia Interna ya existe.')
 
+    @api.onchange('subclass_inherit', 'classification')
+    def _onchange_subclass_inherit(self):
+        if self.classification and self.subclass_inherit:
+            class_inherit = self.subclass_inherit.cl_product_id
+
+            # Ajustar los atributos y valores predeterminados para cada clase y subclase
+            predefined_attributes_dict = {
+                'TELAS-ZEBRA': ['ANCHO DE ROLLO', 'ANCHO DE FRANJA', 'COLOR', 'VISILLO', 'TEXTURA', 'PESO', 'COMPOSICION'],
+                'TELAS-SCREEN': ['ANCHO DE ROLLO', 'APERTURA', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+                'TELAS-BLACKOUT': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+                'TELAS-TRASLUCIDAS': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'COMPOSICION'],
+            }
+
+            key = f"{class_inherit.cl_name}-{self.subclass_inherit.scl_name}"
+            predefined_attribute_names = predefined_attributes_dict.get(key, [
+            ])
+
+            if predefined_attribute_names:
+                attributes_to_add = self.env['product.attribute'].search([
+                    ('name', 'in', predefined_attribute_names),
+                    ('class_inherit.cl_name', '=', class_inherit.cl_name),
+                    ('subclass_inherit.scl_name', '=',
+                     self.subclass_inherit.scl_name),
+                ])
+
+                attribute_lines_to_add = [(0, 0, {
+                    'attribute_id': attribute.id,
+                }) for attribute in attributes_to_add]
+
+                self.attribute_line_ids = attribute_lines_to_add
+
+
+class ProductAttributeLine(models.Model):
+    _inherit = 'product.template.attribute.line'
+
+    predefined_attribute_names = {
+        'TELAS-ZEBRA': ['ANCHO DE ROLLO', 'ANCHO DE FRANJA', 'COLOR', 'VISILLO', 'TEXTURA', 'PESO', 'COMPOSICION'],
+        'TELAS-SCREEN': ['ANCHO DE ROLLO', 'APERTURA', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+        'TELAS-BLACKOUT': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+        'TELAS-TRASLUCIDAS': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'COMPOSICION'],
+    }
+
+    def unlink(self):
+        for attribute_line in self:
+            key = f"{attribute_line.product_tmpl_id.classification.cl_name}-{attribute_line.product_tmpl_id.subclass_inherit.scl_name}"
+            predefined_attributes = self.predefined_attribute_names.get(key, [
+            ])
+            if attribute_line.attribute_id.name in predefined_attributes:
+                raise exceptions.UserError(
+                    "No se puede borrar un valor por defecto de atributos y variantes para esta clase y subclase.")
+        return super(ProductAttributeLine, self).unlink()
+
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
-    @api.onchange('classification')
-    def _onchange_classification(self):
-        """ if not self.classification:
+    """  @api.onchange('classification')
+    def _onchange_classification(self): 
+        if not self.classification:
             self.class_inherit.required = False
             self.subclass_inherit.required = False
             self.fa_class_inherit.required = False

@@ -533,6 +533,49 @@
     <menuitem name="Mandos" id="product_mando_catalogo_menu"
       parent="menu_atributos_in_config_stock" action="product_mando_catalogo_action_window" />
 
+    <record id="view_product_attribute_form_inherit" model="ir.ui.view">
+      <field name="name">product.attribute.form.inherit</field>
+      <field name="model">product.attribute</field>
+      <field name="priority" eval="8" />
+      <field name="inherit_id" ref="product.product_attribute_view_form" />
+      <field name="arch" type="xml">
+        <data>
+          <xpath expr="//group[@name='main_fields']" position="replace">
+            <group name="main_fields" class="o_label_nowrap">
+              <group>
+                <label for="name" />
+                <field name="name" nolabel="1" />
+                <field name="display_type" widget="radio" />
+                <field name="create_variant" widget="radio"
+                  attrs="{'readonly': [('number_related_products', '!=', 0)]}" />
+              </group>
+              <group>
+                <field name="class_inherit" />
+                <field name="subclass_inherit" />
+              </group>
+            </group>
+          </xpath>
+        </data>
+      </field>
+    </record>
+
+    <record id="view_product_attribute_tree_inherit" model="ir.ui.view">
+      <field name="name">product.attribute.tree.inherit</field>
+      <field name="model">product.attribute</field>
+      <field name="inherit_id" ref="product.attribute_tree_view" />
+      <field name="arch" type="xml">
+        <data>
+          <!-- Reemplazar el contenido de la vista product.attribute_tree_view -->
+          <!-- Agregar los campos 'class_inherit' y 'subclass_inherit' sin reemplazar los campos
+          existentes -->
+          <xpath expr="//field[@name='name']" position="after">
+            <field name="class_inherit" />
+            <field name="subclass_inherit" />
+          </xpath>
+        </data>
+      </field>
+    </record>
+
 
   </data>
 </odoo>
