@@ -173,17 +173,23 @@ class AddCatalogInProduct(models.Model):
             class_inherit = self.subclass_inherit.cl_product_id
 
             # Ajustar los atributos y valores predeterminados para cada clase y subclase
+            predefined_attributes_dict = {
+                'TELAS-ZEBRA': ['ANCHO DE ROLLO', 'ANCHO DE FRANJA', 'COLOR', 'VISILLO', 'TEXTURA', 'PESO', 'COMPOSICION'],
+                'TELAS-SCREEN': ['ANCHO DE ROLLO', 'APERTURA', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+                'TELAS-BLACKOUT': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+                'TELAS-TRASLUCIDAS': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'COMPOSICION'],
+            }
+
             key = f"{class_inherit.cl_name}-{self.subclass_inherit.scl_name}"
-            predefined_attribute_names = self.predefined_attribute_names.get(key, [])
+            predefined_attribute_names = predefined_attributes_dict.get(key, [
+            ])
 
-            # Clear existing attribute lines
-            self.attribute_line_ids = [(5, 0, 0)]
-
-            if predefined_attribute_names and class_inherit.cl_name and self.subclass_inherit.scl_name:
+            if predefined_attribute_names:
                 attributes_to_add = self.env['product.attribute'].search([
                     ('name', 'in', predefined_attribute_names),
                     ('class_inherit.cl_name', '=', class_inherit.cl_name),
-                    ('subclass_inherit.scl_name', '=', self.subclass_inherit.scl_name),
+                    ('subclass_inherit.scl_name', '=',
+                     self.subclass_inherit.scl_name),
                 ])
 
                 attribute_lines_to_add = [(0, 0, {
@@ -191,11 +197,6 @@ class AddCatalogInProduct(models.Model):
                 }) for attribute in attributes_to_add]
 
                 self.attribute_line_ids = attribute_lines_to_add
-
-        else:
-            # Handle the case when subclass_inherit is False or not set
-            # You may want to take some action or clear the attribute lines here
-            self.attribute_line_ids = [(5, 0, 0)]
 
 
 class ProductAttributeLine(models.Model):
