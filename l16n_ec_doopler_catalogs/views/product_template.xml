@@ -173,12 +173,12 @@
             <field name="arch" type="xml">
                 <!-- Agregar el atributo 'attrs' al campo 'attribute_id' dentro del árbol -->
                 <xpath expr="//field[@name='attribute_id']"
-                    position="after">
+                    position="before">
                     <field name="attribute_id_readonly" invisible="1" />
                 </xpath>
                 <xpath expr="//field[@name='attribute_id']"
                     position="attributes">
-                    <attribute name="attrs">{'readonly': [('attribute_id_readonly', '=', True)]}</attribute>
+                    <attribute name="attrs">{'readonly': [('attribute_id_readonly', '=', True), ('id', '!=', False)]}</attribute>
                 </xpath>
             </field>
         </record>
