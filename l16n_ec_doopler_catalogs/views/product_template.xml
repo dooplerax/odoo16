@@ -16,7 +16,8 @@
                     </span>
                 </xpath>
                 <xpath expr="//group/field[@name='product_tooltip']" position="after">
-                    <field name="classification" invisible="1"/> <!-- Agregar el campo classification invisible -->
+                    <field name="classification" invisible="1" /> <!-- Agregar el campo
+                    classification invisible -->
                     <field name="class_inherit"
                         attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}" />
                     <field name="subclass_inherit"
@@ -163,5 +164,8 @@
                 </xpath>
             </field>
         </record>
+
+        
+
     </data>
 </odoo>

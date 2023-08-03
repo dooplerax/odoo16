@@ -160,29 +160,30 @@ class AddCatalogInProduct(models.Model):
                 raise ValidationError(
                     'Un producto con esa Referencia Interna ya existe.')
 
+    predefined_attribute_names = {
+        'TELAS-ZEBRA': ['ANCHO DE ROLLO', 'ANCHO DE FRANJA', 'COLOR', 'VISILLO', 'TEXTURA', 'PESO', 'COMPOSICION'],
+        'TELAS-SCREEN': ['ANCHO DE ROLLO', 'APERTURA', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+        'TELAS-BLACKOUT': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
+        'TELAS-TRASLUCIDAS': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'COMPOSICION'],
+    }
+
     @api.onchange('subclass_inherit', 'classification')
     def _onchange_subclass_inherit(self):
         if self.classification and self.subclass_inherit:
             class_inherit = self.subclass_inherit.cl_product_id
 
             # Ajustar los atributos y valores predeterminados para cada clase y subclase
-            predefined_attributes_dict = {
-                'TELAS-ZEBRA': ['ANCHO DE ROLLO', 'ANCHO DE FRANJA', 'COLOR', 'VISILLO', 'TEXTURA', 'PESO', 'COMPOSICION'],
-                'TELAS-SCREEN': ['ANCHO DE ROLLO', 'APERTURA', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
-                'TELAS-BLACKOUT': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
-                'TELAS-TRASLUCIDAS': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'COMPOSICION'],
-            }
-
             key = f"{class_inherit.cl_name}-{self.subclass_inherit.scl_name}"
-            predefined_attribute_names = predefined_attributes_dict.get(key, [
-            ])
+            predefined_attribute_names = self.predefined_attribute_names.get(key, [])
 
-            if predefined_attribute_names:
+            # Clear existing attribute lines
+            self.attribute_line_ids = [(5, 0, 0)]
+
+            if predefined_attribute_names and class_inherit.cl_name and self.subclass_inherit.scl_name:
                 attributes_to_add = self.env['product.attribute'].search([
                     ('name', 'in', predefined_attribute_names),
                     ('class_inherit.cl_name', '=', class_inherit.cl_name),
-                    ('subclass_inherit.scl_name', '=',
-                     self.subclass_inherit.scl_name),
+                    ('subclass_inherit.scl_name', '=', self.subclass_inherit.scl_name),
                 ])
 
                 attribute_lines_to_add = [(0, 0, {
@@ -190,6 +191,11 @@ class AddCatalogInProduct(models.Model):
                 }) for attribute in attributes_to_add]
 
                 self.attribute_line_ids = attribute_lines_to_add
+
+        else:
+            # Handle the case when subclass_inherit is False or not set
+            # You may want to take some action or clear the attribute lines here
+            self.attribute_line_ids = [(5, 0, 0)]
 
 
 class ProductAttributeLine(models.Model):
@@ -204,13 +210,20 @@ class ProductAttributeLine(models.Model):
 
     def unlink(self):
         for attribute_line in self:
-            key = f"{attribute_line.product_tmpl_id.classification.cl_name}-{attribute_line.product_tmpl_id.subclass_inherit.scl_name}"
-            predefined_attributes = self.predefined_attribute_names.get(key, [
-            ])
-            if attribute_line.attribute_id.name in predefined_attributes:
-                raise exceptions.UserError(
-                    "No se puede borrar un valor por defecto de atributos y variantes para esta clase y subclase.")
+            if attribute_line.product_tmpl_id:
+                key = f"{attribute_line.product_tmpl_id.class_inherit.cl_name}-{attribute_line.product_tmpl_id.subclass_inherit.scl_name}"
+                predefined_attributes = self.predefined_attribute_names.get(key, [])
+                if attribute_line.attribute_id.name in predefined_attributes:
+                    raise exceptions.UserError(
+                        "No se puede borrar un valor por defecto de atributos y variantes para esta clase y subclase.")
         return super(ProductAttributeLine, self).unlink()
+
+
+    attribute_id_readonly = fields.Boolean(compute='_compute_attribute_id_readonly', store=False)
+
+    def _compute_attribute_id_readonly(self):
+        for line in self:
+            line.attribute_id_readonly = line.product_tmpl_id.subclass_inherit
 
 
 class ProductTemplate(models.Model):
