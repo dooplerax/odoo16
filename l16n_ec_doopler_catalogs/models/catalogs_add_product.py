@@ -21,7 +21,8 @@ class AddCatalogInProduct(models.Model):
     default_code = fields.Char(string='Internal Reference', required=True, copy=False,
                                readonly=True, default=lambda self: _('New'))
     classification = fields.Boolean('Clasificación', default=False)
-
+    alternate_code = fields.Char(string="Código Alterno", required=True, copy=False)
+    
     @api.depends('anchorolloTela')
     def _compute_m2(self):
         """
@@ -194,6 +195,10 @@ class AddCatalogInProduct(models.Model):
 
                 self.attribute_line_ids = attribute_lines_to_add
 
+                    # Set the attribute_id_readonly field for existing attribute lines
+                """ for line in self.attribute_line_ids:
+                    line.attribute_id_readonly = True """
+
         else:
             # Handle the case when subclass_inherit is False or not set
             # You may want to take some action or clear the attribute lines here
@@ -203,32 +208,31 @@ class AddCatalogInProduct(models.Model):
 class ProductAttributeLine(models.Model):
     _inherit = 'product.template.attribute.line'
 
+    classification = fields.Boolean(related='product_tmpl_id.classification', readonly=True)
     predefined_attribute_names = {
         'TELAS-ZEBRA': ['ANCHO DE ROLLO', 'ANCHO DE FRANJA', 'COLOR', 'VISILLO', 'TEXTURA', 'PESO', 'COMPOSICION'],
         'TELAS-SCREEN': ['ANCHO DE ROLLO', 'APERTURA', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
         'TELAS-BLACKOUT': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'PESO', 'COMPOSICION'],
         'TELAS-TRASLUCIDAS': ['ANCHO DE ROLLO', 'COLOR', 'TEXTURA', 'COMPOSICION'],
     }
+    # medida = fields.Selection(related='attribute_id.medida', string='Unidad de Medida', readonly=True)
+    product_uom_id = fields.Many2one('uom.uom', related='attribute_id.product_uom_id', string='Unidad de Medida')
 
     """ def unlink(self):
         for attribute_line in self:
             if attribute_line.product_tmpl_id:
                 key = f"{attribute_line.product_tmpl_id.class_inherit.cl_name}-{attribute_line.product_tmpl_id.subclass_inherit.scl_name}"
-                predefined_attributes = self.predefined_attribute_names.get(key, [
-                ])
+                predefined_attributes = self.predefined_attribute_names.get(key, [])
                 if attribute_line.attribute_id.name in predefined_attributes:
                     raise exceptions.UserError(
                         "No se puede borrar un valor por defecto de atributos y variantes para esta clase y subclase.")
-        return super(ProductAttributeLine, self).unlink()
- """
+        return super(ProductAttributeLine, self).unlink() """
 
-    @api.depends('product_tmpl_id.subclass_inherit')
-    def _compute_attribute_id_readonly(self):
+    attribute_id_readonly = fields.Boolean(store=False)
+
+    """ def _compute_attribute_id_readonly(self):
         for line in self:
-            line.attribute_id_readonly = line.product_tmpl_id.subclass_inherit
-
-    attribute_id_readonly = fields.Boolean(
-        compute='_compute_attribute_id_readonly', store=False)
+            line.attribute_id_readonly = line.product_tmpl_id.subclass_inherit """
 
 
 class ProductTemplate(models.Model):

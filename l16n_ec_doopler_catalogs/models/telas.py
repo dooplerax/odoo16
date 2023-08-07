@@ -6,6 +6,14 @@ class ProductAttribute(models.Model):
 
     class_inherit = fields.Many2one('cproduct.doclass', 'Clase de producto')
     subclass_inherit = fields.Many2one('subproduct.dosubclass', 'Subclase de producto')
+ # Campo de selección para elegir la medida 'm'
+    # medida = fields.Selection([
+    #     ('metros', 'Metros'),
+    #     ('centimetros', 'Centímetros'),
+    #     ('pulgadas', 'Pulgadas'),
+    #     # Agrega aquí otras opciones de medida que necesites
+    # ], string='Medida', default='metros', readonly=True)
+    product_uom_id = fields.Many2one('uom.uom', string='Unidad de Medida', default=lambda self: self.env.ref('uom.product_uom_meter'))
 
 
 class ProductTelas(models.Model):

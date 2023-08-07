@@ -552,6 +552,7 @@
               <group>
                 <field name="class_inherit" />
                 <field name="subclass_inherit" />
+                <field name="product_uom_id" />
               </group>
             </group>
           </xpath>

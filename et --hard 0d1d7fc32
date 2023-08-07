@@ -1,0 +1,1293 @@
+[33mcommit 24a3acd2f9131eb6fe6fdbde6a5e2b33a6d61cdc[m[33m ([m[1;36mHEAD -> [m[1;32mF2873[m[33m)[m
+Author: Sebastian David Falconi <sdfalconi@espe.edu.ec>
+Date:   Thu Aug 3 12:45:55 2023 -0500
+
+    El campo se corrigio un error del readonly
+
+[33mcommit 6e457b0d4c2a2434af766c4a7f75007f9d2aec62[m
+Author: Sebastian David Falconi <sdfalconi@espe.edu.ec>
+Date:   Thu Aug 3 11:53:52 2023 -0500
+
+    Atributos readonly para aquellos que se cargan automáticamente
+
+[33mcommit 9c348852aec22b74df81e89baa4c5bec80fe18d1[m
+Author: Sebastian David Falconi <sdfalconi@espe.edu.ec>
+Date:   Thu Aug 3 09:11:13 2023 -0500
+
+    Los atributos se cambian al cambiar de subclase
+
+[33mcommit 485c304b368da343e1ca70d3c4baa33f6e5c5881[m
+Author: Sebastian David Falconi <sdfalconi@espe.edu.ec>
+Date:   Tue Aug 1 09:15:06 2023 -0500
+
+    Se cargaron los datos XML de los atributos de productos, se cargan los campos al elegir una clase y subclase en atributos y variantes, se crearon las columnas de clase y subclase en la vista de tree de un atributo y se agregó en la vista de form para seleccionar la clase y subclase
+
+[33mcommit 7037b0dd0835409e146c7d05f0ed3b66244e34e4[m[33m ([m[1;31morigin/test[m[33m, [m[1;32mtest[m[33m)[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Thu Jul 27 14:41:59 2023 -0500
+
+    Se colocó un margen entre columnas de los datos de la factura para mejorar visualización
+
+[33mcommit adb0262334adc7a1531713934e7fa82817d7e192[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Thu Jul 27 14:29:41 2023 -0500
+
+    Agregando separación entre columnas en encabezado
+
+[33mcommit 9c1ffec0843b5ef97709f5b702b3a102f0417b07[m[33m ([m[1;32mF2857[m[33m)[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Thu Jul 27 14:22:02 2023 -0500
+
+    Arreglado encabezado, ocultado ambiente en cotizacion, y comentado código de orden en cotizaciones, arreglado creación de código para productos sin clasificación
+
+[33mcommit 1e668cb8af2eb5c99eb6e3a2357871f5feec67b2[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 16:53:19 2023 -0500
+
+    Agregado campo classification ya que da error sin el campo
+
+[33mcommit 2bc3532008d66f3bdd0be73ac3822b70f83e0caa[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 16:51:01 2023 -0500
+
+    Agregado campo classification ya que da error sin el campo
+
+[33mcommit d60836b63fc1e826fbbb27ee253eda208f64f097[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 16:13:59 2023 -0500
+
+    Ticket 2868, se agrega nuevo botón de clasificación y se oculta la clase, subclase, familia, modelo en la configuracion de productos si se desactiva la clasificación, se genera un nuevo código cuando no tiene una clasificación de 5 dígitos
+
+[33mcommit f964f0a5b6ae4d218d18d39ea95dc447b90d1742[m[33m ([m[1;31morigin/F2868[m[33m, [m[1;32mF2868[m[33m)[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 11:54:10 2023 -0500
+
+    Arreglado archivo de merge
+
+[33mcommit 066b1c226184f9ea39e349039c25cf034cb2491d[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 11:53:05 2023 -0500
+
+    Merge F2777
+
+[33mcommit 59b5f36942d5bea253df141cede4de192368aa13[m
+Merge: 6c20e95 8bbb8db
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 11:45:06 2023 -0500
+
+    Borrado __pycache__
+
+[33mcommit 8bbb8db82256ae7d75d9a80099c48b0f7a923993[m[33m ([m[1;32mF2777[m[33m)[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Wed Jul 26 11:43:59 2023 -0500
+
+    Corregido las actividades
+
+[33mcommit 6c20e95b177fae933bda58ee0fbecdce2ba07938[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 18:11:03 2023 -0500
+
+    Arreglado bug que no se mostraba la segunda tabla
+
+[33mcommit 495ecddca854266fe8ae655398a788ca49f839ba[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:53:07 2023 -0500
+
+    Agregado sección en tabla
+
+[33mcommit fcaa6161192f569a3b0a648a7d82c7a8ddf29bab[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:21:37 2023 -0500
+
+    Borde
+
+[33mcommit 22b4e77a8b5c6af5d49d0287b7aa2db89e564056[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:19:13 2023 -0500
+
+    Borde
+
+[33mcommit a816c4e666a29dea5ddc3ebe88dbbff1267ebcf3[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:16:21 2023 -0500
+
+    Borde
+
+[33mcommit ea560d761a43a38469d727b01afc85ba2ee4e552[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:13:32 2023 -0500
+
+    Borde
+
+[33mcommit 47f530a5cd026e3e66a10eae0c59b40a1b6ed452[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:09:53 2023 -0500
+
+    Arreglando borde de observaciones
+
+[33mcommit cdb86a4bdadb74c1b186e00c5e644c6539db57e8[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 17:05:39 2023 -0500
+
+    Corregido crear nota
+
+[33mcommit ba64bd78b4e04e1a8c23f6bfb2891d7577f8f491[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 16:45:36 2023 -0500
+
+    Ocultado la columna name de cotizacion
+
+[33mcommit 18b2b589e82353e8acadfb860193c06b81e29a69[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 16:41:44 2023 -0500
+
+    Reparado observaciones, y agregado logica para mostrar el nombre de producto en descripcion, si tiene un material entonces mostrar el tipo de cortina en descripcion, y en material se muestra el material
+
+[33mcommit 950cfa3319e67a55616d9c84ef90cebd43864aa9[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 16:18:45 2023 -0500
+
+    Arreglado el producto ahora aparece en descripcion si no se asigna un materia
+
+[33mcommit 1cf874e95e90a93e21d60117b67e46d907fedb19[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 16:04:24 2023 -0500
+
+    El producto ahora aparece en descripcion si no se asigna un material
+
+[33mcommit c4a28b0929119864c529df32f51d9436db9ff6c4[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 14:01:18 2023 -0500
+
+    Arreglar fecha de entrega, cargar notas en observaciones, y arreglar notas
+
+[33mcommit 89793749b77ce6dd9a8046ca879924bb6e9115af[m
+Merge: 311244e a89b7e9
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 11:18:39 2023 -0500
+
+    Eliminado __pycache__
+
+[33mcommit 311244e56d04273c049419ecbe0eca94a5fe4927[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 11:17:05 2023 -0500
+
+    Merge F2857
+
+[33mcommit a89b7e957584e2a1f3d9e6d7ea0e3a136e525273[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 11:15:39 2023 -0500
+
+    2857 Personalización reporte cotización/pedido de venta
+
+[33mcommit d934fe76879f379e7619e097ccb227116ba9c654[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Tue Jul 25 11:14:06 2023 -0500
+
+    2857 Personalización reporte cotización/pedido de venta
+
+[33mcommit b6376ecc6d59865e8e8ce91dc371b4078a56d6b8[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Mon Jul 24 12:38:08 2023 -0500
+
+    Agregando reporte de cotizacion PDF personalizado
+
+[33mcommit 639c43598960f66c76a9ef2687877177f3efefcd[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Mon Jul 24 12:36:48 2023 -0500
+
+    Ticket 2862 se arregla la creacion de actividades
+
+[33mcommit 6a0c421adb719b74db91c1d3cc6d3ec6efec38f4[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Mon Jul 24 11:59:09 2023 -0500
+
+    Agregando reporte de cotizacion PDF personalizado
+
+[33mcommit bfc02d10b267df9d79dcfce80f70ad26808f6111[m[33m ([m[1;32mF2839[m[33m)[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Mon Jul 24 11:32:46 2023 -0500
+
+    Cambios para que al crear una clase (catálogo) se crea en mayusculas, agregar opcion 'ambos' en mando detalles de producto, no se puede borrar la clase inicial telas con clase tela, se cambio Encj, Mot, Clnt a mayusculas y con punto final, se repara la visualización de los detalles en la vista
+
+[33mcommit 841a030d33a70356f346a5fdfe52d5dd785c6450[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Thu Jul 20 16:07:51 2023 -0500
+
+    Modificaciones en creación de catálogos, referencias internas de productos, botón de estado en descuentos, reemplazado Enci por Encj en detalle de producto, y cambios en Doopler Activities
+
+[33mcommit 7ca2a228660fd11a7fc624cfad2f234d0ce9ec87[m
+Author: Sebastian David Falconi <sebastian.falconi@citytech.ec>
+Date:   Thu Jul 6 15:28:24 2023 -0500
+
+    Activities module
+
+[33mcommit fc665c5bcdca54827dba754e3eed9a9586706c4f[m
+Merge: 7d3c21a 681bbda
+Author: dmarante <dmarantej@gmail.com>
+Date:   Tue Jun 27 21:52:45 2023 -0500
+
+    Merge pull request #37 from dannermarante/test
+    
+    Test
+
+[33mcommit 681bbdae3c4d7eb8ce0db7291da02bb85ef76a4b[m
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Mon Jun 26 18:02:36 2023 -0500
+
+    payment
+
+[33mcommit 7d3c21a1ba96e0f6f5a6acae43acaeaeedb25944[m
+Merge: 4941521 127c607
+Author: dmarante <dmarantej@gmail.com>
+Date:   Sun May 28 17:18:22 2023 -0500
+
+    Merge pull request #36 from dannermarante/dev
+    
+    encode string
+
+[33mcommit 127c607b62d557322bdab216c19897639b980583[m[33m ([m[1;31morigin/dev[m[33m)[m
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Sun May 28 17:17:49 2023 -0500
+
+    encode string
+
+[33mcommit 49415216a203ca6221ceda521e89b4e8c5f12fea[m
+Merge: 3e2c23c 3f2a40c
+Author: dmarante <dmarantej@gmail.com>
+Date:   Sun May 28 17:08:42 2023 -0500
+
+    Merge pull request #35 from dannermarante/dev
+    
+    account statements
+
+[33mcommit 3f2a40cc6a00070b01e05120a1b9298b7b2b3fb0[m
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Sun May 28 16:46:37 2023 -0500
+
+    account statements
+
+[33mcommit 0bd527d05a4913cb102a6875a108d98da4c41fa7[m
+Merge: 16dbbb1 3e2c23c
+Author: dmarante <dmarantej@gmail.com>
+Date:   Tue May 23 01:26:33 2023 -0500
+
+    Merge pull request #34 from dannermarante/dev
+    
+    Dev
+
+[33mcommit 3e2c23c02c822419f4af0f3a35c124fd3387c4b7[m
+Merge: ee8a843 5bbb373
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Tue May 23 01:24:40 2023 -0500
+
+    Merge remote-tracking branch 'origin/dev' into dev
+
+[33mcommit ee8a84327b7fb1f72500f414cfd3d0b48aaa4629[m
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Tue May 23 01:24:25 2023 -0500
+
+    stock
+
+[33mcommit 5bbb37346be718cfd550c50b6eee0e172ccb5ac1[m
+Merge: 6cb9eea 16dbbb1
+Author: dmarante <dmarantej@gmail.com>
+Date:   Tue May 23 01:17:35 2023 -0500
+
+    Merge pull request #33 from dannermarante/test
+    
+    Test
+
+[33mcommit 16dbbb1713f67b8a8c2654b88fa22af0579d7d7d[m
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Tue May 23 00:59:39 2023 -0500
+
+    build
+
+[33mcommit 8a432185fc1d3794c7c99a186a3592bc929dc110[m
+Author: Danner Marante Jacas <danner.marante@ppm.com.ec>
+Date:   Tue May 23 00:41:20 2023 -0500
+
+    build
+
+[33mcommit 708bd03797f2013a77a7a049020880ff3fa6b802[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Fri Mar 31 11:30:44 2023 -0500
+
+    cambio pestaña
+
+[33mcommit 734c69ebfcf722cc0bb3c7de343d550c806b996e[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Fri Mar 31 11:28:58 2023 -0500
+
+    cambio pestania
+
+[33mcommit 42f40da9057435d03350dd2f5015141297022227[m
+Merge: 13ef197 2b9730f
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Fri Mar 31 11:20:12 2023 -0500
+
+    Merge pull request #32 from dannermarante/H2400_REFERENCIA
+    
+    H2400 referencia
+
+[33mcommit 2b9730f0d6406187cf0497de9675839b0c3609e2[m[33m ([m[1;31morigin/H2400_REFERENCIA[m[33m)[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Fri Mar 31 11:17:18 2023 -0500
+
+    Cambio
+
+[33mcommit 3733b282ffd5720836a2351531829eaad0e32b80[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Mar 21 17:25:04 2023 -0500
+
+    CAMBIO ERROR
+
+[33mcommit e4d9385f4a6bc3c66f1f9eb852243bf1fb0c1e6c[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Mar 21 11:52:48 2023 -0500
+
+    Cambio valor total
+
+[33mcommit 71eeba9e585b746b924e42844498233ee043de90[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Mar 21 11:50:30 2023 -0500
+
+    CAMBIO PRECIO TOTAL
+
+[33mcommit e1b5f64dcd87f93e619bd88c86611eae204a26d4[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Mar 21 11:44:54 2023 -0500
+
+    CAMBIOS
+
+[33mcommit cbc6e8edaa944d2cbbac986be3026ad5189e186e[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Mar 21 11:41:48 2023 -0500
+
+    Cambio precio total
+
+[33mcommit a039806a32f8a99fc80aba0a1162c7d8ac3de215[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Mar 21 11:23:43 2023 -0500
+
+    CAMBIO M2
+
+[33mcommit e66dd85bdfcfd4f9de45a728567dacd122233172[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Wed Mar 15 09:07:13 2023 -0500
+
+    Creacion cotizacion
+
+[33mcommit 8dc487ead381051fdb35d0c07b9a4779458ddd24[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Wed Mar 1 21:51:43 2023 -0500
+
+    Cambios 1/3/2023
+
+[33mcommit 5f086375a2b638ada59c4892a866b1f728394072[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Wed Mar 1 09:33:43 2023 -0500
+
+    Cambios odelos
+
+[33mcommit 13ef1976cf866e67b68b6e9638b017730bfd8ab8[m
+Merge: b28fa63 5a86834
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Tue Feb 28 14:26:42 2023 -0500
+
+    Merge pull request #31 from dannermarante/H2400_REFERENCIA
+    
+    H2400 referencia
+
+[33mcommit 5a86834cfd51e2f20e0b7af17005d9e51f1412e6[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Feb 28 11:50:42 2023 -0500
+
+    CAMBIOS REVISION TEST
+
+[33mcommit 506f1e89201f9ea6cf3a3d2aa5de066091b4401d[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Tue Feb 28 08:33:48 2023 -0500
+
+    Cambios
+
+[33mcommit b28fa63704ac483009ad99b194f6ff2c0e09650e[m
+Merge: 13f01ed 672cacb
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Fri Feb 17 17:10:41 2023 -0500
+
+    Merge pull request #30 from dannermarante/H2400_REFERENCIA
+    
+    Cambio
+
+[33mcommit 672cacb7fcd5c0aca1e47bf5498d798a27a152b2[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Fri Feb 17 16:53:44 2023 -0500
+
+    Cambio
+
+[33mcommit 13f01edd9298595f3f16ab206c74d9e1fe9ef3bc[m
+Merge: 2a4fdb0 a53a56b
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Feb 15 12:14:43 2023 -0500
+
+    Merge pull request #29 from dannermarante/H2400_REFERENCIA
+    
+    Cambio requerimiento
+
+[33mcommit a53a56bf67aeff8300dfe0a3e3c01bd64d5971c2[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Wed Feb 15 12:12:18 2023 -0500
+
+    Cambio requerimiento
+
+[33mcommit 2a4fdb01d3e0f175a30a1a31c6b1be0cf6178026[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Feb 15 10:07:29 2023 -0500
+
+    formularios con el mismo nombre
+
+[33mcommit ec2efe2b1987724e733987a79ca46b096bed4f7b[m
+Merge: 05789a1 5197b93
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Tue Feb 14 18:51:26 2023 -0500
+
+    Merge pull request #28 from dannermarante/E2330
+    
+    formularios con el mismo nombre
+
+[33mcommit 5197b930a1d329081e3972f7b14fccb9f9fa0ba5[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Feb 14 18:50:33 2023 -0500
+
+    formularios con el mismo nombre
+
+[33mcommit 05789a162b22e88cff51d9995d7b636878362446[m
+Merge: 890c3ff 45a777f
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Tue Feb 14 17:24:03 2023 -0500
+
+    Merge pull request #27 from dannermarante/E2330
+    
+    formularios con el mismo nombre
+
+[33mcommit 45a777fb27ff15b09eb24781ffdd37aabc2c3761[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Feb 14 17:22:05 2023 -0500
+
+    formularios con el mismo nombre
+
+[33mcommit 890c3fff5576d832104f0daf65954a320a18db58[m
+Merge: c09e5f7 72378ea
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Fri Feb 10 17:52:47 2023 -0500
+
+    Merge pull request #26 from dannermarante/F2432
+    
+    Cambios Descuentos, y corrrecciones
+
+[33mcommit 72378eae103db38ec4d77e88fd6b925ecdeb37d9[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 10 17:27:11 2023 -0500
+
+    Cambios Descuentos, y corrrecciones
+
+[33mcommit c09e5f73c80f2b641980012333ca063c49832284[m
+Merge: d318012 63d2ee7
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Fri Feb 10 16:07:14 2023 -0500
+
+    Merge pull request #25 from dannermarante/F2432
+    
+    F2432
+
+[33mcommit 63d2ee76e56577b48799a338cfd022e845c69d82[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 10 15:19:17 2023 -0500
+
+    Cambios
+
+[33mcommit 3f27ee1f6fd24512a2ecb060d07c50f095e3e6e1[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 10 15:18:56 2023 -0500
+
+    CAMBIO FINAL
+
+[33mcommit d3180121f5f130855b5af6a1f1e9cce17bddbfaa[m
+Merge: e176594 7861512
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Fri Feb 10 10:24:19 2023 -0500
+
+    Merge pull request #24 from dannermarante/F2432
+    
+    F2432
+
+[33mcommit 786151274cbed949cb93f07f7f2eb21824c47f93[m
+Merge: 896e51c e176594
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 10 10:18:52 2023 -0500
+
+    Merge remote-tracking branch 'origin/test' into F2432
+
+[33mcommit 896e51c853c93ed3581a804ab6ab39f1f6fd0baf[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 10 09:48:49 2023 -0500
+
+    Cambios finales
+
+[33mcommit aeb26c4749a01b2cbb12690dfad3814f29529ed0[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Thu Feb 9 16:32:46 2023 -0500
+
+    CAMBIOS REQUERIMIENTO
+
+[33mcommit e17659475a32a199520d6fa211f883d8266fb055[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Feb 6 12:13:53 2023 -0500
+
+    cambios en ordenes de venta
+
+[33mcommit d90ad8d081a2d1aadada33afafcfe533ccb8bc7e[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Feb 6 11:41:55 2023 -0500
+
+    cambios en ordenes de venta
+
+[33mcommit 9f0831bf06909953646a6c6755987bac7e98a6d9[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Feb 6 10:51:35 2023 -0500
+
+    cambios en ordenes de venta
+
+[33mcommit 6e4e5907b85336fa6c6ee9ff8f200d543d8f96b7[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Feb 6 10:37:44 2023 -0500
+
+    cambios en ordenes de venta
+
+[33mcommit 3d515070f1de32ae26ebddd2a3668f57bc03bffe[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Feb 6 10:34:15 2023 -0500
+
+    cambios en ordenes de venta
+
+[33mcommit bdad130e499d2ae906b4eafc44f867d6ae387cac[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Feb 6 10:26:11 2023 -0500
+
+    cambios en ordenes de venta
+
+[33mcommit 9e1b720a092096f318646f3de5d80cb81c9e16ed[m
+Merge: 7ce2ead ac0aa9e
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Fri Feb 3 13:43:26 2023 -0500
+
+    Merge pull request #22 from dannermarante/H2400
+    
+    Cambio catologo
+
+[33mcommit ac0aa9eaacc02103e65618514cf28015709c6582[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 3 13:19:04 2023 -0500
+
+    Cambio catologo
+
+[33mcommit ece262497cfae0f900e6144168177aaa6f2e388d[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Fri Feb 3 11:47:03 2023 -0500
+
+    Cambios VIEW
+
+[33mcommit 9aabb221c4053a578ff1bb380337221ea62011a8[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Tue Jan 31 14:18:09 2023 -0500
+
+    Cambios views y doopler
+
+[33mcommit 31c53669f80bca2778468f4e747ecc5a32e1cfe5[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Tue Jan 31 14:01:13 2023 -0500
+
+    Cambios Andres Estrada
+
+[33mcommit 7ce2eadb68d2d195c5ee63ba5c33c487e70ae21f[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Jan 26 21:18:38 2023 -0500
+
+    cambios en fecha de factura y en ordenes de venta
+
+[33mcommit 52ac101b8a157fcfb9f19959c912ddcaf4499695[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Jan 26 21:18:10 2023 -0500
+
+    cambios en fecha de factura y en ordenes de venta
+
+[33mcommit d1604edbfadf6ddbfbcb3265d181b9f0cae62283[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Jan 26 21:15:13 2023 -0500
+
+    cambios en fecha de factura y en ordenes de venta
+
+[33mcommit 9617bd173719c5266b1fad899aebb21d82c21f59[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Jan 26 21:09:21 2023 -0500
+
+    cambios en fecha de factura y en ordenes de venta
+
+[33mcommit 81da42ee7cc325332703cd61d5c301b7b46e9330[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Jan 26 20:51:57 2023 -0500
+
+    cambios en fecha de factura y en ordenes de venta
+
+[33mcommit 7130b7bc87bd32b480b9e841bee8efdb8ce27f45[m
+Merge: 07c42bc 1a6ca57
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Thu Jan 26 17:12:26 2023 -0500
+
+    Merge pull request #21 from dannermarante/2400_Andres_Estrada_Correcciones
+    
+    2400 andres estrada correcciones
+
+[33mcommit 1a6ca575c37ce197d26d3556610fd952dfab549d[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Thu Jan 26 15:19:12 2023 -0500
+
+    Branch New
+
+[33mcommit 959f1ab7fbaba32e5a048f6a304be2bc88023fd8[m
+Author: Carlos Andres Estrada Vasquez <cestrada@cobiscorp.com>
+Date:   Thu Jan 26 10:23:38 2023 -0500
+
+    Cambios Andres Estrada
+
+[33mcommit 07c42bc7d9ae9d79f22c78361daeec3fa93aae23[m
+Merge: 2eeb66f 6cb9eea
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Tue Jan 24 23:38:29 2023 -0500
+
+    Merge pull request #20 from dannermarante/dev
+    
+    Dev
+
+[33mcommit 6cb9eeabfd93d767a2a36db066e58d006b799e23[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Jan 24 23:37:44 2023 -0500
+
+    cambio en catalogo de cortinas
+
+[33mcommit f412114483ac85f9481012d29b07bd38ab118d9a[m
+Merge: 219c02b 9a696fc
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Jan 23 12:18:45 2023 -0500
+
+    Merge pull request #19 from dannermarante/2400_Andres_Estrada
+    
+    Avances Andrés Estrada
+
+[33mcommit 9a696fc89422d5063542265040d873d1be6d3f09[m
+Author: Carlos Andres Estrada Vasquez <121978106+carlosestradacitytech@users.noreply.github.com>
+Date:   Mon Jan 23 10:42:01 2023 -0500
+
+    Avances Andrés Estrada
+
+[33mcommit 219c02b6e7be0cecd067b4f350143c08d639387d[m
+Merge: bf31277 2eeb66f
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Jan 23 10:18:04 2023 -0500
+
+    Merge pull request #18 from dannermarante/test
+    
+    Test
+
+[33mcommit 2eeb66f1552b490245953afa0204763f22c55ca1[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sun Jan 22 12:04:54 2023 -0500
+
+    retenciones
+
+[33mcommit 1961f363c3e3f343222d8afbf186cdd382e4bd6b[m
+Merge: 4224b04 c30b060
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sun Jan 22 12:04:35 2023 -0500
+
+    Merge remote-tracking branch 'origin/test' into test
+
+[33mcommit 4224b04bccd4172322bf1f98faaa5fafd22bc882[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sun Jan 22 12:04:23 2023 -0500
+
+    retenciones
+
+[33mcommit bf3127790cbca3327ac104989a4674c91b682852[m
+Merge: 3bc4486 c30b060
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Jan 18 23:04:48 2023 -0500
+
+    Merge pull request #17 from dannermarante/test
+    
+    Test
+
+[33mcommit c30b06078a2a9948eff53d880bb63885c143df5c[m
+Merge: 6e327af 3bc4486
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Jan 18 23:04:41 2023 -0500
+
+    Merge branch 'dev' into test
+
+[33mcommit 6e327afca479810d77a684b364738be95923e2f0[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 18 23:00:49 2023 -0500
+
+    retenciones
+
+[33mcommit dfbe537fe213f3fe039be3bf6815f13410b8ec71[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 20:22:11 2023 -0500
+
+    logs
+
+[33mcommit 74c71f09bf5ab5d56cae28f8bb0896a29995062d[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 20:13:49 2023 -0500
+
+    logs
+
+[33mcommit 78423c34cd6deff2849bb8f89293e4b3a8f7df0a[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 20:10:03 2023 -0500
+
+    logs
+
+[33mcommit d87e7513fd2d94fc9b16fe9e48236d103e3d1e88[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 20:08:10 2023 -0500
+
+    logs
+
+[33mcommit 238b22bde298df8ca00f16b1727b72eab7bf55ca[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 20:05:14 2023 -0500
+
+    logs
+
+[33mcommit ac9d180b70d89f11a6c654aa055f6990040ba0ff[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 20:02:54 2023 -0500
+
+    logs
+
+[33mcommit 0a7248313dcd425be694c47f011c24a90b3dcd1f[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 19:46:37 2023 -0500
+
+    logs
+
+[33mcommit 9669b3b8bd71e03dd3e08fc48df6342f7c503243[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 19:46:23 2023 -0500
+
+    logs
+
+[33mcommit f15b0dc742a50be98a040cfcef2ee9b9290d5ebc[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 19:38:31 2023 -0500
+
+    logs
+
+[33mcommit 3bc448663138fe2a0dd323a71c4c7d9d195b8171[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 19:30:14 2023 -0500
+
+    deps
+
+[33mcommit e29307059ac43fb42f146472a8e127d1939a9742[m
+Merge: c87d91b f9f80a4
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Jan 11 19:25:05 2023 -0500
+
+    Merge pull request #15 from dannermarante/dev
+    
+    deps
+
+[33mcommit f9f80a44a003e05339f78a1c0653212d4b682b2d[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 19:24:27 2023 -0500
+
+    deps
+
+[33mcommit c87d91b68f410c1ddad3b045c7504f815252ab80[m
+Merge: 074034d aa2b7ee
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Jan 11 19:22:44 2023 -0500
+
+    Merge pull request #14 from dannermarante/dev
+    
+    Dev
+
+[33mcommit aa2b7ee8649bb2b164e4372063bbbf0e81902a83[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 19:22:00 2023 -0500
+
+    deps
+
+[33mcommit 8ffb06a160c807c1c608b787e43445325e49b04e[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 17:18:38 2023 -0500
+
+    deps
+
+[33mcommit d1e01d6f517829fde1438c70689dd96099494402[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 16:55:23 2023 -0500
+
+    deps
+
+[33mcommit 074034ddbdb78432f14a7095b27275829ea03016[m
+Merge: a5bb146 f1ad4aa
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Jan 11 16:51:05 2023 -0500
+
+    Merge pull request #13 from dannermarante/dev
+    
+    deps
+
+[33mcommit f1ad4aa639f9c21cdf15e82e864c335f0c2c7bfd[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 11 16:50:24 2023 -0500
+
+    deps
+
+[33mcommit a5bb1468b14048fa98517f30ee4be7f316bbbf74[m
+Merge: 401575c d853317
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Jan 11 00:22:33 2023 -0500
+
+    Merge pull request #12 from dannermarante/dev
+    
+    Dev
+
+[33mcommit d853317bf04c0cbe22f158f3f8dd489a4b070bc9[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Jan 10 22:13:24 2023 -0500
+
+    firma
+
+[33mcommit bbb5ebee2eced832cd5c3373354ba811695464e7[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 4 22:20:04 2023 -0500
+
+    ats
+
+[33mcommit e81f74230578f26fdcd013d9e1dab6ae42d45c8e[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Jan 4 22:19:23 2023 -0500
+
+    ats
+
+[33mcommit 5da719dbd597b18da5bc4274dae19479255cf00b[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Dec 28 23:46:47 2022 -0500
+
+    java
+
+[33mcommit 43131e1b66151fc0112358ed91bbf58be5e71543[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Dec 28 23:18:29 2022 -0500
+
+    java
+
+[33mcommit e28a6d7cf354288b37a24549fd0aad50380973ae[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Dec 28 23:13:46 2022 -0500
+
+    java
+
+[33mcommit 9f124a6bf7e0562e3b69cd7e6a6e1c67cda970d6[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Dec 28 23:12:21 2022 -0500
+
+    java
+
+[33mcommit caffb6b1cdc390d7da9e08a413edbef0c94f12fd[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Dec 28 22:46:29 2022 -0500
+
+    java
+
+[33mcommit 401575c36d76cec48e89b2e777fe87cac35ed34b[m
+Merge: 1872439 4c09926
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 26 20:15:42 2022 -0500
+
+    Merge pull request #11 from dannermarante/dev
+    
+    bancos
+
+[33mcommit 4c09926025a943829d936ae6e91d6ff5daf222f5[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 26 16:20:05 2022 -0500
+
+    bancos
+
+[33mcommit 187243982f2b4a76cea6c7a6aa8ee4407018ddb6[m
+Merge: b1f7595 f82921a
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 26 16:03:59 2022 -0500
+
+    Merge pull request #10 from dannermarante/dev
+    
+    Dev
+
+[33mcommit f82921a21020a514716c88c45b8fcc5e8f8545f9[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 26 16:02:47 2022 -0500
+
+    bancos
+
+[33mcommit 992a7cd3000ab65b2109a4c3598ec57de74a7b20[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 26 11:17:45 2022 -0500
+
+    bancos
+
+[33mcommit afeaad74a1d6a7c8ee5ba205de005ec039c57c0f[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 26 01:27:47 2022 -0500
+
+    bancos
+
+[33mcommit e7442b1c8574a7335f1c7e3b61b46d46f7823fec[m
+Merge: 812a7b7 b1f7595
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 19 09:23:30 2022 -0500
+
+    Merge pull request #9 from dannermarante/test
+    
+    Test
+
+[33mcommit b1f7595d76138eec76ba263c719852781e75adaf[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 19 09:23:03 2022 -0500
+
+    bancos
+
+[33mcommit 2c56a7cd47befeb847e5aacffa1a57fd99d0fe2f[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sat Dec 17 21:01:52 2022 -0500
+
+    bancos
+
+[33mcommit 422f9629335a420aa1f45f36125f1961f605013d[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Dec 13 09:40:16 2022 -0500
+
+    bancos
+
+[33mcommit 958ff7d92cc811fe0b3ada8afdc36d65a7e885f9[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Dec 13 00:54:20 2022 -0500
+
+    bancos
+
+[33mcommit 99bc4317a65ad569e7ebf9b45eb2c172927b512e[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 12 22:26:18 2022 -0500
+
+    bancos
+
+[33mcommit 2b852e766aa8d5ebf234b5177fcd4fb2365f2b78[m
+Merge: c589227 812a7b7
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 12 21:22:54 2022 -0500
+
+    Merge pull request #8 from dannermarante/dev
+    
+    bancos
+
+[33mcommit 812a7b700665d1b9e222d41e17c4b094f9435419[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 12 21:22:32 2022 -0500
+
+    bancos
+
+[33mcommit c5892277577512cc270b6d2e048dd4825719fcc7[m
+Merge: d3956d3 ad9122b
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 12 21:18:50 2022 -0500
+
+    Merge pull request #7 from dannermarante/dev
+    
+    bancos
+
+[33mcommit ad9122b2d93fd5085e9682bce18922b4670b6321[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 12 21:18:25 2022 -0500
+
+    bancos
+
+[33mcommit d3956d3bee1594ec3168e3ef2c31f2131f942b34[m
+Merge: 15b4742 c32adac
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 12 21:16:34 2022 -0500
+
+    Merge pull request #6 from dannermarante/dev
+    
+    bancos
+
+[33mcommit c32adac0bcec046ce40a939bf0a2b7c2a8be8542[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 12 21:16:01 2022 -0500
+
+    bancos
+
+[33mcommit 15b4742d7b69a3ecb36543703142c6b176dd0ad6[m
+Merge: 7aed7ec b8ddf5a
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Mon Dec 12 09:03:27 2022 -0500
+
+    Merge pull request #5 from dannermarante/dev
+    
+    bancos
+
+[33mcommit b8ddf5a682f0505548f93820ca23cba023c6e1c3[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Mon Dec 12 09:00:26 2022 -0500
+
+    bancos
+
+[33mcommit 7aed7ec08d87f3d83d9ef2de35d0420d3413c23f[m
+Merge: ca9f8f7 6f0a556
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Sat Dec 10 15:48:50 2022 -0500
+
+    Merge pull request #4 from dannermarante/dev
+    
+    Dev
+
+[33mcommit 6f0a556f918b701c606af586abc7f4ba9c620f5f[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sat Dec 10 15:45:09 2022 -0500
+
+    productos
+
+[33mcommit cf942b03d6b74406f7978bef512da8b7f3bf2455[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sat Dec 10 12:53:40 2022 -0500
+
+    productos
+
+[33mcommit 8fbb1d47f332cb3a88ed2fbdea1a13a0d21810d9[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 8 00:31:47 2022 -0500
+
+    productos
+
+[33mcommit a6e28a0579f4d4f8218347470b75329a116b55bf[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 8 00:28:29 2022 -0500
+
+    productos
+
+[33mcommit 72cd79a0c244f43397e0b8e08d7bba9e807e1d7e[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 8 00:09:00 2022 -0500
+
+    productos
+
+[33mcommit ca9f8f7488295ac997c7c58767b9dd614d8b6f0d[m
+Merge: 4b9d4da 496a8e7
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Dec 7 23:39:48 2022 -0500
+
+    Merge pull request #3 from dannermarante/dev
+    
+    Dev
+
+[33mcommit 496a8e748f29d8be27b81125abf9e50c6b49ed11[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Dec 7 23:38:44 2022 -0500
+
+    productos
+
+[33mcommit 31154a933f2f03fd27d6306e782def86e78dc5a5[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Dec 6 10:24:54 2022 -0500
+
+    firna + jar
+
+[33mcommit 4dad3f72d6428665ac9680e6221872fd988b9c80[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Dec 6 10:22:58 2022 -0500
+
+    firna + jar
+
+[33mcommit 4b9d4daf260a05b515216cd898cf2cbd7c810ff0[m
+Merge: bd93072 c3f44b3
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Thu Dec 1 09:11:38 2022 -0500
+
+    Merge pull request #2 from dannermarante/dev
+    
+    Dev
+
+[33mcommit c3f44b3a80dfe9174adb0c3c882c8c7278373927[m
+Merge: 35c39fb bd93072
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 1 09:11:09 2022 -0500
+
+    Merge remote-tracking branch 'origin/test' into dev
+    
+    # Conflicts:
+    #       l16n_ec_doopler_catalogs/__manifest__.py
+    #       l16n_ec_doopler_catalogs/models/catalogs_add_product.py
+    #       l16n_ec_doopler_catalogs/security/ir.model.access.csv
+
+[33mcommit 35c39fbbfda3aad596e0e1de08bb8f8be71a758b[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 1 09:09:57 2022 -0500
+
+    codigo de productos + seguridad
+
+[33mcommit 89ce790dc9da7e037911903c5a615b33da2b0db7[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 1 08:58:48 2022 -0500
+
+    catalogs
+
+[33mcommit 0648368f9f205d078e0cdf329ce6fa19ee8b4cd8[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Thu Dec 1 08:38:33 2022 -0500
+
+    firma
+
+[33mcommit bd930723de3b752b9f2f73029894f726fcd9674b[m
+Merge: e470bd4 a33128d
+Author: DHernandezCity <114940976+DHernandezCity@users.noreply.github.com>
+Date:   Thu Dec 1 08:10:36 2022 -0500
+
+    Merge f2330 into test
+
+[33mcommit a33128d0e8588b4b44ebc8471497d575dff35411[m
+Author: DHernandezCity <david.hernandez@citytech.ec>
+Date:   Thu Dec 1 02:27:13 2022 -0500
+
+    Modulo de catalogos
+
+[33mcommit 400e830a47a916464a01322483cd6f21cdf5c674[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Nov 30 23:07:45 2022 -0500
+
+    fact electronica
+
+[33mcommit e470bd4d9fcda9e83c0a48e803cd6bfa631ee5e4[m
+Merge: f979a3f 532d721
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Wed Nov 30 16:57:23 2022 -0500
+
+    Merge pull request #1 from dannermarante/dev
+    
+    Dev
+
+[33mcommit 532d721b99ac3a34c36dad9d037e0e4b39e278e6[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Wed Nov 30 16:56:47 2022 -0500
+
+    reportes
+
+[33mcommit 2a14f5989ad47f95c6cebf6523d1785a5978224e[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Tue Nov 29 12:10:17 2022 -0500
+
+    reportes
+
+[33mcommit f979a3f748985f2b6ca0132402ae8c5539244f45[m
+Author: dmarante <danner.marante@citytech.ec>
+Date:   Sun Nov 27 13:43:18 2022 -0500
+
+    ret bancarias
+
+[33mcommit efffa0764a0c08be9cf39155cc58e9ff906b5bd9[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Wed Nov 23 21:17:52 2022 -0500
+
+    reporte
+
+[33mcommit 615c4ab890c66e414c2e88ca850722f0c3552446[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Wed Nov 23 20:55:27 2022 -0500
+
+    forma pago
+
+[33mcommit d21a673d87e3c5dcf0d3c33816755c3e8b46647e[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Tue Nov 22 11:16:59 2022 -0500
+
+    nc
+
+[33mcommit 71f3d9fdeba9013cd8a6a2c464a03d0760a8267d[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sun Nov 20 15:11:53 2022 -0500
+
+    reporte
+
+[33mcommit 2abdcf28198e192034cfabcdf073e8d6565f16d8[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 21:26:40 2022 -0500
+
+    reporte
+
+[33mcommit 9813adadc3f3b0fc7c4abb6e73081edc640a8735[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 19:57:17 2022 -0500
+
+    reporte
+
+[33mcommit f12fce26146dabf55890ba025876bc7fc94e47c0[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 19:38:39 2022 -0500
+
+    reporte
+
+[33mcommit 34e3530a1476b7fdba652271e2f13e98492daa81[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 19:33:21 2022 -0500
+
+    reporte
+
+[33mcommit 0bc02ad852f2b03a40dd042e5e342aacbd43926e[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 19:26:57 2022 -0500
+
+    reporte
+
+[33mcommit e16689e3a32ca4ac20d5549ec360ec028a7ce936[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 19:01:23 2022 -0500
+
+    reporte
+
+[33mcommit 5ec22c0a2c0fcc4fe9127e1b8266dfe32227412b[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 17:48:07 2022 -0500
+
+    reporte
+
+[33mcommit 21cbe38ca2944789ce5e20ba4a6de18cb90dfa85[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 17:15:36 2022 -0500
+
+    reporte
+
+[33mcommit f47d4bb92d7a5daaa083def11bde51e3fd547e89[m
+Author: Danner <danner.marante@citytech.ec>
+Date:   Sat Nov 19 11:54:23 2022 -0500
+
+    first commit
+
+[33mcommit 8f155777a514fdc77a718eee92bbb07f634e57cf[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: dannermarante <50956000+dannermarante@users.noreply.github.com>
+Date:   Sat Nov 19 11:35:16 2022 -0500
+
+    Initial commit
