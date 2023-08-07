@@ -174,21 +174,26 @@
                     position="after">
                     <!-- <field name="attribute_id_readonly" invisible="1" />
                     <field name="classification" invisible="1" /> -->
+                    <!-- <field name="product_uom_id" /> -->
+                </xpath>
+                <xpath expr="//field[@name='value_ids']"
+                    position="after">
+                    <!-- <field name="attribute_id_readonly" invisible="1" />
+                <field name="classification" invisible="1" /> -->
                     <field name="product_uom_id" />
                 </xpath>
                 <xpath expr="//field[@name='attribute_id']" position="attributes">
-                    <!-- <attribute name="attrs">{'invisible': [('attribute_id_readonly', '=', True)] }</attribute>
+                    <!-- <attribute name="attrs">{'invisible': [('attribute_id_readonly', '=',
+                    True)] }</attribute>
                     <attribute name="attrs">{'readonly': [('id', '!=', False)] }</attribute> -->
                 </xpath>
-                <xpath expr="//field[@name='attribute_line_ids']/tree" position="attributes">
-                    <!-- <attribute name="create">false</attribute>
-                    <attribute name="edit">false</attribute>
-                    <attribute name="delete">false</attribute> -->
-                    <!-- <attribute name="create" groups="stock.group_stock_manager">true</attribute>
-                    <attribute name="edit" groups="stock.group_stock_manager">true</attribute>
-                    <attribute name="delete" groups="stock.group_stock_manager">true</attribute> -->
-                </xpath>
+                <!-- <xpath expr="//field[@name='attribute_line_ids']/tree" position="attributes">
+                    <attribute name="create" groups="base.group_user">false</attribute>
+                    <attribute name="edit" groups="base.group_user">false</attribute>
+                    <attribute name="delete" groups="base.group_user">false</attribute>
+                </xpath> -->
             </field>
         </record>
+        
     </data>
 </odoo>
