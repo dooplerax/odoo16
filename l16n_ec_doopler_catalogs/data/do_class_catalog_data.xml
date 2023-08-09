@@ -5,5 +5,7 @@
             <field name="cl_name">TELAS</field>
             <field name="cl_name_code">TELA</field>
         </record> -->
+
+
     </data>
 </odoo>

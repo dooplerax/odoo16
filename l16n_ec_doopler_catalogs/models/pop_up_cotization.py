@@ -6,6 +6,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     dirEntrega = fields.Char(string="Direccion de entrega")
+    customer = fields.Char(string="Customer")
 
     def action_confirm(self):
         for line in self.order_line:

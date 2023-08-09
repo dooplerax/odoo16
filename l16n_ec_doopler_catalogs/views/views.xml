@@ -200,9 +200,8 @@
           expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']"
           position="before">
           <field name="dirEntrega" string="Direccion de entrega" />
+          <field name="customer" string="Customer" />
         </xpath>
-
-
       </field>
     </record>
 
