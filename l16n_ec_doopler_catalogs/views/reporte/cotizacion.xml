@@ -229,16 +229,15 @@
               soportes, empaque, a mí completa satisfacción:</p>
             <div class="row">
               <div class="col-6">
-                <p class="fw-bold">Nombres y apellidos: ………………………………………</p>
+                <p class="fw-bold">Nombres y apellidos: …………………………</p>
               </div>
               <div class="col-6">
-                <p class="fw-bold">Firma: ………………………………………</p>
+                <p class="fw-bold">Fecha: …………………………</p>
               </div>
             </div>
             <div class="row">
               <div class="col-6">
-                <p class="fw-bold">Fecha: ………………………………………</p>
-
+                <p class="fw-bold">Firma: …………………………</p>
               </div>
             </div>
             <p class="fw-bold">NOTA: Una vez salida la mercadería del Almacén, no se aceptan
