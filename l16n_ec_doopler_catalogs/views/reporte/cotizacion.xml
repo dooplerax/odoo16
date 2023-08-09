@@ -20,14 +20,15 @@
           }
           .data p{
             margin-bottom: 2px;
+            font-size: 12px; /* Tamaño de letra reducido */
           }
         </style>
         <t t-if="doc.partner_id">
           <div class="row">
             <xpath expr="//h2" position="replace">
-              <div class="row mb-5">
-                <div class="col-11">
-                  <h2 class="mt-1">
+              <div class="row mb-2">
+                <div class="col-10">
+                  <h2 class="">
                     <t t-if="env.context.get('proforma', False) or is_pro_forma">Pro-Forma Factura
                       # </t>
                     <t t-elif="doc.state in ['draft','sent']">Cotización Nro.: </t>
@@ -35,8 +36,8 @@
                     <span t-field="doc.name" />
                   </h2>
                 </div>
-                <div class="col-1">
-                  <p class="fw-bold data">
+                <div class="col-2 data">
+                  <p class="fw-bold">
                     Fecha:
                   </p>
                   <p>
@@ -73,7 +74,7 @@
               </p>
 
             </div>
-            <div class="col-5 pe-5">
+            <div class="col-4 pe-5">
               <p class="fw-bold">
                 Cliente:
               </p>
@@ -87,7 +88,7 @@
                 <span t-field="doc.partner_id.city" />
               </p>
             </div>
-            <div class="col-2 pe-5">
+            <div class="col-3">
               <p class="fw-bold">
                 Nro de identificacion:
               </p>
@@ -178,7 +179,7 @@
         </div>
         <div class="row">
           <div class="col-12"
-            style="border: 1px solid black; margin-top: 20px; padding: 30px; width: 100%; word-wrap: break-word;">
+            style="border: 1px solid black; padding: 30px; width: 100%; word-wrap: break-word;">
             <t t-foreach="doc.order_line" t-as="line">
               <t t-if="line.display_type == 'line_note'">
                 <p style="margin-bottom: 5px;">
@@ -193,8 +194,8 @@
         <!-- Recuadro para el "Recibido del Cliente" -->
         <div
           class="row" style="margin-bottom:20px;">
-          <div class="col-6" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
-            <h2>Datos de Entrega</h2>
+          <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
+            <p class="fw-bold mb-3">Datos de Entrega</p>
             <p class="fw-bold">
               Fecha de entrega:
             </p>
@@ -214,7 +215,7 @@
               <span t-field="doc.customer" />
             </p>
           </div>
-          <div class="col-6" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
+          <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
             <p class="fw-bold">Recibido del Cliente</p>
             <p>He recibido y revisado las cortinas entregadas, la cantidad, tipo y material, así
               como
