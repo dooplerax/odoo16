@@ -11,7 +11,7 @@
       </xpath>
       <xpath expr="//h2[@class='mt-4']" position="replace">
         <!-- Bloque vacío para reemplazar el contenido del elemento 'h2' -->
-        <h2></h2>
+        <div></div>
       </xpath>
       <xpath expr="//div[@class='oe_structure']" position="replace">
         <style>
@@ -21,6 +21,9 @@
           .data p{
           margin-bottom: 2px;
           font-size: 12px; /* Tamaño de letra reducido */
+          }
+          h2{
+          margin-top:0px;
           }
         </style>
         <t t-if="doc.partner_id">
@@ -190,7 +193,7 @@
         <!-- Recuadro para el "Recibido del Cliente" -->
         <div
           class="row" style="margin-bottom:20px;">
-          <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
+          <div class="col-3 data" style="border: 1px solid black; margin-top: 20px; padding: 30px;">
             <p class="fw-bold mb-3">Datos de Entrega</p>
             <t t-if="doc.commitment_date">
               <p class="fw-bold">
@@ -217,7 +220,9 @@
               </p>
             </t>
           </div>
-          <div class="col-6 data" style="border: 1px solid black; margin-top: 20px;">
+          <div class="col-3">
+          </div>
+          <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 30px;">
             <p class="fw-bold">Recibido del Cliente</p>
             <p>He recibido y revisado las cortinas entregadas, la cantidad, tipo y material, así
               como
