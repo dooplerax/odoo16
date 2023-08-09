@@ -11,7 +11,7 @@
       </xpath>
       <xpath expr="//h2[@class='mt-4']" position="replace">
         <!-- Bloque vacío para reemplazar el contenido del elemento 'h2' -->
-        <div></div>
+        <h2></h2>
       </xpath>
       <xpath expr="//div[@class='oe_structure']" position="replace">
         <style>
@@ -19,29 +19,29 @@
           font-size: 12px; /* Tamaño de letra reducido */
           }
           .data p{
-            margin-bottom: 2px;
-            font-size: 12px; /* Tamaño de letra reducido */
+          margin-bottom: 2px;
+          font-size: 12px; /* Tamaño de letra reducido */
           }
         </style>
         <t t-if="doc.partner_id">
           <div class="row">
-                <div class="col-10">
-                  <h2 class="">
-                    <t t-if="env.context.get('proforma', False) or is_pro_forma">Pro-Forma Factura
-                      # </t>
-                    <t t-elif="doc.state in ['draft','sent']">Cotización Nro.: </t>
-                    <t t-else="">Pedido # </t>
-                    <span t-field="doc.name" />
-                  </h2>
-                </div>
-                <div class="col-2 data">
-                  <p class="fw-bold">
-                    Fecha:
-                  </p>
-                  <p>
-                    <span t-field="doc.date_order" t-options='{"widget": "date"}' />
-                  </p>
-                </div>
+            <div class="col-10 mb-2">
+              <h2 class="">
+                <t t-if="env.context.get('proforma', False) or is_pro_forma">Pro-Forma Factura
+                  # </t>
+                <t t-elif="doc.state in ['draft','sent']">Cotización Nro.: </t>
+                <t t-else="">Pedido # </t>
+                <span t-field="doc.name" />
+              </h2>
+            </div>
+            <div class="col-2 data">
+              <p class="fw-bold">
+                Fecha:
+              </p>
+              <p>
+                <span t-field="doc.date_order" t-options='{"widget": "date"}' />
+              </p>
+            </div>
           </div>
           <div class="row data">
             <div class="col-5 pe-5">
@@ -192,24 +192,30 @@
           class="row" style="margin-bottom:20px;">
           <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
             <p class="fw-bold mb-3">Datos de Entrega</p>
-            <p class="fw-bold">
-              Fecha de entrega:
-            </p>
-            <p>
-              <span t-field="doc.commitment_date" t-options='{"widget": "date"}' />
-            </p>
-            <p class="fw-bold">
-              Lugar de entrega:
-            </p>
-            <p>
-              <span t-field="doc.dirEntrega" />
-            </p>
-            <p class="fw-bold">
-              Customer:
-            </p>
-            <p>
-              <span t-field="doc.customer" />
-            </p>
+            <t t-if="doc.commitment_date">
+              <p class="fw-bold">
+                Fecha de entrega:
+              </p>
+              <p>
+                <span t-field="doc.commitment_date" t-options='{"widget": "date"}' />
+              </p>
+            </t>
+            <t t-if="doc.dirEntrega">
+              <p class="fw-bold">
+                Lugar de entrega:
+              </p>
+              <p>
+                <span t-field="doc.dirEntrega" />
+              </p>
+            </t>
+            <t t-if="doc.customer">
+              <p class="fw-bold">
+                Customer:
+              </p>
+              <p>
+                <span t-field="doc.customer" />
+              </p>
+            </t>
           </div>
           <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 10px;">
             <p class="fw-bold">Recibido del Cliente</p>
