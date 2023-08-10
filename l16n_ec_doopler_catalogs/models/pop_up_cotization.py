@@ -48,7 +48,6 @@ class SaleOrderLine(models.Model):
                 'context': {'sale_order_line': self.id},
             }
 
-
     order_id_extra = fields.Many2one(
         'sale.order', string='Order Extra', compute='_compute_order_id_extra', store=True)
     name_extra = fields.Char(string='Description',
