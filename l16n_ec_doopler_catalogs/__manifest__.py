@@ -21,7 +21,8 @@
         'views/reporte/cotizacion.xml',
         'views/product_template.xml',
         'wizard/sale_order_pop.xml',
- 
+        'data/do_class_catalog_data.xml',
+        'data/telas.xml'
     ],
     
     # 'demo': [
