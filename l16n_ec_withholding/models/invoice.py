@@ -9,6 +9,7 @@ from . import utils
 
 class AccountEpayment(models.Model):
     _name = 'account.epayment'
+    _description = 'Descripción'
 
     code = fields.Char('Código')
     name = fields.Char('Forma de Pago')

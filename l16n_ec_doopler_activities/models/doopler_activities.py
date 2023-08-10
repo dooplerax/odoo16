@@ -13,7 +13,7 @@ class MailActivity(models.Model):
     _inherit = 'mail.activity'
 
     display_user_id = fields.Many2one(
-        'res.users', string="Assigned to", compute='_compute_display_user_id', store=True, readonly=False)
+        'res.users', string="Asignado a", compute='_compute_display_user_id', store=True, readonly=False)
 
     @api.depends('res_id', 'res_model', 'display_user_id')
     def _compute_display_user_id(self):

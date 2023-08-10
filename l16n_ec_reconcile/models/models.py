@@ -190,7 +190,7 @@ class AccountBankReconcile(models.Model):
     extracto_ids = fields.One2many(
         'extracto.bancario',
         'concile_id',
-        'Detalle'
+        'Detalles'
     )
 
     #   listExt = fields.
