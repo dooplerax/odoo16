@@ -158,7 +158,7 @@
                       <span t-esc="round(group['price_subtotal_extra'], 2)" />
                     </td>
                     <td>
-                      <!-- Calcula el IVA -->
+
                       <t t-set="iva"
                         t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
                       <span t-esc="round(iva, 2)" />
