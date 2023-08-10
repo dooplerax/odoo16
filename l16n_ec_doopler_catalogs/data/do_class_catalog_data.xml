@@ -5,7 +5,7 @@
             <field name="cl_name_code">TELA</field>
         </record>
 
-        <record model="subproduct.dosubclass" id="default_telas_class">
+        <record model="subproduct.dosubclass" id="default_zebra_subclass">
             <field name="scl_name">ZEBRA</field>
             <field name="scl_name_code">ZEBR</field>
         </record>
