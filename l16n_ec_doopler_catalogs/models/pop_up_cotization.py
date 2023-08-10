@@ -24,7 +24,6 @@ class SaleOrderLine(models.Model):
 
     product_details_ok = fields.Boolean(
         string='Product Details', related='product_template_id.details_ok')
-    metros2 = fields.Float(related='product_template_id.m2')
     details_id = fields.Many2one(
         'sale.order.pop', string='Detalle del producto', required=False, ondelete='cascade')
     details_name = fields.Char(string='Descripción')

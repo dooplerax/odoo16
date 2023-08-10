@@ -17,22 +17,13 @@ class AddCatalogInProduct(models.Model):
     mod_class_inherit = fields.Many2one(
         'mproduct.domodel', 'Modelo de producto')
     details_ok = fields.Boolean('Detalles', default=False)
-    m2 = fields.Float(string='m2', compute='_compute_m2', store=True)
     default_code = fields.Char(string='Internal Reference', required=True, copy=False,
                                readonly=True, default=lambda self: _('New'))
     classification = fields.Boolean('Clasificación', default=False)
     alternative_code = fields.Char(string="Código Alterno", required=True, copy=False, default="")
-    
-    @api.depends('anchorolloTela')
-    def _compute_m2(self):
-        """
-        Calcula el valor del campo 'm2' basado en el campo 'anchorolloTela'.
-        """
-        for record in self:
-            record.m2 = record.anchorolloTela * record.anchorolloTela
+
 
     # @api.onchange('class_inherit')
-    # def _onchange_sclass(self):
         # for record in self.class_inherit:
         #    if record.cl_name:
         #        return {'domain': {'subclass_inherit': [('subclass_inherit','=',1)]}}
