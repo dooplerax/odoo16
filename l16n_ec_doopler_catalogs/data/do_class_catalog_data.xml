@@ -6,6 +6,31 @@
             <field name="cl_name_code">TELA</field>
         </record> -->
 
+        <record model="cproduct.doclass" id="default_accesorios_class">
+            <field name="cl_name">ACCESORIOS</field>
+            <field name="cl_name_code">ACCE</field>
+        </record>
 
+        <record model="cproduct.doclass" id="default_perfileria_class">
+            <field name="cl_name">PERFILERIA</field>
+            <field name="cl_name_code">PERF</field>
+        </record>
+
+        <record model="cproduct.doclass" id="default_insumos_class">
+            <field name="cl_name">INSUMOS</field>
+            <field name="cl_name_code">INSU</field>
+        </record>
+
+        <record id="uom_category_gramaje" model="uom.category">
+            <field name="name">Gramaje</field>
+        </record>
+        
+        <record id="uom_gramaje_g_per_m2" model="uom.uom">
+            <field name="name">g/m2</field>
+            <field name="category_id" ref="uom_category_gramaje"/>
+            <field name="factor" eval="1.0"/>
+            <field name="uom_type">reference</field>
+            <field name="rounding" eval="0.01"/>
+        </record>
     </data>
 </odoo>

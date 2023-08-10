@@ -5,7 +5,6 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.exceptions import AccessError
 
 
-
 # class l16n_ec_doopler_catalogs(models.Model):
 #     _name = 'l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs'
 #     _description = 'l16n_ec_doopler_catalogs.l16n_ec_doopler_catalogs'
@@ -32,8 +31,10 @@ class DoClassCatalog(models.Model):
         ('cl_name_code_uniq', 'unique (cl_name_code)', "Código ya registrado!"),
     ]
 
-    #Relaciones entre tablas subclase
-    scl_product_ids = fields.One2many('subproduct.dosubclass','cl_product_id', string='Subclases')
+    # Relaciones entre tablas subclase
+    scl_product_ids = fields.One2many(
+        'subproduct.dosubclass', 'cl_product_id', string='Subclases')
+
     @api.onchange('cl_name', 'cl_name_code')
     def convert_to_uppercase(self):
         if self.cl_name_code:
@@ -46,40 +47,48 @@ class DoClassCatalog(models.Model):
         if not self.env.user.has_group('stock.group_stock_manager'):
             raise AccessError("No tiene permisos para crear un catálogo.")
 
-        # Verificar si ya existe una clase por defecto llamada "TELAS"
-        default_class = self.env['cproduct.doclass'].search([('cl_name', '=', 'TELAS')])
-        if default_class:
-            raise ValidationError("La clase por defecto 'TELAS' ya ha sido creada.")
+        # Verificar si ya existe una clase con el mismo nombre
+        existing_class = self.env['cproduct.doclass'].search(
+            [('cl_name', '=', vals.get('cl_name'))])
+        if existing_class:
+            raise ValidationError(
+                f"La clase '{vals.get('cl_name')}' ya ha sido creada.")
 
-        # Establecer valores predeterminados para la clase por defecto "TELAS"
-        if not vals.get('cl_name'):
-            vals['cl_name'] = 'TELAS'
+        # Establecer valores predeterminados para la nueva clase
         if not vals.get('cl_name_code'):
             vals['cl_name_code'] = 'TELA'
         return super(DoClassCatalog, self).create(vals)
 
     def write(self, vals):
-        if self.cl_name == 'TELAS' or self.cl_name_code == 'TELA':
-            raise AccessError("No tiene permisos para editar la clase por defecto 'TELAS'.")
+        if self.cl_name.upper() in ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']:
+            raise AccessError(
+                "No tiene permisos para editar clases predeterminadas.")
         return super(DoClassCatalog, self).write(vals)
 
     def unlink(self):
-        default_class = self.env['cproduct.doclass'].search([('cl_name', '=', 'TELAS')])
-        if default_class and self.id == default_class.id:
-            raise AccessError("No tiene permisos para eliminar la clase por defecto 'TELAS'.")
+        default_class = self.env['cproduct.doclass'].search(
+            [('cl_name', '=', 'TELAS')])
+        protected_classes = ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']
+        
+        if default_class and self.cl_name.upper() in protected_classes:
+            raise AccessError(
+                "No tiene permisos para eliminar clases predeterminadas.")
         return super(DoClassCatalog, self).unlink()
 
     @api.ondelete(at_uninstall=False)
     def check_del_class(self):
         for clpro in self:
             if clpro.scl_product_ids:
-                raise ValidationError(_("No se puede eliminar debido que forma parte de otro catálogo o producto"))
+                raise ValidationError(
+                    _("No se puede eliminar debido que forma parte de otro catálogo o producto"))
 
     @api.constrains('cl_name_code')
     def check_cl_name_code(self):
         for record in self:
             if len(record.cl_name_code) != 4:
-                raise ValidationError("El código de clase debe tener exactamente 4 letras/dígitos.")
+                raise ValidationError(
+                    "El código de clase debe tener exactamente 4 letras/dígitos.")
+
 
 class DoSubClassCatalog(models.Model):
     _name = 'subproduct.dosubclass'
@@ -89,12 +98,13 @@ class DoSubClassCatalog(models.Model):
     scl_name = fields.Char('Subclase de producto', required=True)
     scl_name_code = fields.Char('Código de subclase', required=True, size=4)
 
-    #apunta a clase
+    # apunta a clase
     cl_product_id = fields.Many2one('cproduct.doclass', string="Clase")
 
-    #Relacion entre tablas Family
-    f_product_ids = fields.One2many('fproduct.dofamily','scl_product_id', string='Subclases')
-    
+    # Relacion entre tablas Family
+    f_product_ids = fields.One2many(
+        'fproduct.dofamily', 'scl_product_id', string='Subclases')
+
     _sql_constraints = [
         ('scl_name_code_uniq', 'unique (scl_name_code)', "Código ya registrado!"),
     ]
@@ -110,19 +120,22 @@ class DoSubClassCatalog(models.Model):
     def check_del_class(self):
         for sclpro in self:
             if sclpro.f_product_ids:
-                raise ValidationError(_("No se puede eliminar debido que forma parte de otro catálogo o producto"))
+                raise ValidationError(
+                    _("No se puede eliminar debido que forma parte de otro catálogo o producto"))
 
     @api.model
     def create(self, vals):
         if not self.env.user.has_group('stock.group_stock_manager'):
             raise AccessError("No tiene permisos para crear un catálogo.")
         return super(DoSubClassCatalog, self).create(vals)
-    
+
     @api.constrains('scl_name_code')
     def check_scl_name_code(self):
         for record in self:
             if len(record.scl_name_code) != 4:
-                raise ValidationError("El código de subclase debe tener exactamente 4 letras/dígitos.")
+                raise ValidationError(
+                    "El código de subclase debe tener exactamente 4 letras/dígitos.")
+
 
 class DoFamilyCatalog(models.Model):
     _name = 'fproduct.dofamily'
@@ -132,10 +145,10 @@ class DoFamilyCatalog(models.Model):
     f_name = fields.Char('Familia de producto', required=True)
     f_name_code = fields.Char('Código de familia', required=True, size=4)
 
-    #Relacion entre tabla modelo
-    #m_product_ids = fields.One2many('mproduct.domodel', 'm_product_id', string='Family')
+    # Relacion entre tabla modelo
+    # m_product_ids = fields.One2many('mproduct.domodel', 'm_product_id', string='Family')
 
-    #apunta a subclase
+    # apunta a subclase
     scl_product_id = fields.Many2one('subproduct.dosubclass', "Subclase")
     _sql_constraints = [
         ('f_name_code_uniq', 'unique (f_name_code)', "Código ya registrado!"),
@@ -158,7 +171,8 @@ class DoFamilyCatalog(models.Model):
     def check_f_name_code(self):
         for record in self:
             if len(record.f_name_code) != 4:
-                raise ValidationError("El código de familia debe tener exactamente 4 letras/dígitos.")
+                raise ValidationError(
+                    "El código de familia debe tener exactamente 4 letras/dígitos.")
 
 
 class DoModelCatalog(models.Model):
@@ -167,15 +181,16 @@ class DoModelCatalog(models.Model):
     _rec_name = 'm_name'
 
     m_name = fields.Char('Modelo de producto', required=True)
-    m_name_code = fields.Char('Código de Modelo', required=True, size=3, unique=True)
+    m_name_code = fields.Char(
+        'Código de Modelo', required=True, size=3, unique=True)
 
-    #Apunta a Familia
+    # Apunta a Familia
     f_product_id = fields.Many2one('fproduct.dofamily', string="Familia")
-    
+
     _sql_constraints = [
         ('f_mproduct_name_code_uniq', 'unique (m_name_code)', "Código ya registrado!"),
     ]
-    
+
     @api.onchange('m_name', 'm_name_code')
     def convert_to_uppercase(self):
         if self.m_name:
@@ -193,10 +208,5 @@ class DoModelCatalog(models.Model):
     def check_m_name_code(self):
         for record in self:
             if len(record.m_name_code) != 3:
-                raise ValidationError("El código de modelo debe tener exactamente 3 letras/dígitos.")
-
-
-
-
-
-
+                raise ValidationError(
+                    "El código de modelo debe tener exactamente 3 letras/dígitos.")

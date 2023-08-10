@@ -13,7 +13,7 @@ class ProductAttribute(models.Model):
     #     ('pulgadas', 'Pulgadas'),
     #     # Agrega aquí otras opciones de medida que necesites
     # ], string='Medida', default='metros', readonly=True)
-    product_uom_id = fields.Many2one('uom.uom', string='Unidad de Medida', default=lambda self: self.env.ref('uom.product_uom_meter'))
+    product_uom_id = fields.Many2one('uom.uom', string='Unidad de Medida')
 
 
 class ProductTelas(models.Model):
