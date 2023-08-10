@@ -1,6 +1,5 @@
 <odoo>
     <data>
-
         <!-- ANCHO DE ROLLO -->
         <record id="attribute_ancho_rollo" model="product.attribute">
             <field name="name">ANCHO DE ROLLO</field>
