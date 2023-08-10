@@ -625,7 +625,7 @@
             <field name="create_variant">always</field>
             <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
             <field name="subclass_inherit" search="[('scl_name','=','BLACKOUT')]" />
-            <field name="product_uom_id" ref="uom.product_uom_meter"/>
+            <field name="product_uom_id" ref="uom.product_uom_meter" />
         </record>
 
         <record id="attribute_value_ancho_rollo_1_blackout" model="product.attribute.value">
@@ -804,7 +804,7 @@
             <field name="create_variant">always</field>
             <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
             <field name="subclass_inherit" search="[('scl_name','=','TRASLUCIDAS')]" />
-            <field name="product_uom_id" ref="uom.product_uom_meter"/>
+            <field name="product_uom_id" ref="uom.product_uom_meter" />
         </record>
 
         <record id="attribute_value_ancho_rollo_1_traslucidas" model="product.attribute.value">
