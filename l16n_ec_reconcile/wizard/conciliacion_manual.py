@@ -8,6 +8,8 @@ from odoo import api, fields, models, _
 
 class conciliacion_manual(models.TransientModel):
     _name = 'conciliacion.manual'
+    _description = 'Descripción'
+    
     move_id = fields.Integer('Movimiento')
     date = fields.Date('Fecha')
 

@@ -7,6 +7,7 @@ from odoo import api, models
 
 class extracto_reporte(models.AbstractModel):
     _name = 'report.l16n_ec_reconcile.extracto_reporte'
+    _description = 'Descripción'
     _auto = False
 
     ## listado de cheques girados y no cobrados a la fecha de cierre del extracto

@@ -13,6 +13,7 @@ from odoo.exceptions import Warning as UserError
 
 class MovimientosBancarios(models.TransientModel):
     _name = 'bank.account.move'
+    _description = 'Descripción'
 
     def _lines(self, fecha_inicio, fecha_hasta, no_documento, id_select, id_valor, partner, prm_account,estados,limit=False ):
         account = """select id from account_account

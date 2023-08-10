@@ -25,7 +25,7 @@ MONTHS = {
 
 class ReporteRetencion(models.AbstractModel):
     _name = 'report.l16n_ec_withholding.withholding_report'
-
+    _description = 'Descripción'
 
     @api.model
     def _get_report_values(self, docids, data=None):

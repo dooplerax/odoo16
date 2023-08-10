@@ -13,6 +13,7 @@ from odoo.exceptions import (UserError)
 
 class AccountBankReconcile(models.Model):
     _name = 'account.bank.reconcile'
+    _description = 'Descripción'
     _order = 'date_start DESC'
 
     def unlink(self):

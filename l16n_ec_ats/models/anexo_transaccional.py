@@ -19,6 +19,8 @@ def get_years():
 
 class AnexoTransac(models.Model):
     _name = "l16n.reporte.trans"
+    The model l16n.reporte.trans has no _description
+
     # _order = "create_date desc"
 
     fact_manual = fields.Boolean('Facturación Manual', default=False)
