@@ -10,6 +10,21 @@
             <field name="scl_name_code">ZEBR</field>
         </record>
 
+        <record model="subproduct.dosubclass" id="default_screen_subclass">
+            <field name="scl_name">SCREEN</field>
+            <field name="scl_name_code">SCRE</field>
+        </record>
+
+        <record model="subproduct.dosubclass" id="default_blackout_subclass">
+            <field name="scl_name">BLACKOUT</field>
+            <field name="scl_name_code">BLAC</field>
+        </record>
+
+        <record model="subproduct.dosubclass" id="default_traslucidas_subclass">
+            <field name="scl_name">TRASLUCIDAS</field>
+            <field name="scl_name_code">TRAS</field>
+        </record>
+
         <record model="cproduct.doclass" id="default_accesorios_class">
             <field name="cl_name">ACCESORIOS</field>
             <field name="cl_name_code">ACCE</field>
