@@ -21,7 +21,7 @@ class AddCatalogInProduct(models.Model):
     default_code = fields.Char(string='Internal Reference', required=True, copy=False,
                                readonly=True, default=lambda self: _('New'))
     classification = fields.Boolean('Clasificación', default=False)
-    alternative_code = fields.Char(string="Código Alterno", required=True, copy=False)
+    alternative_code = fields.Char(string="Código Alterno", required=True, copy=False, default="")
     
     @api.depends('anchorolloTela')
     def _compute_m2(self):
