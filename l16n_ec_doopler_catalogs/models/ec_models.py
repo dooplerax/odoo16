@@ -60,9 +60,9 @@ class DoClassCatalog(models.Model):
         return super(DoClassCatalog, self).create(vals)
 
     def write(self, vals):
-        if self.cl_name.upper() in ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']:
+        """ if self.cl_name.upper() in ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']:
             raise AccessError(
-                "No tiene permisos para editar clases predeterminadas.")
+                "No tiene permisos para editar clases predeterminadas.") """
         return super(DoClassCatalog, self).write(vals)
 
     def unlink(self):
@@ -70,9 +70,9 @@ class DoClassCatalog(models.Model):
             [('cl_name', '=', 'TELAS')])
         protected_classes = ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']
         
-        if default_class and self.cl_name.upper() in protected_classes:
+        """ if default_class and self.cl_name.upper() in protected_classes:
             raise AccessError(
-                "No tiene permisos para eliminar clases predeterminadas.")
+                "No tiene permisos para eliminar clases predeterminadas.") """
         return super(DoClassCatalog, self).unlink()
 
     @api.ondelete(at_uninstall=False)
