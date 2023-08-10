@@ -29,7 +29,7 @@
                     <field name="mod_class_inherit"
                         attrs="{'required': [('classification', '=', True)], 'invisible': [('classification', '=', False)]}"
                         domain="[('f_product_id','=',fa_class_inherit)]" />
-                    <field name="alternate_code" />
+                    <field name="alternative_code" />
                 </xpath>
                 <!-- <xpath expr="//group/field[@name='default_code']" position="attributes">
                             <attribute
