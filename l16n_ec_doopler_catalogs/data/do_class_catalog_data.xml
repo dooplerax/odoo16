@@ -5,6 +5,11 @@
             <field name="cl_name_code">TELA</field>
         </record>
 
+        <record model="cproduct.doclass" id="default_telas_class">
+            <field name="scl_name">ZEBRA</field>
+            <field name="scl_name_code">ZEBR</field>
+        </record>
+
         <record model="cproduct.doclass" id="default_accesorios_class">
             <field name="cl_name">ACCESORIOS</field>
             <field name="cl_name_code">ACCE</field>
