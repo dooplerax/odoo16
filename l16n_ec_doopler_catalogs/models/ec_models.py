@@ -42,22 +42,23 @@ class DoClassCatalog(models.Model):
         if self.cl_name:
             self.cl_name = self.cl_name.upper()
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        if not self.env.user.has_group('stock.group_stock_manager'):
-            raise AccessError("No tiene permisos para crear un catálogo.")
+        for val in vals:
+            if not self.env.user.has_group('stock.group_stock_manager'):
+                raise AccessError("No tiene permisos para crear un catálogo.")
 
-        # Verificar si ya existe una clase con el mismo nombre
-        existing_class = self.env['cproduct.doclass'].search(
-            [('cl_name', '=', vals.get('cl_name'))])
-        if existing_class:
-            raise ValidationError(
-                f"La clase '{vals.get('cl_name')}' ya ha sido creada.")
+            # Verificar si ya existe una clase con el mismo nombre
+            existing_class = self.env['cproduct.doclass'].search(
+                [('cl_name', '=', val.get('cl_name'))])
+            if existing_class:
+                raise ValidationError(
+                    f"La clase '{val.get('cl_name')}' ya ha sido creada.")
 
-        # Establecer valores predeterminados para la nueva clase
-        if not vals.get('cl_name_code'):
-            vals['cl_name_code'] = 'TELA'
-        return super(DoClassCatalog, self).create(vals)
+            # Establecer valores predeterminados para la nueva clase
+            if not vals.get('cl_name_code'):
+                vals['cl_name_code'] = 'TELA'
+        return super(DoClassCatalog, self).create(val)
 
     def write(self, vals):
         """ if self.cl_name.upper() in ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']:
@@ -123,11 +124,12 @@ class DoSubClassCatalog(models.Model):
                 raise ValidationError(
                     _("No se puede eliminar debido que forma parte de otro catálogo o producto"))
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        if not self.env.user.has_group('stock.group_stock_manager'):
-            raise AccessError("No tiene permisos para crear un catálogo.")
-        return super(DoSubClassCatalog, self).create(vals)
+        for val in vals:
+            if not self.env.user.has_group('stock.group_stock_manager'):
+                raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoSubClassCatalog, self).create(val)
 
     @api.constrains('scl_name_code')
     def check_scl_name_code(self):
@@ -161,11 +163,12 @@ class DoFamilyCatalog(models.Model):
         if self.f_name_code:
             self.f_name_code = self.f_name_code.upper()
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        if not self.env.user.has_group('stock.group_stock_manager'):
-            raise AccessError("No tiene permisos para crear un catálogo.")
-        return super(DoFamilyCatalog, self).create(vals)
+        for val in vals:
+            if not self.env.user.has_group('stock.group_stock_manager'):
+                raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoFamilyCatalog, self).create(val)
 
     @api.constrains('f_name_code')
     def check_f_name_code(self):
@@ -198,11 +201,12 @@ class DoModelCatalog(models.Model):
         if self.m_name_code:
             self.m_name_code = self.m_name_code.upper()
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
-        if not self.env.user.has_group('stock.group_stock_manager'):
-            raise AccessError("No tiene permisos para crear un catálogo.")
-        return super(DoModelCatalog, self).create(vals)
+        for val in vals:
+            if not self.env.user.has_group('stock.group_stock_manager'):
+                raise AccessError("No tiene permisos para crear un catálogo.")
+        return super(DoModelCatalog, self).create(val)
 
     @api.constrains('m_name_code')
     def check_m_name_code(self):
