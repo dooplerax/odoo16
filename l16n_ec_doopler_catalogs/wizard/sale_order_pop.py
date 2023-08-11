@@ -5,7 +5,8 @@ from odoo.exceptions import ValidationError
 
 class SaleOrderPop(models.Model):
     _name = 'sale.order.pop'
-
+    _description = 'Descripción'
+    
     # cortinas_id = fields.Many2one('sale.order', string='ID CORTINA', required=True)
     name = fields.Char(string="Ambiente", required=True)
     tipo_cortina = fields.Selection(

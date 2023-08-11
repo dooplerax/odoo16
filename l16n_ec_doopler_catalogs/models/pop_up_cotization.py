@@ -22,6 +22,7 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     _description = "Descripción"
+    
     product_details_ok = fields.Boolean(
         string='Product Details', related='product_template_id.details_ok')
     details_id = fields.Many2one(
