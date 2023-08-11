@@ -13,17 +13,17 @@
         <!-- Bloque vacío para reemplazar el contenido del elemento 'h2' -->
         <div></div>
       </xpath>
-      <xpath expr="//div[@class='oe_structure']" position="replace">
+      <xpath expr="//div[hasclass('oe_structure')]" position="replace">
         <style>
           table {
-          font-size: 12px; /* Tamaño de letra reducido */
+            font-size: 12px;
           }
-          .data p{
-          margin-bottom: 2px;
-          font-size: 12px; /* Tamaño de letra reducido */
+          .data p {
+            margin-bottom: 2px;
+            font-size: 12px;
           }
-          h2{
-          margin-top:0px;
+          h2 {
+            margin-top: 0px;
           }
         </style>
         <t t-if="doc.partner_id">
