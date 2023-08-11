@@ -6,7 +6,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     dirEntrega = fields.Char(string="Direccion de entrega")
-    customer = fields.Char(string="Customer")
+    customer = fields.Char()
 
     def action_confirm(self):
         for line in self.order_line:
@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
 
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
-
+    _description = "Descripción"
     product_details_ok = fields.Boolean(
         string='Product Details', related='product_template_id.details_ok')
     details_id = fields.Many2one(
@@ -49,19 +49,19 @@ class SaleOrderLine(models.Model):
             }
 
     order_id_extra = fields.Many2one(
-        'sale.order', string='Order Extra', compute='_compute_order_id_extra', store=True)
-    name_extra = fields.Char(string='Description',
-                             compute='_compute_name_extra', store=True)
+        'sale.order', compute='_compute_order_id_extra', store=True)
+    name_extra = fields.Char(
+        compute='_compute_name_extra', store=True)
     product_id_extra = fields.Many2one(
-        'product.product', string='Material', compute='_compute_product_id_extra', store=True)
+        'product.product', compute='_compute_product_id_extra', store=True)
     quantity_extra = fields.Float(
-        string='Cantidad', compute='_compute_quantity_extra', store=True)
+        compute='_compute_quantity_extra', store=True)
     price_unit_extra = fields.Float(
-        string='Precio Unitario', compute='_compute_price_unit_extra', store=True)
+        compute='_compute_price_unit_extra', store=True)
     price_subtotal_extra = fields.Float(
-        string='Subtotal', compute='_compute_price_subtotal_extra', store=True)
+        compute='_compute_price_subtotal_extra', store=True)
     price_total_extra = fields.Float(
-        string='Total', compute='_compute_price_total_extra', store=True)
+        compute='_compute_price_total_extra', store=True)
 
     @api.depends('order_id', 'name', 'product_id', 'product_uom_qty', 'price_unit', 'price_subtotal', 'price_total')
     def _compute_order_id_extra(self):

@@ -56,4 +56,4 @@ class Descuentos(models.Model):
             if record.fecha_vencimiento < today:
                 record.active = False
 
-    colores = fields.Many2one('product.color.catalogo')
+    

@@ -214,7 +214,6 @@
           <field name="category_id" string="Categoria del cliente" />
           <field name="fa_class_inherit" string="Familia" />
 
-          <field name="colores" string="Color" />
           <field name="min_descuento" string="Min. Descuento" />
           <field name="max_descuento" string="Max Descuento" />
           <field name="fecha_inicio" string="Fecha de inicio" />
@@ -242,7 +241,6 @@
               <group>
                 <field name="category_id" string="Categoria del cliente" required="1" />
                 <field name="subclass_inherit" string="Subclase" required="1" />
-                <field name="colores" string="Color" required="1" />
                 <field name="min_descuento" string="Min. Descuento" required="1" widget="percentage" />
                 <field name="fecha_inicio" string="Fecha de inicio" required="1" />
 
