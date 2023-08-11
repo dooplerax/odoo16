@@ -9,7 +9,7 @@
         <!-- Bloque vacío para reemplazar el contenido de la sección 'informations' -->
         <div></div>
       </xpath>
-      <xpath expr="//h2[@class='mt-4']" position="replace">
+      <xpath expr="//h2[hasclass('mt-4')]" position="replace">
         <!-- Bloque vacío para reemplazar el contenido del elemento 'h2' -->
         <div></div>
       </xpath>
