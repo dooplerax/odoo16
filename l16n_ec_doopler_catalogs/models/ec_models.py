@@ -56,14 +56,14 @@ class DoClassCatalog(models.Model):
                     f"La clase '{val.get('cl_name')}' ya ha sido creada.")
 
             # Establecer valores predeterminados para la nueva clase
-            if not vals.get('cl_name_code'):
-                vals['cl_name_code'] = 'TELA'
+            if not val.get('cl_name_code'):
+                val['cl_name_code'] = 'TELA'
         return super(DoClassCatalog, self).create(val)
 
     def write(self, vals):
-        """ if self.cl_name.upper() in ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']:
+        if self.cl_name.upper() in ['TELAS', 'ACCESORIOS', 'PERFILERIA', 'INSUMOS']:
             raise AccessError(
-                "No tiene permisos para editar clases predeterminadas.") """
+                "No tiene permisos para editar clases predeterminadas.")
         return super(DoClassCatalog, self).write(vals)
 
     def unlink(self):
@@ -138,6 +138,24 @@ class DoSubClassCatalog(models.Model):
                 raise ValidationError(
                     "El código de subclase debe tener exactamente 4 letras/dígitos.")
 
+    def unlink(self):
+        protected_subclasses = ['ZEBRA', 'SCREEN', 'BLACKOUT', 'TRASLUCIDAS']
+        
+        for record in self:
+            if record.cl_product_id.cl_name.upper() == 'TELAS' and record.scl_name.upper() in protected_subclasses:
+                raise AccessError(
+                    "No tiene permisos para eliminar subclases protegidas de la clase 'TELAS'.")
+        
+        return super(DoSubClassCatalog, self).unlink()
+
+    def write(self, vals):
+        protected_subclasses = ['ZEBRA', 'SCREEN', 'BLACKOUT', 'TRASLUCIDAS']
+        
+        if any(record.cl_product_id.cl_name.upper() == 'TELAS' and record.scl_name.upper() in protected_subclasses for record in self):
+            raise AccessError(
+                "No tiene permisos para editar subclases protegidas de la clase 'TELAS'.")
+        
+        return super(DoSubClassCatalog, self).write(vals)
 
 class DoFamilyCatalog(models.Model):
     _name = 'fproduct.dofamily'

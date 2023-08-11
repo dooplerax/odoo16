@@ -4,25 +4,29 @@
             <field name="cl_name">TELAS</field>
             <field name="cl_name_code">TELA</field>
         </record>
-
+        
         <record model="subproduct.dosubclass" id="default_zebra_subclass">
             <field name="scl_name">ZEBRA</field>
             <field name="scl_name_code">ZEBR</field>
+            <field name="cl_product_id" ref="default_telas_class" />
         </record>
-
+        
         <record model="subproduct.dosubclass" id="default_screen_subclass">
             <field name="scl_name">SCREEN</field>
             <field name="scl_name_code">SCRE</field>
+            <field name="cl_product_id" ref="default_telas_class" />
         </record>
-
+        
         <record model="subproduct.dosubclass" id="default_blackout_subclass">
             <field name="scl_name">BLACKOUT</field>
             <field name="scl_name_code">BLAC</field>
+            <field name="cl_product_id" ref="default_telas_class" />
         </record>
-
+        
         <record model="subproduct.dosubclass" id="default_traslucidas_subclass">
             <field name="scl_name">TRASLUCIDAS</field>
             <field name="scl_name_code">TRAS</field>
+            <field name="cl_product_id" ref="default_telas_class" />
         </record>
 
         <record model="cproduct.doclass" id="default_accesorios_class">
