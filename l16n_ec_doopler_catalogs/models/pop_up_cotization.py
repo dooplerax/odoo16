@@ -6,7 +6,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     dirEntrega = fields.Char(string="Direccion de entrega")
-    customer = fields.Char()
+    customer = fields.Char(string="Customer ")
 
     def action_confirm(self):
         for line in self.order_line:
@@ -22,7 +22,6 @@ class SaleOrder(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     _description = "Descripción"
-    
     product_details_ok = fields.Boolean(
         string='Product Details', related='product_template_id.details_ok')
     details_id = fields.Many2one(

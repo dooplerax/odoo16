@@ -182,7 +182,7 @@ class DoModelCatalog(models.Model):
 
     m_name = fields.Char('Modelo de producto', required=True)
     m_name_code = fields.Char(
-        'Código de Modelo', required=True, size=3, unique=True)
+        'Código de Modelo', required=True, size=3)
 
     # Apunta a Familia
     f_product_id = fields.Many2one('fproduct.dofamily', string="Familia")
