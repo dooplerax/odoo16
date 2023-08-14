@@ -18,7 +18,7 @@
               <group>
                 <field name="mando" required="1" />
                 <field name="material" required="1" />
-                <field name="enci" required="1" />
+                <field name="encj" required="1" />
                 <field name="mot" required="1" />
               </group>
             </group>

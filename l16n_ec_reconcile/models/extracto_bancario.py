@@ -6,6 +6,7 @@ from odoo import api, fields, models
 
 class ExtractoBancario(models.Model):
     _name = 'extracto.bancario'
+    _description = 'Descripción'
     _order = 'date,referencia  DESC'
 
     date = fields.Date('Fecha', required=True)

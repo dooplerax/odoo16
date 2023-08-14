@@ -18,6 +18,7 @@ from ..xades.sri import SriService
 
 class AccountEpayment(models.Model):
     _name = 'account.epayment'
+    _description = 'Descripción'
 
     code = fields.Char('Código')
     name = fields.Char('Forma de Pago')
@@ -26,6 +27,7 @@ class AccountEpayment(models.Model):
 class Edocument(models.AbstractModel):
 
     _name = 'account.edocument'
+    _description = 'Descripción'
     _FIELDS = {
         'account.move': 'l10n_latam_document_number',
         'account.retention': 'name'

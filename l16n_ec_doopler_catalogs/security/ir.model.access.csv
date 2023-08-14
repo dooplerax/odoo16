@@ -5,9 +5,5 @@ access_fproduct_dofamily,fproduct_dofamily,model_fproduct_dofamily,base.group_us
 access_mproduct_domodel,mproduct_domodel,model_mproduct_domodel,base.group_user,1,1,1,1
 access_sale_order_pop,sale_order_pop,model_sale_order_pop,base.group_user,1,1,1,1
 access_descuentos_model,descuentos_model,model_descuentos_model,base.group_user,1,1,1,1
-access_product_color_catalogo,product_color_catalogo,model_product_color_catalogo,base.group_user,1,1,1,1
-access_product_textura_catalogo,product_textura_catalogo,model_product_textura_catalogo,base.group_user,1,1,1,1
-access_product_presentacion_catalogo,product_presentacion_catalogo,model_product_presentacion_catalogo,base.group_user,1,1,1,1
-access_product_mando_catalogo,product_mando_catalogo,model_product_mando_catalogo,base.group_user,1,1,1,1
-access_product_visillo_catalogo,product_visillo_catalogo,model_product_visillo_catalogo,base.group_user,1,1,1,1
-access_product_composicion_catalogo,product_composicion_catalogo,model_product_composicion_catalogo,base.group_user,1,1,1,1
+access_product_template_form_manager,access.product.template.form.manager,model_product_template,stock.group_stock_manager,1,1,1,1
+access_product_template_form_user,access.product.template.form.user,model_product_template,stock.group_stock_user,1,0,0,0

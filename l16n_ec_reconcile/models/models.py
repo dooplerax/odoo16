@@ -13,6 +13,7 @@ from odoo.exceptions import (UserError)
 
 class AccountBankReconcile(models.Model):
     _name = 'account.bank.reconcile'
+    _description = 'Descripción'
     _order = 'date_start DESC'
 
     def unlink(self):
@@ -189,7 +190,7 @@ class AccountBankReconcile(models.Model):
     extracto_ids = fields.One2many(
         'extracto.bancario',
         'concile_id',
-        'Detalle'
+        'Detalles'
     )
 
     #   listExt = fields.

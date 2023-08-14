@@ -15,7 +15,7 @@ class Company(models.Model):
     )
     emission_code = fields.Selection([('1', 'Normal')], string='Tipo de Emisión',
                                      required=True, default='1')
-    env_service = fields.Selection([('1', 'Pruebas'), ('2', 'Producción')], tring='Tipo de Ambiente',
+    env_service = fields.Selection([('1', 'Pruebas'), ('2', 'Producción')], string='Tipo de Ambiente',
                                    required=True, default='1'
                                    )
     

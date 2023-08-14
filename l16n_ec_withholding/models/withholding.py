@@ -135,7 +135,7 @@ class AccountWithdrawing(models.Model):
     )
     
     bank_document = fields.Char(
-        string='Documento',
+        string='Documento Bancario',
         size=17,
     )
 

@@ -13,7 +13,7 @@ class MailActivity(models.Model):
     _inherit = 'mail.activity'
 
     display_user_id = fields.Many2one(
-        'res.users', string="Assigned to", compute='_compute_display_user_id', store=True, readonly=False)
+        'res.users', string="Asignado a", compute='_compute_display_user_id', store=True, readonly=False)
 
     @api.depends('res_id', 'res_model', 'display_user_id')
     def _compute_display_user_id(self):
@@ -47,28 +47,52 @@ class MailActivity(models.Model):
             display_user_id = self.env.user.id
         return display_user_id
 
-    @api.model
-    def create(self, vals):
-        # Obtener el ID del modelo del diccionario 'vals'
-        res_model_id = vals.get('res_model_id')
-        model_obj = self.env['ir.model']
-        display_user_id = vals.get('display_user_id', False)
-        if display_user_id:
-            vals['user_id'] = display_user_id
-        res_model = model_obj.sudo().search(
-            [('id', '=', res_model_id)], limit=1).model if res_model_id else False
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            # Obtener el ID del modelo del diccionario 'vals'
+            res_model_id = vals.get('res_model_id')
+            model_obj = self.env['ir.model']
+            display_user_id = vals.get('display_user_id', False)
+            if display_user_id:
+                vals['user_id'] = display_user_id
+            res_model = model_obj.sudo().search(
+                [('id', '=', res_model_id)], limit=1).model if res_model_id else False
 
-        """  if res_model == 'sale.order':
-            activity = super(MailActivity, self).create(vals)
-            res_id = vals.get('res_id')
-            if res_id and display_user_id:
-                sale_order = self.env['sale.order'].browse(res_id)
-                activity.user_id = display_user_id
-                if sale_order.partner_id:
+            """  if res_model == 'sale.order':
+                activity = super(MailActivity, self).create(vals)
+                res_id = vals.get('res_id')
+                if res_id and display_user_id:
+                    sale_order = self.env['sale.order'].browse(res_id)
+                    activity.user_id = display_user_id
+                    if sale_order.partner_id:
+                        lead_vals = {
+                            'name': "",
+                            'user_id': vals.get('display_user_id', sale_order.partner_id.user_id.id),
+                            'partner_id': sale_order.partner_id.id,
+                            'type': 'opportunity',
+                            'stage_id': False,
+                            'expected_revenue': False,
+                            'recurring_revenue': False,
+                            'recurring_revenue_monthly': False,
+                        }
+                        lead = self.env['crm.lead'].create(lead_vals)
+                        vals['res_model_id'] = self.env.ref(
+                            'crm.model_crm_lead').id
+                        vals['res_id'] = lead.id
+                        activity = super(MailActivity, self).create(vals)
+
+                return activity """
+            if res_model == 'res.partner':
+                print(vals)
+
+                res_id = vals.get('res_id')
+                activity = super(MailActivity, self).create(vals)
+                if res_id:
                     lead_vals = {
                         'name': "",
-                        'user_id': vals.get('display_user_id', sale_order.partner_id.user_id.id),
-                        'partner_id': sale_order.partner_id.id,
+                        'user_id': display_user_id,
+                        'partner_id': res_id,
                         'type': 'opportunity',
                         'stage_id': False,
                         'expected_revenue': False,
@@ -76,35 +100,12 @@ class MailActivity(models.Model):
                         'recurring_revenue_monthly': False,
                     }
                     lead = self.env['crm.lead'].create(lead_vals)
-                    vals['res_model_id'] = self.env.ref(
-                        'crm.model_crm_lead').id
+                    vals['res_model_id'] = 644
                     vals['res_id'] = lead.id
                     activity = super(MailActivity, self).create(vals)
-
-            return activity """
-        if res_model == 'res.partner':
-            print(vals)
-
-            res_id = vals.get('res_id')
-            activity = super(MailActivity, self).create(vals)
-            if res_id:
-                lead_vals = {
-                    'name': "",
-                    'user_id': display_user_id,
-                    'partner_id': res_id,
-                    'type': 'opportunity',
-                    'stage_id': False,
-                    'expected_revenue': False,
-                    'recurring_revenue': False,
-                    'recurring_revenue_monthly': False,
-                }
-                lead = self.env['crm.lead'].create(lead_vals)
-                vals['res_model_id'] = 644
-                vals['res_id'] = lead.id
-                activity = super(MailActivity, self).create(vals)
-            return activity
-        else:
-            return super(MailActivity, self).create(vals)
+                return activity
+            else:
+                return super(MailActivity, self).create(vals)
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):

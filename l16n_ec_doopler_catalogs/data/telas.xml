@@ -1,0 +1,941 @@
+<odoo>
+    <data>
+        <!-- ANCHO DE ROLLO -->
+        <record id="attribute_ancho_rollo" model="product.attribute">
+            <field name="name">ANCHO DE ROLLO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+            <field name="product_uom_id" ref="uom.product_uom_meter" />
+        </record>
+
+        <record id="attribute_value_ancho_rollo_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_rollo" />
+            <field name="name">2.80</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_2" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_rollo" />
+            <field name="name">2.50</field>
+        </record>
+
+        <!-- ANCHO DE FRANJA -->
+        <record id="attribute_ancho_franja" model="product.attribute">
+            <field name="name">ANCHO DE FRANJA</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+            <field name="product_uom_id" ref="uom.product_uom_cm" />
+        </record>
+
+        <record id="attribute_value_ancho_franja_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">10x6</field>
+        </record>
+
+        <record id="attribute_value_ancho_franja_2" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">10x7</field>
+        </record>
+
+        <record id="attribute_value_ancho_franja_3" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">12x8</field>
+        </record>
+
+        <record id="attribute_value_ancho_franja_4" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">14x10</field>
+        </record>
+
+        <record id="attribute_value_ancho_franja_5" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">19.5x14</field>
+        </record>
+
+        <record id="attribute_value_ancho_franja_6" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">7.5x5</field>
+        </record>
+
+        <record id="attribute_value_ancho_franja_7" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_ancho_franja" />
+            <field name="name">7x5</field>
+        </record>
+
+        <!-- COLOR -->
+        <record id="attribute_color" model="product.attribute">
+            <field name="name">COLOR</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+        </record>
+
+        <record id="attribute_value_color_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">BEIGE</field>
+        </record>
+
+        <record id="attribute_value_color_2" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">BLACK</field>
+        </record>
+
+        <record id="attribute_value_color_3" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">BLUE</field>
+        </record>
+
+        <record id="attribute_value_color_4" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">BROWN</field>
+        </record>
+
+        <record id="attribute_value_color_5" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">CAPUCHINO</field>
+        </record>
+
+        <record id="attribute_value_color_6" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">CARAMEL</field>
+        </record>
+
+        <record id="attribute_value_color_7" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">CHARCOAL</field>
+        </record>
+
+        <record id="attribute_value_color_8" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">CHERRY</field>
+        </record>
+
+        <record id="attribute_value_color_9" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">CHOCOLATE</field>
+        </record>
+
+        <record id="attribute_value_color_10" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">CLASSICO</field>
+        </record>
+
+        <record id="attribute_value_color_11" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">COFFE</field>
+        </record>
+
+        <record id="attribute_value_color_12" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">DARK BEIGE</field>
+        </record>
+
+        <record id="attribute_value_color_13" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">DARK CARAMEL</field>
+        </record>
+
+        <record id="attribute_value_color_14" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">DARK CHERRY</field>
+        </record>
+
+        <record id="attribute_value_color_15" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">DARK GREY</field>
+        </record>
+
+        <record id="attribute_value_color_16" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">GREEN</field>
+        </record>
+
+        <record id="attribute_value_color_17" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">GREY</field>
+        </record>
+
+        <record id="attribute_value_color_18" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">ICE WHITE</field>
+        </record>
+
+        <record id="attribute_value_color_19" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">IVORY</field>
+        </record>
+
+        <record id="attribute_value_color_20" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">KHAKI</field>
+        </record>
+
+        <record id="attribute_value_color_21" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">LATE</field>
+        </record>
+
+        <record id="attribute_value_color_22" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">LIGTH CARAMEL</field>
+        </record>
+
+        <record id="attribute_value_color_23" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">LIGTH GREY</field>
+        </record>
+
+        <record id="attribute_value_color_24" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">LINEN IVORY</field>
+        </record>
+
+        <record id="attribute_value_color_25" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">LINEN WHITE</field>
+        </record>
+
+        <record id="attribute_value_color_26" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">MOCACHINO</field>
+        </record>
+
+        <record id="attribute_value_color_27" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">MOCHA</field>
+        </record>
+
+        <record id="attribute_value_color_28" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">MUSHROOM</field>
+        </record>
+
+        <record id="attribute_value_color_29" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">OFF IVORY</field>
+        </record>
+
+        <record id="attribute_value_color_30" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">OFF WHITE</field>
+        </record>
+
+        <record id="attribute_value_color_31" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">ORANGE</field>
+        </record>
+
+        <record id="attribute_value_color_32" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">PEACH</field>
+        </record>
+
+        <record id="attribute_value_color_33" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">PINK</field>
+        </record>
+
+        <record id="attribute_value_color_34" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">PURPLE</field>
+        </record>
+
+        <record id="attribute_value_color_35" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">RED</field>
+        </record>
+
+        <record id="attribute_value_color_36" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">SKY BLUE</field>
+        </record>
+
+        <record id="attribute_value_color_37" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">TAUPE</field>
+        </record>
+
+        <record id="attribute_value_color_38" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">TEAK</field>
+        </record>
+
+        <record id="attribute_value_color_39" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">WHITE</field>
+        </record>
+
+        <record id="attribute_value_color_40" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">WHITE/PURPLE</field>
+        </record>
+
+        <record id="attribute_value_color_41" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">WINE</field>
+        </record>
+
+        <record id="attribute_value_color_42" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_color" />
+            <field name="name">YELLOW</field>
+        </record>
+
+        <!-- VISILLO -->
+        <record id="attribute_visillo" model="product.attribute">
+            <field name="name">VISILLO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+        </record>
+
+        <record id="attribute_value_visillo_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_visillo" />
+            <field name="name">MALLA FINA</field>
+        </record>
+
+        <record id="attribute_value_visillo_2" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_visillo" />
+            <field name="name">MALLA GRUESA</field>
+        </record>
+
+        <record id="attribute_value_visillo_3" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_visillo" />
+            <field name="name">VELO</field>
+        </record>
+
+        <!-- TEXTURA -->
+        <record id="attribute_textura" model="product.attribute">
+            <field name="name">TEXTURA</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+        </record>
+
+        <record id="attribute_value_textura_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_textura" />
+            <field name="name">JASPEADO</field>
+        </record>
+
+        <record id="attribute_value_textura_2" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_textura" />
+            <field name="name">LLANO</field>
+        </record>
+
+        <!-- PESO -->
+        <record id="attribute_peso" model="product.attribute">
+            <field name="name">PESO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+            <field name="product_uom_id" ref="uom_gramaje_g_per_m2" />
+
+        </record>
+
+        <record id="attribute_value_peso_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">100,00</field>
+        </record>
+
+        <record id="attribute_value_peso_2" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">100,90</field>
+        </record>
+
+        <record id="attribute_value_peso_3" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">115,50</field>
+        </record>
+
+        <record id="attribute_value_peso_4" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">130,90</field>
+        </record>
+
+        <record id="attribute_value_peso_5" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">143,50</field>
+        </record>
+
+        <record id="attribute_value_peso_6" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">145,00</field>
+        </record>
+
+        <record id="attribute_value_peso_7" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">159,00</field>
+        </record>
+
+        <record id="attribute_value_peso_8" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">160,00</field>
+        </record>
+
+        <record id="attribute_value_peso_9" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">203,00</field>
+        </record>
+
+        <record id="attribute_value_peso_10" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">203,30</field>
+        </record>
+
+        <record id="attribute_value_peso_11" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">237,00</field>
+        </record>
+
+        <record id="attribute_value_peso_12" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">255,00</field>
+        </record>
+
+        <record id="attribute_value_peso_13" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">302,10</field>
+        </record>
+
+        <record id="attribute_value_peso_14" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_peso" />
+            <field name="name">306,00</field>
+        </record>
+
+        <!-- COMPOSICION -->
+        <record id="attribute_composicion" model="product.attribute">
+            <field name="name">COMPOSICION</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','ZEBRA')]" />
+        </record>
+
+        <record id="attribute_value_composicion_1" model="product.attribute.value">
+            <field name="attribute_id" ref="l16n_ec_doopler_catalogs.attribute_composicion" />
+            <field name="name">Polyester 100%</field>
+        </record>
+
+        <!-- SCREEN -->
+        <!-- ANCHO DE ROLLO -->
+        <record id="attribute_ancho_rollo_screen" model="product.attribute">
+            <field name="name">ANCHO DE ROLLO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','SCREEN')]" />
+            <field name="product_uom_id" ref="uom.product_uom_meter" />
+        </record>
+
+        <record id="attribute_value_ancho_rollo_1_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_screen" />
+            <field name="name">2.00</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_2_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_screen" />
+            <field name="name">2.50</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_3_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_screen" />
+            <field name="name">2.80</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_4_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_screen" />
+            <field name="name">3.00</field>
+        </record>
+
+        <!-- APERTURA -->
+        <record id="attribute_apertura_screen" model="product.attribute">
+            <field name="name">APERTURA</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','SCREEN')]" />
+        </record>
+
+        <record id="attribute_value_apertura_1_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_apertura_screen" />
+            <field name="name">1%</field>
+        </record>
+
+        <record id="attribute_value_apertura_2_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_apertura_screen" />
+            <field name="name">5%</field>
+        </record>
+
+        <record id="attribute_value_apertura_3_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_apertura_screen" />
+            <field name="name">12%</field>
+        </record>
+
+        <record id="attribute_value_apertura_4_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_apertura_screen" />
+            <field name="name">16%</field>
+        </record>
+
+        <!-- COLOR -->
+        <record id="attribute_color_screen" model="product.attribute">
+            <field name="name">COLOR</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','SCREEN')]" />
+        </record>
+
+        <record id="attribute_value_color_1_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_screen" />
+            <field name="name">BEIGE</field>
+        </record>
+
+        <record id="attribute_value_color_2_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_screen" />
+            <field name="name">GREY</field>
+        </record>
+
+        <record id="attribute_value_color_3_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_screen" />
+            <field name="name">IVORY</field>
+        </record>
+
+        <record id="attribute_value_color_4_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_screen" />
+            <field name="name">MILK</field>
+        </record>
+
+        <record id="attribute_value_color_5_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_screen" />
+            <field name="name">NATURAL</field>
+        </record>
+
+        <record id="attribute_value_color_6_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_screen" />
+            <field name="name">WHITE</field>
+        </record>
+
+        <!-- TEXTURA -->
+        <record id="attribute_textura_screen" model="product.attribute">
+            <field name="name">TEXTURA</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','SCREEN')]" />
+        </record>
+
+        <record id="attribute_value_textura_1_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_textura_screen" />
+            <field name="name">LLANO</field>
+        </record>
+
+        <!-- PESO -->
+        <record id="attribute_peso_screen" model="product.attribute">
+            <field name="name">PESO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','SCREEN')]" />
+            <field name="product_uom_id" ref="uom_gramaje_g_per_m2" />
+        </record>
+
+        <record id="attribute_value_peso_1_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">255,00</field>
+        </record>
+
+        <record id="attribute_value_peso_2_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">275,00</field>
+        </record>
+
+        <record id="attribute_value_peso_3_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">280,00</field>
+        </record>
+
+        <record id="attribute_value_peso_4_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">295,00</field>
+        </record>
+
+        <record id="attribute_value_peso_5_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">355,00</field>
+        </record>
+
+        <record id="attribute_value_peso_6_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">375,00</field>
+        </record>
+
+        <record id="attribute_value_peso_7_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">380,00</field>
+        </record>
+
+        <record id="attribute_value_peso_8_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">380,50</field>
+        </record>
+
+        <record id="attribute_value_peso_9_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">385,00</field>
+        </record>
+
+        <record id="attribute_value_peso_10_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">395,00</field>
+        </record>
+
+        <record id="attribute_value_peso_11_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">416,00</field>
+        </record>
+
+        <record id="attribute_value_peso_12_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">425,00</field>
+        </record>
+
+        <record id="attribute_value_peso_13_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">460,00</field>
+        </record>
+
+        <record id="attribute_value_peso_14_screen" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_screen" />
+            <field name="name">480,00</field>
+        </record>
+
+
+        <!-- BLACKOUT -->
+        <!-- ANCHO DE ROLLO -->
+        <record id="attribute_ancho_rollo_blackout" model="product.attribute">
+            <field name="name">ANCHO DE ROLLO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','BLACKOUT')]" />
+            <field name="product_uom_id" ref="uom.product_uom_meter" />
+        </record>
+
+        <record id="attribute_value_ancho_rollo_1_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_blackout" />
+            <field name="name">2.00</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_2_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_blackout" />
+            <field name="name">2.50</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_3_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_blackout" />
+            <field name="name">2.80</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_4_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_blackout" />
+            <field name="name">3.00</field>
+        </record>
+
+        <!-- COLOR -->
+        <record id="attribute_color_blackout" model="product.attribute">
+            <field name="name">COLOR</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','BLACKOUT')]" />
+        </record>
+
+        <record id="attribute_value_color_1_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">BARLEY</field>
+        </record>
+
+        <record id="attribute_value_color_2_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">BEIGE</field>
+        </record>
+
+        <record id="attribute_value_color_3_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">CARAMEL</field>
+        </record>
+
+        <record id="attribute_value_color_4_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">COFFE</field>
+        </record>
+
+        <record id="attribute_value_color_5_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">CREAM</field>
+        </record>
+
+        <record id="attribute_value_color_6_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">DARK GREY</field>
+        </record>
+
+        <record id="attribute_value_color_7_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">GREY</field>
+        </record>
+
+        <record id="attribute_value_color_8_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">IVORY</field>
+        </record>
+
+        <record id="attribute_value_color_9_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">LIGHT GREY</field>
+        </record>
+
+        <record id="attribute_value_color_10_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">LILA</field>
+        </record>
+
+        <record id="attribute_value_color_11_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">OFF WHITE</field>
+        </record>
+
+        <record id="attribute_value_color_12_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">PEPPER</field>
+        </record>
+
+        <record id="attribute_value_color_13_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">SAND</field>
+        </record>
+
+        <record id="attribute_value_color_14_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_blackout" />
+            <field name="name">WHITE</field>
+        </record>
+
+        <!-- TEXTURA -->
+        <record id="attribute_textura_blackout" model="product.attribute">
+            <field name="name">TEXTURA</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','BLACKOUT')]" />
+        </record>
+
+        <record id="attribute_value_textura_1_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_textura_blackout" />
+            <field name="name">JASPEADO</field>
+        </record>
+
+        <record id="attribute_value_textura_2_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_textura_blackout" />
+            <field name="name">LLANO</field>
+        </record>
+
+        <!-- PESO -->
+        <record id="attribute_peso_blackout" model="product.attribute">
+            <field name="name">PESO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','BLACKOUT')]" />
+            <field name="product_uom_id" ref="uom_gramaje_g_per_m2" />
+        </record>
+
+        <record id="attribute_value_peso_1_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_blackout" />
+            <field name="name">225.00</field>
+        </record>
+
+        <record id="attribute_value_peso_2_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_blackout" />
+            <field name="name">340.00</field>
+        </record>
+
+        <record id="attribute_value_peso_3_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_blackout" />
+            <field name="name">365.00</field>
+        </record>
+
+        <record id="attribute_value_peso_4_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_blackout" />
+            <field name="name">380.00</field>
+        </record>
+
+        <record id="attribute_value_peso_5_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_peso_blackout" />
+            <field name="name">400.00</field>
+        </record>
+
+        <!-- COMPOSICION -->
+        <record id="attribute_composicion_blackout" model="product.attribute">
+            <field name="name">COMPOSICION</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','BLACKOUT')]" />
+        </record>
+
+        <record id="attribute_value_composicion_blackout" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_composicion_blackout" />
+            <field name="name">Polyester 100%</field>
+        </record>
+
+
+        <!-- TRASLUCIDAS -->
+        <!-- ANCHO DE ROLLO -->
+        <record id="attribute_ancho_rollo_traslucidas" model="product.attribute">
+            <field name="name">ANCHO DE ROLLO</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','TRASLUCIDAS')]" />
+            <field name="product_uom_id" ref="uom.product_uom_meter" />
+        </record>
+
+        <record id="attribute_value_ancho_rollo_1_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">2.20</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_2_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">2.30</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_3_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">2.50</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_4_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">2.60</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_5_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">2.70</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_6_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">2.80</field>
+        </record>
+
+        <record id="attribute_value_ancho_rollo_7_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_ancho_rollo_traslucidas" />
+            <field name="name">3.00</field>
+        </record>
+
+        <!-- COLOR -->
+        <record id="attribute_color_traslucidas" model="product.attribute">
+            <field name="name">COLOR</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','TRASLUCIDAS')]" />
+        </record>
+
+        <record id="attribute_value_color_1_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">BEIGE</field>
+        </record>
+
+        <record id="attribute_value_color_2_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">BROWN</field>
+        </record>
+
+        <record id="attribute_value_color_3_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">CHOCOLATE</field>
+        </record>
+
+        <record id="attribute_value_color_4_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">DARK BLUE</field>
+        </record>
+
+        <record id="attribute_value_color_5_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">GREY</field>
+        </record>
+
+        <record id="attribute_value_color_6_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">IVORY</field>
+        </record>
+
+        <record id="attribute_value_color_7_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">LIGHT GREY</field>
+        </record>
+
+        <record id="attribute_value_color_8_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">ORANGE</field>
+        </record>
+
+        <record id="attribute_value_color_9_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">PURPLE</field>
+        </record>
+
+        <record id="attribute_value_color_10_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">RED</field>
+        </record>
+
+        <record id="attribute_value_color_11_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">SAND</field>
+        </record>
+
+        <record id="attribute_value_color_12_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_color_traslucidas" />
+            <field name="name">WHITE</field>
+        </record>
+
+        <!-- TEXTURA -->
+        <record id="attribute_textura_traslucidas" model="product.attribute">
+            <field name="name">TEXTURA</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','TRASLUCIDAS')]" />
+        </record>
+
+        <record id="attribute_value_textura_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_textura_traslucidas" />
+            <field name="name">JASPEADO</field>
+        </record>
+
+        <!-- COMPOSICION -->
+        <record id="attribute_composicion_traslucidas" model="product.attribute">
+            <field name="name">COMPOSICION</field>
+            <field name="display_type">select</field>
+            <field name="create_variant">always</field>
+            <field name="class_inherit" search="[('cl_name','=','TELAS')]" />
+            <field name="subclass_inherit" search="[('scl_name','=','TRASLUCIDAS')]" />
+        </record>
+
+        <record id="attribute_value_composicion_traslucidas" model="product.attribute.value">
+            <field name="attribute_id" ref="attribute_composicion_traslucidas" />
+            <field name="name">Polyester 100%</field>
+        </record>
+    </data>
+</odoo>

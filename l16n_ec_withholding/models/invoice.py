@@ -9,6 +9,7 @@ from . import utils
 
 class AccountEpayment(models.Model):
     _name = 'account.epayment'
+    _description = 'Descripción'
 
     code = fields.Char('Código')
     name = fields.Char('Forma de Pago')
@@ -164,6 +165,7 @@ class AccountMove(models.Model):
 
 class AccountRetentionMove(models.Model):
     _name = 'account.retention.move'
+    _description = 'Descripción'
     
     fiscal_year = fields.Char('Año Fiscal', default= lambda self: datetime.now().year)
     

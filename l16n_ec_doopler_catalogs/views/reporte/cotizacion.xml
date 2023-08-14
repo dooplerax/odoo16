@@ -1,9 +1,355 @@
 <odoo>
   <data>
-    <template id="reporte_cotizacion" inherit_id="sale.report_saleorder">
-        
-        
-    </template>
+    <template id="report_saleorder_document_custom" inherit_id="sale.report_saleorder_document">
+      <xpath expr="//t[@t-set='address']" position="replace">
+        <!-- Bloque vacío para reemplazar 'address' -->
+        <t></t>
+      </xpath>
+      <xpath expr="//div[@id='informations']" position="replace">
+        <!-- Bloque vacío para reemplazar el contenido de la sección 'informations' -->
+        <div></div>
+      </xpath>
+      <xpath expr="//h2[hasclass('mt-4')]" position="replace">
+        <!-- Bloque vacío para reemplazar el contenido del elemento 'h2' -->
+        <div></div>
+      </xpath>
+      <xpath expr="//div[hasclass('oe_structure')]" position="replace">
+        <style>
+          table {
+            font-size: 12px;
+          }
+          .data p {
+            margin-bottom: 2px;
+            font-size: 12px;
+          }
+          h2 {
+            margin-top: 0px;
+          }
+        </style>
+        <t t-if="doc.partner_id">
+          <div class="row">
+            <div class="col-10 mb-2">
+              <h2 class="">
+                <t t-if="env.context.get('proforma', False) or is_pro_forma">Pro-Forma Factura
+                  # </t>
+                <t t-elif="doc.state in ['draft','sent']">Cotización Nro.: </t>
+                <t t-else="">Pedido # </t>
+                <span t-field="doc.name" />
+              </h2>
+            </div>
+            <div class="col-2 data">
+              <p class="fw-bold">
+                Fecha:
+              </p>
+              <p>
+                <span t-field="doc.date_order" t-options='{"widget": "date"}' />
+              </p>
+            </div>
+          </div>
+          <div class="row data">
+            <div class="col-5 pe-5">
+              <p class="fw-bold">
+                Emitido por:
+              </p>
+              <p>
+                <span t-esc="user.name" />
+              </p>
+              <p class="fw-bold">
+                Dirección:
+              </p>
+              <p>
+                <span t-field="doc.partner_id.street" />
+              </p>
+              <p class="fw-bold">
+                Comercial:
+              </p>
+              <p>
+                <t t-if="doc.partner_id.user_id">
+                  <span t-field="doc.partner_id.user_id.name" />
+                </t>
+                <t t-else="">
+                  <span>Comercial no asignado</span>
+                </t>
+              </p>
 
+            </div>
+            <div class="col-4 pe-5">
+              <p class="fw-bold">
+                Cliente:
+              </p>
+              <p>
+                <span t-field="doc.partner_id.name" />
+              </p>
+              <p class="fw-bold">
+                Ciudad:
+              </p>
+              <p>
+                <span t-field="doc.partner_id.city" />
+              </p>
+            </div>
+            <div class="col-3">
+              <p class="fw-bold">
+                Nro de identificacion:
+              </p>
+              <p>
+                <t t-if="doc.partner_id.vat">
+                  <span t-field="doc.partner_id.vat" />
+                </t>
+                <t t-elif="doc.partner_id.passport">
+                  <span t-field="doc.partner_id.passport" />
+                </t>
+                <t t-else="">
+                  <span>Identificación no disponible</span>
+                </t>
+              </p>
+              <p class="fw-bold">
+                Teléfono cliente:
+              </p>
+              <p>
+                <span t-field="doc.partner_id.phone" />
+              </p>
+            </div>
+          </div>
+        </t>
+      </xpath>
+      <xpath expr="//div[@t-if='doc.signature']" position="before">
+        <div class="table-responsive">
+          <table class="table table-sm mt-3">
+            <thead>
+              <tr>
+                <th name="th_cantidad" class="text-start">CANTIDAD</th>
+                <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
+                <th name="th_material" class="text-start">MATERIAL</th>
+                <th name="th_precio_unitario" class="text-start">PRECIO UNITARIO</th>
+                <th name="th_subtotal" class="text-start">SUBTOTAL</th>
+                <th name="th_iva" class="text-start">IVA</th>
+                <th name="th_total" class="text-start">TOTAL</th>
+              </tr>
+            </thead>
+            <!--             <t t-if="line.display_type != 'line_note'"> -->
+            <tbody>
+              <t t-set="group_totals" t-value="doc.get_group_totals()" />
+              <t t-foreach="group_totals" t-as="group">
+                <t t-if="group['display_type'] not in ['line_note', 'line_section']">
+                  <tr>
+                    <td>
+                      <span t-esc="round(group['quantity_extra'], 2)" />
+                    </td>
+                    <td>
+                      <t t-if="group['tipo_cortina']">
+                        <span t-esc="group['tipo_cortina']" />
+                      </t>
+                      <t t-if="not group['tipo_cortina']">
+                        <span t-esc="group['name'] or ''" />
+                      </t>
+                    </td>
+                    <td>
+                      <t t-if="group['name'] and group['tipo_cortina']">
+                        <span t-esc="group['name']" />
+                      </t>
+                      <t t-if="not group['name'] and not group['tipo_cortina']">
+                        <span> </span>
+                      </t>
+                    </td>
+                    <td>
+                      <span t-esc="group['price_unit']" />
+                    </td>
+                    <td>
+                      <span t-esc="round(group['price_subtotal_extra'], 2)" />
+                    </td>
+                    <td>
+
+                      <t t-set="iva"
+                        t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
+                      <span t-esc="round(iva, 2)" />
+                    </td>
+                    <td>
+                      <span t-esc="round(group['price_total_extra'], 2)" />
+                    </td>
+                  </tr>
+                </t>
+              </t>
+            </tbody>
+          </table>
+        </div>
+        <div class="row data">
+          <p class="fw-bold">Observaciones:</p>
+        </div>
+        <div class="row data  ">
+          <div class="col-12"
+            style="border: 1px solid black; padding: 30px; width: 100%; word-wrap: break-word;">
+            <t t-foreach="doc.order_line" t-as="line">
+              <t t-if="line.display_type == 'line_note'">
+                <p style="margin-bottom: 5px;">
+                  <p t-field="line.name" />
+                </p>
+              </t>
+            </t>
+          </div>
+        </div>
+
+
+        <!-- Recuadro para el "Recibido del Cliente" -->
+        <div
+          class="row" style="margin-bottom:20px;">
+          <div class="col-5 data" style="border: 1px solid black; margin-top: 20px; padding: 30px;">
+            <p class="fw-bold mb-3">Datos de Entrega</p>
+            <t t-if="doc.commitment_date">
+              <p class="fw-bold">
+                Fecha de entrega:
+              </p>
+              <p>
+                <span t-field="doc.commitment_date" t-options='{"widget": "date"}' />
+              </p>
+            </t>
+            <t t-if="doc.dirEntrega">
+              <p class="fw-bold">
+                Lugar de entrega:
+              </p>
+              <p>
+                <span t-field="doc.dirEntrega" />
+              </p>
+            </t>
+            <t t-if="doc.customer">
+              <p class="fw-bold">
+                Customer:
+              </p>
+              <p>
+                <span t-field="doc.customer" />
+              </p>
+            </t>
+          </div>
+          <div class="col-1">
+          </div>
+          <div class="col-6 data" style="border: 1px solid black; margin-top: 20px; padding: 30px;">
+            <p class="fw-bold">Recibido del Cliente</p>
+            <p>He recibido y revisado las cortinas entregadas, la cantidad, tipo y material, así
+              como
+              soportes, empaque, a mí completa satisfacción:</p>
+            <div class="row">
+              <div class="col-6">
+                <p class="fw-bold">Nombres y apellidos: …………………………</p>
+              </div>
+              <div class="col-6">
+                <p class="fw-bold">Fecha: …………………………</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <p class="fw-bold">Firma: …………………………</p>
+              </div>
+            </div>
+            <p class="fw-bold">NOTA: Una vez salida la mercadería del Almacén, no se aceptan
+              reclamos
+              posteriores.</p>
+          </div>
+        </div>
+        <div
+          t-if="doc.signature" class="mt-4 ml64 mr4" name="signature">
+          <div class="offset-8">
+            <strong>Signature</strong>
+          </div>
+          <div class="offset-8">
+            <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;" />
+          </div>
+          <div class="offset-8 text-center">
+            <p t-field="doc.signed_by" />
+          </div>
+        </div>
+      </xpath>
+      <xpath expr="//thead" position="replace">
+        <thead style="display: table-row-group">
+          <tr>
+            <th name="th_items" class="text-start">ITEMS</th>
+            <!-- <th name="th_orden" class="text-start">ORDEN</th> -->
+            <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
+            <th name="th_material" class="text-start">MATERIAL</th>
+            <th name="th_ancho" class="text-start">ANCHO</th>
+            <th name="th_alto" class="text-start">ALTO</th>
+            <th name="th_mando" class="text-start">MANDO</th>
+            <th name="th_cant_m2" class="text-start">CANT. / M2</th>
+            <th name="th_valor" class="text-start">VALOR</th>
+            <th name="th_subtotal" class="text-start">SUBTOTAL</th>
+            <!-- <th name="th_ambiente" class="text-start">AMBIENTE</th> -->
+            <th name="th_encj" class="text-start">ENCJ</th>
+            <th name="th_mot" class="text-start">MOT</th>
+            <th name="th_clnt" class="text-start">CLNT</th>
+          </tr>
+        </thead>
+      </xpath>
+      <xpath expr="//tbody" position="replace">
+        <tbody>
+          <tr t-foreach="doc.order_line" t-as="line">
+            <t t-if="line.display_type not in ['line_note', 'line_section']">
+              <td>
+                <span t-if="line.items" t-field="line.items" t-options='{"widget": "text"}' />
+              </td>
+              <!-- <td>
+                <span t-field="line.orden" />
+              </td> -->
+              <td>
+                <t t-if="line.details_id">
+                  <span t-field="line.details_id.tipo_cortina" />
+                </t>
+                <t t-if="not line.details_id">
+                  <span t-field="line.product_id.name" />
+                </t>
+              </td>
+
+              <td>
+                <t t-if="line.details_id.material">
+                  <span t-esc="line.details_id.material.name" />
+                </t>
+                <t t-if="not line.details_id.material">
+                </t>
+              </td>
+              <td>
+                <t t-if="line.details_id.ancho is not None">
+                  <span t-esc="line.details_id.ancho" />
+                </t>
+              </td>
+              <td>
+                <t t-if="line.details_id.alto is not None">
+                  <span t-esc="line.details_id.alto" />
+                </t>
+              </td>
+              <td>
+                <span t-field="line.details_id.mando" />
+              </td>
+              <td>
+                <t t-if="line.product_uom_qty is not None">
+                  <span t-esc="line.product_uom_qty" />
+                </t>
+              </td>
+              <td>
+                <span t-field="line.price_unit" />
+              </td>
+              <td>
+                <span t-field="line.price_subtotal" />
+              </td>
+              <!-- <td>
+                <span t-field="line.details_id.name" />
+              </td> -->
+              <td>
+                <input type="checkbox" t-att-checked="line.details_id.encj" disabled="disabled" />
+              </td>
+              <td>
+                <input type="checkbox" t-att-checked="line.details_id.mot" disabled="disabled" />
+              </td>
+              <td>
+                <input type="checkbox" t-att-checked="line.details_id.clnt" disabled="disabled" />
+              </td>
+            </t>
+            <tr t-elif="line.display_type == 'line_section'" style="background-color: #f2f2f2;">
+              <td colspan="14">
+                <span t-field="line.name" />
+              </td>
+            </tr>
+          </tr>
+        </tbody>
+      </xpath>
+
+
+    </template>
   </data>
 </odoo>
