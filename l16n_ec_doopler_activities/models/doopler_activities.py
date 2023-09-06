@@ -12,8 +12,6 @@ class AccountMove(models.Model):
 class MailActivity(models.Model):
     _inherit = 'mail.activity'
 
-    display_user_id = fields.Many2one(
-        'res.users', string="Asignado a", compute='_compute_display_user_id', store=True, readonly=False)
 
     @api.depends('res_id', 'res_model', 'display_user_id')
     def _compute_display_user_id(self):
@@ -58,6 +56,7 @@ class MailActivity(models.Model):
                 vals['user_id'] = display_user_id
             res_model = model_obj.sudo().search(
                 [('id', '=', res_model_id)], limit=1).model if res_model_id else False
+
 
             """  if res_model == 'sale.order':
                 activity = super(MailActivity, self).create(vals)
@@ -120,6 +119,14 @@ class MailActivity(models.Model):
             args.append(('user_id', '=', current_user.id))
         return super(MailActivity, self).search(args, offset=offset, limit=limit, order=order, count=count)
 
+    def action_create_calendar_event(self):
+        action = super(MailActivity,self).action_create_calendar_event()
+        opportunity = self.calendar_event_id.opportunity_id
+
+        if opportunity and opportunity.partner_id.user_id:
+            user_id = opportunity.partner_id.user_id.id
+            action['context']['default_user_id'] = user_id
+        return action
 
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
