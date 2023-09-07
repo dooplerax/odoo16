@@ -29,6 +29,7 @@
         'views/report/reports.xml',
         'views/report/report_account_withdrawing.xml',
         'views/report/report_account_move.xml',
+        'views/latam_document_number.xml',
 
     ]
 }

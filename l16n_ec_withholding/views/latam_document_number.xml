@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_res_company_einvoice_form_ec" model="ir.ui.view">
+            <field name="name">view_res_company_einvoice_form_ec</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_latam_invoice_document.view_move_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='l10n_latam_document_number']" position="replace">
+                    <field name="l10n_latam_document_number" placeholder="001-001-000000001"
+                           attrs="{'readonly': [('state', '!=', 'draft')]}"></field>
+
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+
+</odoo>
