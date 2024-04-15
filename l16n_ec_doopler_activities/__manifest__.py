@@ -10,7 +10,7 @@
     'category': 'CRM/Activities',
     'website': "https://citytech.ec",
     'images': [],
-    'depends': ['base', 'mail', 'crm', 'sale', 'account'],
+    'depends': ['base', 'mail', 'crm', 'sale', 'account', 'stock'],
     'data': [
             'views/mail.activity.view.form.popup.inherited.xml'
     ],
