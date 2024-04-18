@@ -10,8 +10,8 @@ class SaleOrderPop(models.Model):
     # cortinas_id = fields.Many2one('sale.order', string='ID CORTINA', required=True)
     name = fields.Char(string="Ambiente", required=True)
     tipo_cortina = fields.Selection(
-        [('roller', 'Roller'), ('romana', 'Romana'), ('panelada', 'Panelada'), ('claraboya', 'Claraboya'),
-         ('triple', 'Triple'), ('shade', 'Shade'), ('diungunce', 'Diungunce')], string="Tipo Cortina", required=True)
+        selection='_get_tipo_cortina_options', string="Tipo Cortina", required=True
+    )
     material = fields.Many2one(
         "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
     ancho = fields.Float(string="Ancho", required=True, default=None)
@@ -22,6 +22,23 @@ class SaleOrderPop(models.Model):
     encj = fields.Boolean(string="ENCJ.", required=True, default=False)
     mot = fields.Boolean(string="MOT.", required=True, default=False)
     clnt = fields.Boolean(string="CLNT.", required=True, default=False)
+
+    @api.model
+    def _get_tipo_cortina_options(self):
+        return [
+            ('enrollable', 'Enrollable'),
+            ('zebra', 'Zebra'),
+            ('romana', 'Romana'),
+            ('panelada', 'Panelada'),
+            ('claraboya', 'Claraboya'),
+            ('triple_shade', 'Triple Shade'),
+            ('divergence', 'Divergence'),
+            ('tradicional', 'Tradicional'),
+            ('horizontal', 'Horizontal'),
+            ('vertical', 'Vertical'),
+            ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
+            ('tradicional_con_pliegues', 'Tradicional con pliegues'),
+        ]
 
     def name_get(self):
         result = []
