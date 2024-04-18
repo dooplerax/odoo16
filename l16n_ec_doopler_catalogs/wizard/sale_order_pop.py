@@ -10,8 +10,8 @@ class SaleOrderPop(models.Model):
     # cortinas_id = fields.Many2one('sale.order', string='ID CORTINA', required=True)
     name = fields.Char(string="Ambiente", required=True)
     tipo_cortina = fields.Selection(
-        [('roller', 'Roller'), ('romana', 'Romana'), ('panelada', 'Panelada'), ('claraboya', 'Claraboya'),
-         ('triple', 'Triple'), ('shade', 'Shade'), ('diungunce', 'Diungunce')], string="Tipo Cortina", required=True)
+        [('Enrollable', 'Enrollable'), ('Zebra', 'Zebra'), ('Romana', 'Romana'), ('Panelada', 'Panelada'),
+         ('Claraboya', 'Claraboya'), ('Triple Shade', 'Triple Shade'), ('Divergence', 'Divergence'), ('Tradicional', 'Tradicional'), ('Horizontal', 'Horizontal'), ('Vertical', 'Vertical'), ('Tradicional onda perfecta', 'Tradicional onda perfecta'), ('Tradicional con pliegues', 'Tradicional con pliegues')], string="Tipo Cortina", required=True)
     material = fields.Many2one(
         "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
     ancho = fields.Float(string="Ancho", required=True, default=None)
