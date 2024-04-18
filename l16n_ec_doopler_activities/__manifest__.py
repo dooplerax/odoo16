@@ -12,7 +12,8 @@
     'images': [],
     'depends': ['base', 'mail', 'crm', 'sale', 'account', 'stock'],
     'data': [
-            'views/mail.activity.view.form.popup.inherited.xml'
+            'views/mail.activity.view.form.popup.inherited.xml',
+            'views/stock_move_line.xml',
     ],
     'installable': True,
     'application': True,
