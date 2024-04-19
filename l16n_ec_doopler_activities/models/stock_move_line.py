@@ -9,49 +9,23 @@ from importlib.resources import _
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
-#
-#     product_uom_id = fields.Many2one(
-#         'uom.uom', 'Unit of Measure',
-#         readonly=False, related='product_id.uom_po_id')
-#
-#     product_uom_d = fields.Many2one(
-#         'uom.uom', 'Unit of Measure',
-#         readonly=False, related='product_id.uom_po_id')
-    @api.depends('move_line_ids.qty_done', 'move_line_ids.product_uom_id', 'move_line_nosuggest_ids.qty_done')
+
+    @api.depends('move_line_ids.qty_done', 'move_line_ids.product_uom_id', 'move_line_nosuggest_ids.qty_done',
+                 'product_id.uom_po_id')
     def _quantity_done_compute(self):
-        if not any(self._ids):
-            # onchange
-            for move in self:
-                move.quantity_done = move._quantity_done_sml()
-        else:
-            # compute
-            move_lines_ids = set()
-            for move in self:
-                move_lines_ids |= set(move._get_move_lines().ids)
-
-            data = self.env['stock.move.line']._read_group(
-                [('id', 'in', list(move_lines_ids))],
-                ['move_id', 'product_uom_id', 'qty_done'], ['move_id', 'product_uom_id'],
-                lazy=False
-            )
-
-            rec = defaultdict(list)
-            for d in data:
-                rec[d['move_id'][0]] += [(d['product_uom_id'][0], d['qty_done'])]
-
-            for move in self:
-                uom = move.product_uom_d
-                move.quantity_done = sum(
-                    self.env['uom.uom'].browse(line_uom_id)._compute_quantity(qty, uom, round=False)
-                    for line_uom_id, qty in rec.get(move.ids[0] if move.ids else move.id, [])
-                )
+        for move in self:
+            quantity_done = sum(line.qty_done for line in move.move_line_ids)
+            uom_po_id = move.product_id.uom_po_id
+            if uom_po_id:
+                quantity_done *= uom_po_id.factor_inv
+            move.quantity_done = quantity_done
 
 class StockMove(models.Model):
     _inherit = 'stock.move.line'
 
     product_uom_d = fields.Many2one(
-        'uom.uom', 'Unit of Measure',
-        readonly=False, related='product_id.uom_po_id')
+        'uom.uom', 'Unidad de medida',
+        readonly=False, related='product_id.uom_po_id', store=True)
 
     @api.onchange('qty_done', 'product_id')
     def _onchange_qty_done(self):
