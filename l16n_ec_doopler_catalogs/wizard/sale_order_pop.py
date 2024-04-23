@@ -7,38 +7,38 @@ class SaleOrderPop(models.Model):
     _name = 'sale.order.pop'
     _description = 'Descripción'
     
-    # cortinas_id = fields.Many2one('sale.order', string='ID CORTINA', required=True)
-    name = fields.Char(string="Ambiente", required=True)
-    tipo_cortina = fields.Selection(
-        selection='_get_tipo_cortina_options', string="Tipo Cortina", required=True
-    )
-    material = fields.Many2one(
-        "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
-    ancho = fields.Float(string="Ancho", required=True, default=None)
-    alto = fields.Float(string="Alto", required=True, default=None)
-    mando = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha',
-                             'DERECHA'), ('Ambos', 'AMBOS')], string="Mando", required=True)
-    # ambiente = fields.Char(string="Ambiente", required=True)
-    encj = fields.Boolean(string="ENCJ.", required=True, default=False)
-    mot = fields.Boolean(string="MOT.", required=True, default=False)
-    clnt = fields.Boolean(string="CLNT.", required=True, default=False)
-
-    @api.model
-    def _get_tipo_cortina_options(self):
-        return [
-            ('enrollable', 'Enrollable'),
-            ('zebra', 'Zebra'),
-            ('romana', 'Romana'),
-            ('panelada', 'Panelada'),
-            ('claraboya', 'Claraboya'),
-            ('triple_shade', 'Triple Shade'),
-            ('divergence', 'Divergence'),
-            ('tradicional', 'Tradicional'),
-            ('horizontal', 'Horizontal'),
-            ('vertical', 'Vertical'),
-            ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
-            ('tradicional_con_pliegues', 'Tradicional con pliegues'),
-        ]
+    # # cortinas_id = fields.Many2one('sale.order', string='ID CORTINA', required=True)
+    # name = fields.Char(string="Ambiente", required=True)
+    # tipo_cortina = fields.Selection(
+    #     selection='_get_tipo_cortina_options', string="Tipo Cortina", required=True
+    # )
+    # material = fields.Many2one(
+    #     "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
+    # ancho = fields.Float(string="Ancho", required=True, default=None)
+    # alto = fields.Float(string="Alto", required=True, default=None)
+    # mando = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha',
+    #                          'DERECHA'), ('Ambos', 'AMBOS')], string="Mando", required=True)
+    # # ambiente = fields.Char(string="Ambiente", required=True)
+    # encj = fields.Boolean(string="ENCJ.", required=True, default=False)
+    # mot = fields.Boolean(string="MOT.", required=True, default=False)
+    # clnt = fields.Boolean(string="CLNT.", required=True, default=False)
+    #
+    # @api.model
+    # def _get_tipo_cortina_options(self):
+    #     return [
+    #         ('enrollable', 'Enrollable'),
+    #         ('zebra', 'Zebra'),
+    #         ('romana', 'Romana'),
+    #         ('panelada', 'Panelada'),
+    #         ('claraboya', 'Claraboya'),
+    #         ('triple_shade', 'Triple Shade'),
+    #         ('divergence', 'Divergence'),
+    #         ('tradicional', 'Tradicional'),
+    #         ('horizontal', 'Horizontal'),
+    #         ('vertical', 'Vertical'),
+    #         ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
+    #         ('tradicional_con_pliegues', 'Tradicional con pliegues'),
+    #     ]
 
     # def name_get(self):
     #     result = []
@@ -83,12 +83,17 @@ class SaleOrderPop(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    m2 = fields.Float(related='details_id.m2', string="M2", store=True)
+    m2 = fields.Float(string="M2", compute='_compute_m2', store=True)
 
-    @api.depends('details_id', 'details_id.m2', 'product_uom_qty')
+    @api.depends('broad', 'high', 'product_uom_qty')
+    def _compute_m2(self):
+        for line in self:
+            line.m2 = line.broad * line.high * line.product_uom_qty
+
+    @api.depends('m2', 'product_uom_qty')
     def _compute_product_uom_qty(self):
         for line in self:
-            if line.details_id:
+            if line.m2:
                 line.product_uom_qty = line.m2
             else:
                 super(SaleOrderLine, line)._compute_product_uom_qty()
@@ -135,15 +140,15 @@ class SaleOrder(models.Model):
         groups = {}
 
         for line in self.order_line:
-            group_key = f"{line.details_id.courtain_type}_{line.product_id_extra.name}"
+            group_key = f"{line.courtain_type}_{line.product_id_extra.name}"
             if group_key in groups:
                 groups[group_key]['quantity_extra'] += line.quantity_extra
                 groups[group_key]['price_subtotal_extra'] += line.price_subtotal_extra
                 groups[group_key]['price_total_extra'] += line.price_total_extra
             else:
-                name = line.details_id.material.name if line.details_id.material.name else line.product_id_extra.name
+                name = line.material.name if line.material.name else line.product_id_extra.name
                 groups[group_key] = {
-                    'courtain_type': line.details_id.courtain_type,
+                    'courtain_type': line.courtain_type,
                     'name': name,
                     'quantity_extra': line.quantity_extra,
                     'price_subtotal_extra': line.price_subtotal_extra,

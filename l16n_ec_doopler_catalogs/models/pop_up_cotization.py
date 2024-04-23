@@ -9,24 +9,13 @@ class SaleOrder(models.Model):
     dirEntrega = fields.Char(string="Direccion de entrega")
     customer = fields.Char(string="Customer ")
 
-    # def action_confirm(self):
-    #     for line in self.order_line:
-    #         if line.product_details_ok:
-    #             if not line.details_id:
-    #                 raise UserError(
-    #                     _('El producto %s requiere de detalles') % (line.product_id.name))
-    #     sale = super(SaleOrder, self).action_confirm()
-    #
-    #     return sale
-
-
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     _description = "Descripción"
     product_details_ok = fields.Boolean(
         string='Product Details', related='product_template_id.details_ok')
-    details_id = fields.Many2one(
-        'sale.order.pop', string='Detalle del producto', required=False, ondelete='cascade')
+    product_type = fields.Selection(
+        string='Product Type', related='product_template_id.detailed_type')
     details_name = fields.Char(string='Descripción')
 
     ambience = fields.Char(string="Ambiente")
@@ -76,7 +65,7 @@ class SaleOrderLine(models.Model):
     def _check_required_fields(self):
         for record in self:
             if record.product_details_ok:
-                if not record.courtain_type or not record.ambience or not record.command or not record.material or not record.broad or not record.high or not record.clnt or not record.mot or not record.encj:
+                if not record.courtain_type or not record.ambience or not record.command or not record.material:
                     raise ValidationError(
                         "Por favor, complete todos los campos requeridos antes de agregar otra línea.")
 
@@ -98,21 +87,21 @@ class SaleOrderLine(models.Model):
             result.append((cat.id, name))
         return result
 
-    @api.constrains('broad', 'high')
+    @api.constrains('broad', 'high', 'product_type')
     def _check_values(self):
         for record in self:
-            if record.broad <= 0.0 or record.high <= 0.0:
+            if record.product_type != 'service' and (record.broad <= 0.0 or record.high <= 0.0):
                 raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
 
-    @api.model_create_multi
-    @api.returns('self', lambda value: value.id)
-    def create(self, vals_list):
-        notes = super(SaleOrderLine, self).create(vals_list)
-        for note in notes:
-            sale_order_line = self.env['sale.order.line'].browse(
-                self.env.context.get('sale_order_line'))
-            sale_order_line.write({'details_id': note.id})
-        return notes
+    # @api.model_create_multi
+    # @api.returns('self', lambda value: value.id)
+    # def create(self, vals_list):
+    #     notes = super(SaleOrderLine, self).create(vals_list)
+    #     for note in notes:
+    #         sale_order_line = self.env['sale.order.line'].browse(
+    #             self.env.context.get('sale_order_line'))
+    #         sale_order_line.write({'details_id': note.id})
+    #     return notes
 
     m2 = fields.Float(string="M2", compute="_compute_m2")
 
@@ -141,12 +130,12 @@ class SaleOrderLine(models.Model):
         for line in self:
             line.order_id_extra = line.order_id
 
-    @api.depends('name', 'details_id', 'details_id.tipo_cortina')
+    @api.depends('name', 'courtain_type')
     def _compute_name_extra(self):
         for line in self:
-            if line.details_id and line.details_id.tipo_cortina:
-                tipo_cortina = line.details_id.tipo_cortina
-                line.name_extra = f"{line.name} ({tipo_cortina})"
+            if line.courtain_type:
+                courtain_type = line.courtain_type
+                line.name_extra = f"{line.name} ({courtain_type})"
             else:
                 line.name_extra = line.name
 
@@ -155,11 +144,11 @@ class SaleOrderLine(models.Model):
         for line in self:
             line.product_id_extra = line.product_id
 
-    @api.depends('product_uom_qty', 'details_id.m2')
+    @api.depends('product_uom_qty', 'broad', 'high')
     def _compute_quantity_extra(self):
         for line in self:
-            if line.details_id:
-                line.quantity_extra = line.details_id.m2
+            if line.broad and line.high:
+                line.quantity_extra = line.broad * line.high
             else:
                 line.quantity_extra = line.product_uom_qty
 
