@@ -178,23 +178,27 @@
       <field name="inherit_id" ref="sale.view_order_form"></field>
       <field name="priority" eval="8" />
       <field name="arch" type="xml">
-        <xpath expr="//tree/field[@name='name']" position="replace">
-          <field name="name" invisible="0" />
-          <field name="product_details_ok" invisible="1" />
-          <field name="details_name" attrs="{'invisible': [('product_details_ok','!=',False)]}" />
-          <field name="details_id" target="new" domain="[('id','=',False)]"
-            attrs="{'invisible': [('product_details_ok','!=',True)]}" />
-          <button name="create_details" data-tooltip="Adicionar detalle"
-            title="Guarde el producto para poder agregarle detalles"
-            attrs="{'invisible':[('product_details_ok','!=',True)]}"
-            type="object" arial-label="Adicionar detalle"
-            class="btn btn-secondary fa o_external_button fa-arrow-right" icon="fa-">
-          </button>
+        <xpath expr="//field[@name='product_template_id']" position="attributes">
+            <attribute name="width">100px</attribute>
         </xpath>
-        <xpath expr="//notebook" position="before">
-          <div class="alert alert-info grid col-lg-8" role="alert" style="display:block">
-            <p class="text-info">Guarde la orden para adicionar un detalle en la linea del producto</p>
-          </div>
+        <xpath expr="//field[@name='product_uom']" position="attributes">
+            <attribute name="width">100px</attribute>
+        </xpath>
+        <xpath expr="//field[@name='tax_id']" position="attributes">
+            <attribute name="width">100px</attribute>
+        </xpath>
+        <xpath expr="//tree/field[@name='name']" position="replace">
+            <field name="name" width="100px"/>
+            <field name="product_details_ok" invisible="1" width="100px"/>
+            <field name="courtain_type" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="ambience" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="command" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="material" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="broad" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="high" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="clnt" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="mot" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="encj" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
         </xpath>
         <xpath
           expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']"

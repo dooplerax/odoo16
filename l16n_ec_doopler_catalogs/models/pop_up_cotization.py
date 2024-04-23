@@ -1,5 +1,6 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import (UserError)
+from odoo.exceptions import ValidationError
 
 
 class SaleOrder(models.Model):
@@ -8,15 +9,15 @@ class SaleOrder(models.Model):
     dirEntrega = fields.Char(string="Direccion de entrega")
     customer = fields.Char(string="Customer ")
 
-    def action_confirm(self):
-        for line in self.order_line:
-            if line.product_details_ok:
-                if not line.details_id:
-                    raise UserError(
-                        _('El producto %s requiere de detalles') % (line.product_id.name))
-        sale = super(SaleOrder, self).action_confirm()
-
-        return sale
+    # def action_confirm(self):
+    #     for line in self.order_line:
+    #         if line.product_details_ok:
+    #             if not line.details_id:
+    #                 raise UserError(
+    #                     _('El producto %s requiere de detalles') % (line.product_id.name))
+    #     sale = super(SaleOrder, self).action_confirm()
+    #
+    #     return sale
 
 
 class SaleOrderLine(models.Model):
@@ -28,25 +29,97 @@ class SaleOrderLine(models.Model):
         'sale.order.pop', string='Detalle del producto', required=False, ondelete='cascade')
     details_name = fields.Char(string='Descripción')
 
-    def create_details(self):
-        if self.details_id:
-            return {
-                'view_type': 'form',
-                'view_mode': 'form',
-                'res_model': 'sale.order.pop',
-                'type': 'ir.actions.act_window',
-                'target': 'current',
-                'res_id': self.details_id.id,
-            }
-        else:
-            return {
-                'view_type': 'form',
-                'view_mode': 'form',
-                'res_model': 'sale.order.pop',
-                'type': 'ir.actions.act_window',
-                'target': 'new',
-                'context': {'sale_order_line': self.id},
-            }
+    ambience = fields.Char(string="Ambiente")
+    courtain_type = fields.Selection(
+        selection='_get_tipo_cortina_options', string="Tipo Cortina")
+    material = fields.Many2one(
+        "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
+    broad = fields.Float(string="Ancho", default=None)
+    high = fields.Float(string="Alto", default=None)
+    command = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha',
+                                                           'DERECHA'), ('Ambos', 'AMBOS')], string="Mando")
+    # ambiente = fields.Char(string="Ambiente", required=True)
+    encj = fields.Boolean(string="ENCJ.", default=False)
+    mot = fields.Boolean(string="MOT.", default=False)
+    clnt = fields.Boolean(string="CLNT.", default=False)
+
+    product_uom_qty = fields.Float(
+        string="Quantity",
+        compute='calculated_quantity_field',
+        digits='Product Unit of Measure', default=0.0,
+        store=True, readonly=False, required=True, precompute=True)
+
+    @api.model
+    def _get_tipo_cortina_options(self):
+        return [
+            ('enrollable', 'Enrollable'),
+            ('zebra', 'Zebra'),
+            ('romana', 'Romana'),
+            ('panelada', 'Panelada'),
+            ('claraboya', 'Claraboya'),
+            ('triple_shade', 'Triple Shade'),
+            ('divergence', 'Divergence'),
+            ('tradicional', 'Tradicional'),
+            ('horizontal', 'Horizontal'),
+            ('vertical', 'Vertical'),
+            ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
+            ('tradicional_con_pliegues', 'Tradicional con pliegues'),
+        ]
+
+    @api.depends('broad', 'high')
+    def calculated_quantity_field(self):
+        for record in self:
+            record.product_uom_qty = record.broad * record.high
+
+    @api.constrains('product_details_ok', 'courtain_type', 'ambience', 'command', 'material', 'broad', 'high', 'clnt',
+                    'mot', 'encj')
+    def _check_required_fields(self):
+        for record in self:
+            if record.product_details_ok:
+                if not record.courtain_type or not record.ambience or not record.command or not record.material or not record.broad or not record.high or not record.clnt or not record.mot or not record.encj:
+                    raise ValidationError(
+                        "Por favor, complete todos los campos requeridos antes de agregar otra línea.")
+
+    def name_get(self):
+        result = []
+        for cat in self:
+            material_name = cat.material.name if cat.material else ""
+            name = "Tipo de cortina: {} / Materiales: {} / Ancho: {} / Alto: {} / Mando: {} / Ambiente: {} / ENCJ.: {} / MOT.: {} /  CLNT.: {}".format(
+                cat.courtain_type,
+                material_name,
+                cat.broad,
+                cat.high,
+                cat.command,
+                cat.name,
+                "Sí" if cat.encj else "No",
+                "Sí" if cat.mot else "No",
+                "Sí" if cat.clnt else "No",
+            )
+            result.append((cat.id, name))
+        return result
+
+    @api.constrains('broad', 'high')
+    def _check_values(self):
+        for record in self:
+            if record.broad <= 0.0 or record.high <= 0.0:
+                raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
+
+    @api.model_create_multi
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals_list):
+        notes = super(SaleOrderLine, self).create(vals_list)
+        for note in notes:
+            sale_order_line = self.env['sale.order.line'].browse(
+                self.env.context.get('sale_order_line'))
+            sale_order_line.write({'details_id': note.id})
+        return notes
+
+    m2 = fields.Float(string="M2", compute="_compute_m2")
+
+    @api.depends('broad', 'high')
+    def _compute_m2(self):
+        for record in self:
+            record.m2 = record.broad * record.high
 
     order_id_extra = fields.Many2one(
         'sale.order', compute='_compute_order_id_extra', store=True)

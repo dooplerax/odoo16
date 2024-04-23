@@ -40,23 +40,23 @@ class SaleOrderPop(models.Model):
             ('tradicional_con_pliegues', 'Tradicional con pliegues'),
         ]
 
-    def name_get(self):
-        result = []
-        for cat in self:
-            material_name = cat.material.name if cat.material else ""
-            name = "Tipo de cortina: {} / Materiales: {} / Ancho: {} / Alto: {} / Mando: {} / Ambiente: {} / ENCJ.: {} / MOT.: {} /  CLNT.: {}".format(
-                cat.tipo_cortina,
-                material_name,
-                cat.ancho,
-                cat.alto,
-                cat.mando,
-                cat.name,
-                "Sí" if cat.encj else "No",
-                "Sí" if cat.mot else "No",
-                "Sí" if cat.clnt else "No",
-            )
-            result.append((cat.id, name))
-        return result
+    # def name_get(self):
+    #     result = []
+    #     for cat in self:
+    #         material_name = cat.material.name if cat.material else ""
+    #         name = "Tipo de cortina: {} / Materiales: {} / Ancho: {} / Alto: {} / Mando: {} / Ambiente: {} / ENCJ.: {} / MOT.: {} /  CLNT.: {}".format(
+    #             cat.tipo_cortina,
+    #             material_name,
+    #             cat.ancho,
+    #             cat.alto,
+    #             cat.mando,
+    #             cat.name,
+    #             "Sí" if cat.encj else "No",
+    #             "Sí" if cat.mot else "No",
+    #             "Sí" if cat.clnt else "No",
+    #         )
+    #         result.append((cat.id, name))
+    #     return result
 
     @api.constrains('ancho', 'alto')
     def _check_values(self):
