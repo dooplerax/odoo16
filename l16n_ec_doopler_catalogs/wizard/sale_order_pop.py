@@ -58,26 +58,26 @@ class SaleOrderPop(models.Model):
     #         result.append((cat.id, name))
     #     return result
 
-    @api.constrains('ancho', 'alto')
-    def _check_values(self):
-        if self.ancho <= 0.0 or self.alto <= 0.0:
-            raise ValidationError(_('Los valores deben ser mayores a cero.'))
+    # @api.constrains('ancho', 'alto')
+    # def _check_values(self):
+    #     if self.ancho <= 0.0 or self.alto <= 0.0:
+    #         raise ValidationError(_('Los valores deben ser mayores a cero.'))
 
-    @api.model_create_multi
-    @api.returns('self', lambda value: value.id)
-    def create(self, vals_list):
-        note = super(SaleOrderPop, self).create(vals_list)
-        sale_order_line = self.env['sale.order.line'].browse(
-            self.env.context.get('sale_order_line'))
-        sale_order_line.write({'details_id': note.id})
-        return note
+    # @api.model_create_multi
+    # @api.returns('self', lambda value: value.id)
+    # def create(self, vals_list):
+    #     note = super(SaleOrderPop, self).create(vals_list)
+    #     sale_order_line = self.env['sale.order.line'].browse(
+    #         self.env.context.get('sale_order_line'))
+    #     sale_order_line.write({'details_id': note.id})
+    #     return note
 
     m2 = fields.Float(string="M2", compute="_compute_m2")
 
-    @api.depends('ancho', 'alto')
-    def _compute_m2(self):
-        for record in self:
-            record.m2 = record.ancho * record.alto
+    # @api.depends('ancho', 'alto')
+    # def _compute_m2(self):
+    #     for record in self:
+    #         record.m2 = record.ancho * record.alto
 
 
 class SaleOrderLine(models.Model):
@@ -135,7 +135,7 @@ class SaleOrder(models.Model):
         groups = {}
 
         for line in self.order_line:
-            group_key = f"{line.details_id.tipo_cortina}_{line.product_id_extra.name}"
+            group_key = f"{line.details_id.courtain_type}_{line.product_id_extra.name}"
             if group_key in groups:
                 groups[group_key]['quantity_extra'] += line.quantity_extra
                 groups[group_key]['price_subtotal_extra'] += line.price_subtotal_extra
@@ -143,7 +143,7 @@ class SaleOrder(models.Model):
             else:
                 name = line.details_id.material.name if line.details_id.material.name else line.product_id_extra.name
                 groups[group_key] = {
-                    'tipo_cortina': line.details_id.tipo_cortina,
+                    'courtain_type': line.details_id.courtain_type,
                     'name': name,
                     'quantity_extra': line.quantity_extra,
                     'price_subtotal_extra': line.price_subtotal_extra,
