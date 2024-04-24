@@ -93,6 +93,11 @@ class SaleOrderLine(models.Model):
             if record.product_type != 'service' and (record.broad <= 0.0 or record.high <= 0.0):
                 raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
 
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.product_type == 'service':
+            self.product_uom_qty = 1
+
     # @api.model_create_multi
     # @api.returns('self', lambda value: value.id)
     # def create(self, vals_list):

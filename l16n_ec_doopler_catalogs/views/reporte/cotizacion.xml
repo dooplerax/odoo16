@@ -136,12 +136,14 @@
                       <span t-esc="round(group['quantity_extra'], 2)" />
                     </td>
                     <td>
-                      <t t-if="group['courtain_type']">
-                        <span t-esc="group['courtain_type']" />
-                      </t>
-                      <t t-if="not group['courtain_type']">
-                        <span t-esc="group['name'] or ''" />
-                      </t>
+                        <t t-if="group['name']">
+                            <t t-if="group['courtain_type']">
+                                <span t-esc="group['courtain_type']" />
+                            </t>
+                            <t t-else="">
+                                <span t-esc="group['name']" />
+                            </t>
+                        </t>
                     </td>
                     <td>
                       <t t-if="group['name'] and group['courtain_type']">
@@ -285,7 +287,14 @@
                     <span t-if="line.items" t-field="line.items" t-options='{"widget": "text"}' />
                 </td>
                 <td>
-                    <span t-field="line.courtain_type" />
+                    <t t-if="line.name">
+                        <t t-if="line.courtain_type">
+                            <span t-field="line.courtain_type" />
+                        </t>
+                        <t t-if="not line.courtain_type">
+                            <span t-field="line.name" />
+                        </t>
+                    </t>
                 </td>
                 <td>
                     <t t-if="line.material">
