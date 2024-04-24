@@ -60,15 +60,6 @@ class SaleOrderLine(models.Model):
         for record in self:
             record.product_uom_qty = record.broad * record.high
 
-    @api.constrains('product_details_ok', 'courtain_type', 'ambience', 'command', 'material', 'broad', 'high', 'clnt',
-                    'mot', 'encj')
-    def _check_required_fields(self):
-        for record in self:
-            if record.product_details_ok:
-                if not record.courtain_type or not record.ambience or not record.command or not record.material:
-                    raise ValidationError(
-                        "Por favor, complete todos los campos requeridos antes de agregar otra línea.")
-
     def name_get(self):
         result = []
         for cat in self:

@@ -190,7 +190,7 @@
         <xpath expr="//tree/field[@name='name']" position="replace">
             <field name="name" width="100px"/>
             <field name="product_details_ok" invisible="1" width="100px"/>
-            <field name="product_type" invisible="0" width="100px"/>
+            <field name="product_type" invisible="1" width="100px"/>
             <field name="courtain_type" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
             <field name="ambience" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
             <field name="command" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
