@@ -8,7 +8,11 @@
                 <div class="alert alert-info" role="alert">
                     <span class="o_form_label">Importar archivo XLS.</span>
                 </div>
-                <button string="Ejemplo" icon="fa-download" name="download_example" type="object" class="mb-4 oe_highlight"/>
+
+                <group>
+                    <span class="label">Descargar plantilla</span>
+                    <button string="Ejemplo" icon="fa-download" name="download_example" type="object" class="mb-4 oe_highlight"/>
+                </group>
                 <group>
                     <field name="data_file" filename="file_name" string="Archivo"/>
                     <field name="file_name" invisible="1" />

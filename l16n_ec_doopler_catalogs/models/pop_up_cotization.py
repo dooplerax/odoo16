@@ -30,7 +30,7 @@ class SaleOrderLine(models.Model):
     # ambiente = fields.Char(string="Ambiente", required=True)
     encj = fields.Boolean(string="ENCJ.", default=False)
     mot = fields.Boolean(string="MOT.", default=False)
-    clnt = fields.Boolean(string="CLNT.", default=False)
+    clnt = fields.Boolean(string="CINT.", default=False)
 
     product_uom_qty = fields.Float(
         string="Quantity",
@@ -56,9 +56,13 @@ class SaleOrderLine(models.Model):
         ]
 
     @api.depends('broad', 'high')
+    @api.onchange('product_id')
     def calculated_quantity_field(self):
         for record in self:
-            record.product_uom_qty = record.broad * record.high
+            if record.broad == 0.0 and record.high == 0.0:
+                record.product_uom_qty = 1
+            else:
+                record.product_uom_qty = record.broad * record.high
 
     def name_get(self):
         result = []
@@ -78,16 +82,37 @@ class SaleOrderLine(models.Model):
             result.append((cat.id, name))
         return result
 
-    @api.constrains('broad', 'high', 'product_type')
+    # @api.constrains('broad', 'high', 'product_type', 'courtain_type')
+    # def _check_values(self):
+    #     for record in self:
+    #         if record.product_type != 'service' and (record.broad <= 0.0 or record.high <= 0.0):
+    #             raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
+
+    @api.constrains('broad', 'high', 'courtain_type', 'ambience', 'command', 'material', 'product_details_ok', 'name')
     def _check_values(self):
         for record in self:
-            if record.product_type != 'service' and (record.broad <= 0.0 or record.high <= 0.0):
-                raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
+            if record.courtain_type or record.product_details_ok:
+                missing_fields = []
+                if not record.courtain_type:
+                    missing_fields.append("Tipo cortina")
+                if not record.ambience:
+                    missing_fields.append("Ambiente")
+                if not record.command:
+                    missing_fields.append("Mando")
+                if not record.material:
+                    missing_fields.append("Material")
+                if missing_fields:
+                    missing_fields_str = ", ".join(missing_fields)
+                    product_name = record.name or "Producto sin nombre"
+                    raise ValidationError(
+                        _('El producto "{}" tiene campos faltantes que son obligatorios: {}').format(product_name, missing_fields_str))
+                if record.broad <= 0.0 or record.high <= 0.0:
+                    raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
 
-    @api.onchange('product_id')
-    def onchange_product_id(self):
-        if self.product_type == 'service':
-            self.product_uom_qty = 1
+    # @api.onchange('product_id')
+    # def onchange_product_id(self):
+    #     if self.product_type == 'service':
+    #         self.product_uom_qty = 1
 
     # @api.model_create_multi
     # @api.returns('self', lambda value: value.id)

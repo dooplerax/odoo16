@@ -275,7 +275,7 @@
             <!-- <th name="th_ambiente" class="text-start">AMBIENTE</th> -->
             <th name="th_encj" class="text-start">ENCJ</th>
             <th name="th_mot" class="text-start">MOT</th>
-            <th name="th_clnt" class="text-start">CLNT</th>
+            <th name="th_clnt" class="text-start">CINT</th>
           </tr>
         </thead>
       </xpath>

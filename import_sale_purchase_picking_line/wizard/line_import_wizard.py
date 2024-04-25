@@ -24,7 +24,7 @@ class LineImportWizard(models.TransientModel):
         if active_model == 'stock.picking':
             file_exam = 'line_picking_exam.xlsx'
         if active_model == 'sale.order':
-            file_exam = 'line_sale_exam.xlsx'
+            file_exam = 'line_sale_plantilla.xlsx'
         if active_model == 'purchase.order':
             file_exam = 'line_purchase_exam.xlsx'
         return {
@@ -156,7 +156,7 @@ class LineImportWizard(models.TransientModel):
     #
     #     if order_line:
     #         return order_line.order_id
-        
+
     def import_sale_line(self, reader_line=[]):
         sale_id = self.env['sale.order'].browse(self.env.context.get('active_id'))
 
@@ -168,16 +168,21 @@ class LineImportWizard(models.TransientModel):
             ambience = str(line['ambiente'])
             command = str(line['mando'])
             material = str(line['material'])
-            broad = float(line['ancho'])
-            high = float(line['alto'])
-            quantity = float(line['cantidad'])
+            broad = float(line['ancho']) if line['ancho'] else 0.0
+            high = float(line['alto']) if line['alto'] else 0.0
+            quantity = broad * high
             clnt = bool(line['cint'])
             mot = bool(line['mot'])
             encj = bool(line['encj'])
             material_search = self.env['product.template'].search(
                 [('name', '=', material), ('class_inherit.cl_name', '=', 'TELAS')], limit=1)
-            if not material_search:
-                raise MissingError(_('Material no se encuentra para el producto: %s' % product_name))
+
+            if not product_id:
+                raise MissingError(_('No existe el producto: %s' % product_name))
+
+            if material:
+                if not material_search:
+                    raise MissingError(_('Material no se encuentra para el producto: %s' % product_name))
 
             vals = {
                 'name': (product_id.display_name or '')[:2000],

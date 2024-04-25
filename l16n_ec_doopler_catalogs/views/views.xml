@@ -191,15 +191,15 @@
             <field name="name" width="100px"/>
             <field name="product_details_ok" invisible="1" width="100px"/>
             <field name="product_type" invisible="1" width="100px"/>
-            <field name="courtain_type" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="ambience" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="command" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="material" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="broad" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="high" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="clnt" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="mot" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
-            <field name="encj" width="100px" attrs="{'required': [('product_details_ok', '=', True)]}"/>
+            <field name="courtain_type" width="100px"/>
+            <field name="ambience" width="100px"/>
+            <field name="command" width="100px"/>
+            <field name="material" width="100px"/>
+            <field name="broad" width="100px"/>
+            <field name="high" width="100px"/>
+            <field name="clnt" width="100px"/>
+            <field name="mot" width="100px"/>
+            <field name="encj" width="100px"/>
         </xpath>
         <xpath
           expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']"
