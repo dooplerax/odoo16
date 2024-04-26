@@ -168,6 +168,7 @@ class LineImportWizard(models.TransientModel):
             ambience = str(line['ambiente'])
             command = str(line['mando'])
             material = str(line['material'])
+            material_name = line.get('material')
             broad = float(line['ancho']) if line['ancho'] else 0.0
             high = float(line['alto']) if line['alto'] else 0.0
             quantity = broad * high
@@ -182,7 +183,7 @@ class LineImportWizard(models.TransientModel):
 
             if material:
                 if not material_search:
-                    raise MissingError(_('Material no se encuentra para el producto: %s' % product_name))
+                    raise MissingError(_('El Material %s no se encuentra para el producto: %s') % (material_name, product_name))
 
             vals = {
                 'name': (product_id.display_name or '')[:2000],
