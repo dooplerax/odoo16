@@ -161,6 +161,17 @@ class LineImportWizard(models.TransientModel):
         sale_id = self.env['sale.order'].browse(self.env.context.get('active_id'))
 
         order_line = self.env['sale.order.line']
+
+        allowed_curtain_types = [
+            'enrollable', 'zebra', 'romana', 'panelada', 'claraboya',
+            'triple_shade', 'divergence', 'tradicional', 'horizontal',
+            'vertical', 'tradicional_onda_perfecta', 'tradicional_con_pliegues'
+        ]
+
+        allowed_command = [
+            'Izquierda', 'Derecha', 'Ambos'
+        ]
+
         for line in reader_line:
             product_id = self.env['product.product'].search([('name', '=', line['nombre'])], limit=1)
             product_name = line.get('nombre')
@@ -180,6 +191,12 @@ class LineImportWizard(models.TransientModel):
 
             if not product_id:
                 raise MissingError(_('No existe el producto: %s' % product_name))
+
+            if courtain_type not in allowed_curtain_types:
+                raise MissingError(_('El tipo de cortina "%s" no existe.' % courtain_type))
+
+            if command not in allowed_command:
+                raise MissingError(_('El Mando "%s" no existe.' % command))
 
             if material:
                 if not material_search:
