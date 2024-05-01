@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="line_import_wizard" model="ir.ui.view">
+        <field name="name">line.import.wizard</field>
+        <field name="model">line.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Stock Import">
+                <div class="alert alert-info" role="alert">
+                    <span class="o_form_label">Importar archivo XLS.</span>
+                </div>
+
+                <group>
+                    <span class="label">Descargar plantilla</span>
+                    <button string="Ejemplo" icon="fa-download" name="download_example" type="object" class="mb-4 oe_highlight"/>
+                </group>
+                <group>
+                    <field name="data_file" filename="file_name" string="Archivo"/>
+                    <field name="file_name" invisible="1" />
+                </group>
+                <footer>
+                    <button name="action_import" string="Importar" type="object"
+                            class="oe_highlight"/>
+                    <button string="Cerrar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_line_import_wizard" model="ir.actions.act_window">
+        <field name="name">Stock Move Line Import</field>
+        <field name="res_model">line.import.wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
