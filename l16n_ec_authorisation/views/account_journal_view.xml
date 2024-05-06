@@ -16,7 +16,22 @@
                 <xpath expr="//field[@name='refund_sequence']" position="after">
                     <field name="account_bank_retention" attrs="{'invisible': [('type', 'not in', ['sale'])]}" />
                 </xpath>
+
+                <xpath expr="//field[@name='l10n_ec_emission_address_id']" position="after">
+                    <field name="accounting_location" attrs="{'required': [('type', '=', 'sale')], 'invisible': [('type', '!=', 'sale')]}" />
+                </xpath>
                 
+            </field>
+        </record>
+
+        <record id="view_users_form_inherit" model="ir.ui.view">
+            <field name="name">view.users.form.inherit</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='odoobot_state']" position="after">
+                    <field name="accounting_location" required="True"/>
+                </xpath>
             </field>
         </record>
     </data>

@@ -6,7 +6,7 @@
     'category': 'Generic Modules/Accounting',
     'license': 'AGPL-3',
     'depends': [
-        'account',
+        'account', 'l10n_ec',
     ],
     'author': 'Danner Marante',
     'website': '',
