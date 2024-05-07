@@ -18,7 +18,7 @@
         # 'security/ir.model.access.csv'
     ],
     'depends': [
-       'l16n_ec_partner',  
+       'l16n_ec_partner', 'base'
     ],
     "installable": True,
 }
