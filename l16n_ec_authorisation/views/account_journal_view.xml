@@ -31,7 +31,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='preferences']" position="after">
                     <group string="Billing accounting location" name="billing_location" groups="account.group_account_invoice, account.group_account_manager, account.group_account_user">
-                        <field name="billing_location" />
+                        <field name="billing_location" required="1"/>
                     </group>
                 </xpath>
             </field>
