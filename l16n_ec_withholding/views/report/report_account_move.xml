@@ -251,14 +251,9 @@
                                         <span t-esc="o.partner_id.email"/>
                                         <br/>
                                         <span>
-                                            <strong>Pre-Factura:</strong>
+                                            <strong>Doc. Fuente:</strong>
                                         </span>
-                                        <!--                                        <span t-esc="o.origen"/>-->
-                                        <br/>
-                                        <span>
-                                            <strong>Orden de Servicio:</strong>
-                                        </span>
-                                        <!--                                        <span t-esc="o.service_order"/>-->
+                                        <span t-esc="o.invoice_origin"/>
                                         <br/>
                                         <table>
                                             <tr>
