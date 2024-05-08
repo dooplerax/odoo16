@@ -1,0 +1,55 @@
+<odoo>
+    <record id="view_billing_location_form" model="ir.ui.view">
+        <field name="name">billing.location.form</field>
+        <field name="model">billing.location</field>
+        <field name="arch" type="xml">
+            <form string="Billing Location">
+                <sheet>
+                    <group>
+                        <field name="street" colspan ="2" required="1"/>
+                        <field name="street2" colspan ="2" required="1"/>
+                        <field name="zip" colspan ="2" required="1"/>
+                        <field name="city" colspan ="2" required="1"/>
+                        <field name="state_id" colspan ="2" required="1"/>
+                        <field name="country_id" colspan ="2" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_billing_location_tree" model="ir.ui.view">
+        <field name="name">billing.location.tree</field>
+        <field name="model">billing.location</field>
+        <field name="arch" type="xml">
+            <tree string="Billing Locations">
+                <field name="location"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_billing_location_custom" model="ir.actions.act_window">
+        <field name="name">Billing Locations</field>
+        <field name="res_model">billing.location</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="res_config_settings_view_form_inherit_billing_location" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.billing.location</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='use_invoice_terms']" position="after">
+                <div class="col-12 col-lg-6 o_setting_box" id="use_billing_locations">
+                    <div class="o_setting_right_pane">
+                        <span class="o_form_label" style="font-weight: bold;">Billing Location</span>
+                            <div class="text-muted">
+                                Add fixed locations for sales journals
+                            </div>
+                        <button name="%(action_billing_location_custom)d" icon="fa-arrow-right" type="action" string="Billing Location" class="btn-link o_web_settings_access_rights"/>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

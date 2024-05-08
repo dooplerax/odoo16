@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e-20240404\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-06 22:53+0000\n"
-"PO-Revision-Date: 2024-05-06 22:53+0000\n"
+"POT-Creation-Date: 2024-05-08 20:06+0000\n"
+"PO-Revision-Date: 2024-05-08 20:06+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,71 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l16n_ec_authorisation
-#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_account_journal__accounting_location
-#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_res_users__accounting_location
+#: model_terms:ir.ui.view,arch_db:l16n_ec_authorisation.res_config_settings_view_form_inherit_billing_location
+msgid "<span class=\"o_form_label\">Billing Location</span>"
+msgstr "Localización de facturación"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_account_journal__billing_location
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_res_users__billing_location
 msgid "Accounting Location"
-msgstr "Localización contable"
+msgstr "Localización de facturación"
+
+#. module: l16n_ec_authorisation
+#: model_terms:ir.ui.view,arch_db:l16n_ec_authorisation.res_config_settings_view_form_inherit_billing_location
+msgid "Add fixed locations for sales journals"
+msgstr "Agregar ubicaciones fijas para diarios de ventas"
+
+#. module: l16n_ec_authorisation
+#: model_terms:ir.ui.view,arch_db:l16n_ec_authorisation.res_config_settings_view_form_inherit_billing_location
+#: model_terms:ir.ui.view,arch_db:l16n_ec_authorisation.view_billing_location_form
+msgid "Billing Location"
+msgstr "Localización de facturación"
+
+#. module: l16n_ec_authorisation
+#: model:ir.actions.act_window,name:l16n_ec_authorisation.action_billing_location_custom
+#: model_terms:ir.ui.view,arch_db:l16n_ec_authorisation.view_billing_location_tree
+msgid "Billing Locations"
+msgstr "Localización de facturación"
+
+#. module: l16n_ec_authorisation
+#: model_terms:ir.ui.view,arch_db:l16n_ec_authorisation.view_users_form_inherit
+msgid "Billing accounting location"
+msgstr "Facturación"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__city
+msgid "City"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__country_id
+msgid "Country"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__create_date
+msgid "Created on"
+msgstr ""
 
 #. module: l16n_ec_authorisation
 #: model:ir.model.fields,field_description:l16n_ec_authorisation.field_account_journal__account_bank_retention
 msgid "Cuenta de movimiento retención tarjeta de crédito"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model,name:l16n_ec_authorisation.model_billing_location
+msgid "Custom Address Model"
+msgstr "Localizaciones de facturación personalizables"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__display_name
+msgid "Display Name"
 msgstr ""
 
 #. module: l16n_ec_authorisation
@@ -37,6 +94,11 @@ msgid "Emission Retention Entity"
 msgstr "Entidad de Retención de Emisiones"
 
 #. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__id
+msgid "ID"
+msgstr ""
+
+#. module: l16n_ec_authorisation
 #: model:ir.model,name:l16n_ec_authorisation.model_account_journal
 msgid "Journal"
 msgstr "Diario"
@@ -47,6 +109,46 @@ msgid "Journal Entry"
 msgstr "Asiento contable"
 
 #. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__location
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__state_id
+msgid "State"
+msgstr "Estado"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__street
+msgid "Street"
+msgstr "Calle"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__street2
+msgid "Street2"
+msgstr "Calle 2"
+
+#. module: l16n_ec_authorisation
 #: model:ir.model,name:l16n_ec_authorisation.model_res_users
 msgid "User"
 msgstr "Usuario"
+
+#. module: l16n_ec_authorisation
+#: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__zip
+msgid "Zip"
+msgstr "Código Postal"
