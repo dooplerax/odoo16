@@ -42,11 +42,11 @@
             <xpath expr="//div[@id='use_invoice_terms']" position="after">
                 <div class="col-12 col-lg-6 o_setting_box" id="use_billing_locations">
                     <div class="o_setting_right_pane">
-                        <span class="o_form_label" style="font-weight: bold;">Billing Location</span>
+                        <span class="o_form_label" style="font-weight: bold;">Localización de facturación</span>
                             <div class="text-muted">
                                 Add fixed locations for sales journals
                             </div>
-                        <button name="%(action_billing_location_custom)d" icon="fa-arrow-right" type="action" string="Billing Location" class="btn-link o_web_settings_access_rights"/>
+                        <button name="%(action_billing_location_custom)d" icon="fa-arrow-right" type="action" string="Localización" class="btn-link o_web_settings_access_rights"/>
                     </div>
                 </div>
             </xpath>
