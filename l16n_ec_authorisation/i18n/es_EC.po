@@ -51,12 +51,12 @@ msgstr "Facturación"
 #. module: l16n_ec_authorisation
 #: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__city
 msgid "City"
-msgstr ""
+msgstr "Ciudad"
 
 #. module: l16n_ec_authorisation
 #: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__country_id
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #. module: l16n_ec_authorisation
 #: model:ir.model.fields,field_description:l16n_ec_authorisation.field_billing_location__create_uid
