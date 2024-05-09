@@ -8,7 +8,7 @@
                     <group>
                         <field name="street" colspan ="2" required="1"/>
                         <field name="street2" colspan ="2" required="1"/>
-                        <field name="zip" colspan ="2" required="1"/>
+                        <field name="zip" colspan ="2" required="0"/>
                         <field name="city" colspan ="2" required="1"/>
                         <field name="state_id" colspan ="2" required="1"/>
                         <field name="country_id" colspan ="2" required="1"/>

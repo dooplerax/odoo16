@@ -30,8 +30,9 @@
             <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='preferences']" position="after">
-                    <group string="Billing accounting location" name="billing_location" groups="account.group_account_invoice, account.group_account_manager, account.group_account_user">
-                        <field name="billing_location" required="1"/>
+                    <field name="account_group_custom" invisible="1"/>
+                    <group string="Billing accounting location" name="billing_location" attrs="{'invisible': [('account_group_custom', '=', False)]}">
+                        <field name="billing_location" attrs="{'required': [('account_group_custom', '!=', False)]}"/>
                     </group>
                 </xpath>
             </field>
