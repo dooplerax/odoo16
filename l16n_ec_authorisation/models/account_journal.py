@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError, UserError
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
@@ -10,20 +11,39 @@ class AccountJournal(models.Model):
                                              string='Cuenta de movimiento retención tarjeta de crédito',
                                              domain=[('deprecated', '=', False)])
 
-    def _get_accounting_locations(self):
-        # Esta función devuelve las opciones para el campo de selección accounting_location
-        return [('', 'Seleccionar'),('quito', 'Quito'), ('cuenca', 'Cuenca'), ('guayaquil', 'Guayaquil')]
-
-    accounting_location = fields.Selection(_get_accounting_locations, string='Accounting Location', stored=True)
+    billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True)
 
 class Users(models.Model):
     _inherit = 'res.users'
 
-    def _get_accounting_locations(self):
-        # Esta función devuelve las opciones para el campo de selección accounting_location
-        return [('', 'Seleccionar'),('quito', 'Quito'), ('cuenca', 'Cuenca'), ('guayaquil', 'Guayaquil')]
+    billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True)
 
-    accounting_location = fields.Selection(_get_accounting_locations, string='Accounting Location', stored = True)
+class BillingLocation(models.Model):
+    _name = 'billing.location'
+    _description = 'Custom Address Model'
+
+    street = fields.Char(string='Street', stored="True")
+    street2 = fields.Char(string='Street2', stored="True")
+    zip = fields.Char(string='Zip', stored="True")
+    city = fields.Char(string='City', stored="True")
+    state_id = fields.Many2one("res.country.state", string='State', stored="True")
+    country_id = fields.Many2one('res.country', string='Country', stored="True")
+
+    location = fields.Char(string='Location', compute='_compute_location', store=True)
+
+    @api.depends('street', 'street2', 'zip', 'city', 'state_id', 'country_id')
+    def _compute_location(self):
+        for record in self:
+            location_parts = [record.street or '', record.street2 or '', record.city or '', record.state_id.name or '',
+                               record.country_id.name or '']
+            record.location = '/ '.join(filter(None, location_parts))
+
+    def name_get(self):
+        result = []
+        for record in self:
+            name = record.location
+            result.append((record.id, name))
+        return result
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -31,9 +51,9 @@ class AccountMove(models.Model):
     @api.depends('move_type')
     def _compute_journal_id(self):
         for record in self:
-            user_accounting_location = self.env.user.accounting_location
+            user_billing_location = self.env.user.billing_location.location
             suitable_journals = self.env['account.journal'].search(
-                [('accounting_location', '=', user_accounting_location)])
+                [('billing_location.location', '=', user_billing_location)])
             if suitable_journals:
                 record.journal_id = suitable_journals[0].id
                 continue

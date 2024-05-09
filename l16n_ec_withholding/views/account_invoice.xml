@@ -24,6 +24,7 @@
                          <field name="off_accounting"
                               attrs="{'invisible': [('move_type', '!=', 'out_invoice')],
                               'readonly':[('state','!=','draft')]}"></field>
+                         <field name="invoice_origin" readonly="1" attrs="{'invisible': [('invoice_origin', '=', False)]}"/>
                     </xpath>
 
                     <xpath expr="//page[@name='other_info']" position="after">

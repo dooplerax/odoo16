@@ -18,7 +18,7 @@
                 </xpath>
 
                 <xpath expr="//field[@name='l10n_ec_emission_address_id']" position="after">
-                    <field name="accounting_location" attrs="{'required': [('type', '=', 'sale')], 'invisible': [('type', '!=', 'sale')]}" />
+                    <field name="billing_location" attrs="{'required': [('type', '=', 'sale')], 'invisible': [('type', '!=', 'sale')]}" />
                 </xpath>
                 
             </field>
@@ -29,8 +29,10 @@
             <field name="model">res.users</field>
             <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='odoobot_state']" position="after">
-                    <field name="accounting_location" required="True"/>
+                <xpath expr="//group[@name='preferences']" position="after">
+                    <group string="Billing accounting location" name="billing_location" groups="account.group_account_invoice, account.group_account_manager, account.group_account_user">
+                        <field name="billing_location" required="1"/>
+                    </group>
                 </xpath>
             </field>
         </record>

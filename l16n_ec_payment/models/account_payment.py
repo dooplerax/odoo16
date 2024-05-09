@@ -10,6 +10,14 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
     payment_number = fields.Char('Número', default='000')
 
+    invoice_origin = fields.Char(
+        string='Doc. Fuente',
+        stored="True",
+        readonly=False,
+        tracking=True,
+        help="The document(s) that generated the invoice.",
+    )
+
     l10n_ec_sri_payment_id = fields.Many2one(
         comodel_name="l10n_ec.sri.payment",
         string="Payment Method (SRI)",

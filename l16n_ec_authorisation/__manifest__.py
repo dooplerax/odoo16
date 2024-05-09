@@ -13,9 +13,10 @@
     'license': 'AGPL-3',
     'website': '',
     'data': [
+        'security/ir.model.access.csv',
         'views/account_journal_view.xml',
+        'views/billing_location.xml',
         # 'data/account.ats.sustento.csv',
-        # 'security/ir.model.access.csv'
     ],
     'depends': [
        'l16n_ec_partner', 'base'
