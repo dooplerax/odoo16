@@ -11,12 +11,27 @@ class AccountJournal(models.Model):
                                              string='Cuenta de movimiento retención tarjeta de crédito',
                                              domain=[('deprecated', '=', False)])
 
-    billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True)
+    billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True, ondelete='restrict')
 
 class Users(models.Model):
     _inherit = 'res.users'
 
-    billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True)
+    billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True, ondelete='restrict')
+
+    account_group_custom = fields.Char(string="Accounting Permission", compute='_compute_accounting_permission', store=True, readonly=False)
+
+    @api.depends('groups_id')
+    def _compute_accounting_permission(self):
+        for user in self:
+            user_groups = user.groups_id
+            group_names = user_groups.mapped('name')
+            for group_name in group_names:
+                if group_name in ['Mostrar características de contabilidad completas', 'Administrador de Facturación',
+                                  'Facturación']:
+                    user.account_group_custom = group_name
+                    break
+                else:
+                    user.account_group_custom = False
 
 class BillingLocation(models.Model):
     _name = 'billing.location'
