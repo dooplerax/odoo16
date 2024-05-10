@@ -33,6 +33,9 @@ class Users(models.Model):
                 else:
                     user.account_group_custom = False
 
+            if user.account_group_custom == False:
+                user.billing_location = False
+
 class BillingLocation(models.Model):
     _name = 'billing.location'
     _description = 'Custom Address Model'

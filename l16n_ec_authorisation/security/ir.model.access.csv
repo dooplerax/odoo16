@@ -1,4 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_billing_location_manager,access_billing_manager,model_billing_location,account.group_account_manager,1,1,1,1
-access_billing_location_invoice,access_billing_invoice,model_billing_location,account.group_account_invoice,1,1,1,1
-access_billing_location_user,access_billing_user,model_billing_location,account.group_account_user,1,1,1,1
+access_billing_location_manager,access_billing_manager,model_billing_location,base.group_user,1,1,1,1
