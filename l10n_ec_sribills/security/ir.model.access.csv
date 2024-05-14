@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+id_sri_bills,sri_bills,model_sri_bills,account.group_account_invoice,1,1,1,1
+id_sri_bills_load,sri_bills_load,model_sri_bills_load,account.group_account_invoice,1,1,1,1
+
