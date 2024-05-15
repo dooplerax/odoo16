@@ -25,7 +25,7 @@
                                 <field name="producto_iva12" domain="[('purchase_ok', '=', True)]" />
                             </group>
                             <group>
-                                <field name="document_file" filename="file_name" />
+                                <field name="document_file" filename="file_name" attrs="{'readonly':[('state','!=','draft')]}"/>
                                 <field name="file_name" invisible="1" />
                                 <field name="numero_facturas" readonly="1" />
                             </group>

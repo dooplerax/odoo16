@@ -30,11 +30,11 @@ class SriBillsLoad(models.Model):
     descripcion = fields.Char('Descripción')
     producto_iva0 = fields.Many2one(
         'product.template',
-        'Productos Iva 0',
+        'Productos sin IVA',
         required=True)
     producto_iva12 = fields.Many2one(
         'product.template',
-        'Productos Iva 12',
+        'Productos con IVA',
         required=True)
 
     document_file = fields.Binary('Documento')
@@ -129,6 +129,7 @@ class SriBillsLoad(models.Model):
                 continue
 
             xslt_content = line.documento_firmado.encode('utf-8')  # Convertir la cadena a bytes con codificación UTF-8
+            comprobante_num = line.serie_comprobante
             tipo = ''
 
             try:
@@ -143,7 +144,7 @@ class SriBillsLoad(models.Model):
                     raise ValueError(f'Tipo desconocido: {tipo}')
 
                 if tipo == 'factura':
-                    line.generada, line.comentario = self._factura(objFactura)
+                    line.generada, line.comentario = self._factura(objFactura,comprobante_num)
                 elif tipo == 'comprobanteRetencion':
                     line.generada, line.comentario = self._retencion(objFactura)
                 else:
@@ -227,7 +228,7 @@ class SriBillsLoad(models.Model):
             return False, 'Cliente o Factura no registrada'
 
 
-    def _factura(self, obj):
+    def _factura(self, obj, comprobante_num):
         """
         Metodo para generar las facturas desde los xml del SRI
         :param obj:
@@ -276,6 +277,7 @@ class SriBillsLoad(models.Model):
                     'ref': obj['infoTributaria']['secuencial'],
                     'l10n_ec_authorization_number': obj['infoTributaria']['claveAcceso'],
                     'invoice_date': fechaEmision,
+                    'l10n_latam_document_number': comprobante_num,
                     # 'auth_inv_id': auth,
                     # 'epayment_id': 1,
                     # 'sustento_id': 2
