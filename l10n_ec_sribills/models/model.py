@@ -7,11 +7,17 @@
 
 import base64
 import logging
+import time
 
 from ..sri.sri_doc import SRIRequest
 from ..sri.generar_factura import generarFactura, generarRetencion
 from odoo import fields, models, api, _
 from lxml import etree
+from datetime import datetime
+from odoo.exceptions import (
+    ValidationError,
+    Warning as UserError
+)
 
 
 class SriBillsLoad(models.Model):
@@ -21,7 +27,7 @@ class SriBillsLoad(models.Model):
 
     __logger = logging.getLogger(_name)
 
-    descripcion = fields.Char('Descripcion')
+    descripcion = fields.Char('Descripción')
     producto_iva0 = fields.Many2one(
         'product.template',
         'Productos Iva 0',
@@ -121,30 +127,40 @@ class SriBillsLoad(models.Model):
             if not line.documento_firmado:
                 line.generada, line.comentario = False, 'Fecha de emisión extemporánea, ocurrió un error en el SRI'
                 continue
-            xslt_content = str(line.documento_firmado.decode('utf-8'))
+
+            xslt_content = line.documento_firmado.encode('utf-8')  # Convertir la cadena a bytes con codificación UTF-8
             tipo = ''
-            if etree.fromstring(xslt_content).tag == 'factura':
-                tipo = etree.fromstring(xslt_content).tag
-                objFactura = generarFactura(xslt_content)
 
-            if etree.fromstring(xslt_content).tag == 'comprobanteRetencion':
-                tipo = etree.fromstring(xslt_content).tag
-                objFactura = generarRetencion(xslt_content)
+            try:
+                root = etree.fromstring(xslt_content)
+                tipo = root.tag
 
-            if tipo == 'factura':
-                line.generada, line.comentario = self._factura(objFactura)
+                if tipo == 'factura':
+                    objFactura = generarFactura(xslt_content)
+                elif tipo == 'comprobanteRetencion':
+                    objFactura = generarRetencion(xslt_content)
+                else:
+                    raise ValueError(f'Tipo desconocido: {tipo}')
 
-            elif tipo == 'comprobanteRetencion':
-                line.generada, line.comentario = self._retencion(objFactura)
+                if tipo == 'factura':
+                    line.generada, line.comentario = self._factura(objFactura)
+                elif tipo == 'comprobanteRetencion':
+                    line.generada, line.comentario = self._retencion(objFactura)
+                else:
+                    line.generada = False
 
-            else:
-                line.generada = False
+                if line.generada:
+                    self.documentos_importados += 1
+                else:
+                    self.documentos_error += 1
+                if not line.generada and estadoGeneral:
+                    estadoGeneral = False
 
-            if line.generada:
-                self.documentos_importados += 1
-            else:
-                self.documentos_error += 1
-            if not line.generada and estadoGeneral:
+            except etree.XMLSyntaxError as e:
+                # Capturar y registrar el error de manera más detallada
+                self.logger.error(f"Error al analizar el XML en documento_id {line.id}: {e}")
+                self.logger.error(f"Contenido del XML: {xslt_content}")
+                # Establecer estadoGeneral en False si se produce un error
                 estadoGeneral = False
 
         if estadoGeneral:
@@ -218,8 +234,8 @@ class SriBillsLoad(models.Model):
         :return:
         """
         try:
-            Factura = self.env['account.invoice']
-            Cliente = self.env['res.partner'].search([('indentifier', '=', obj['infoTributaria']['ruc'])])
+            Factura = self.env['account.move']
+            Cliente = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])])
 
             if Cliente.id:
                 arrFechaEmision = obj['infoFactura']['fechaEmision'].split('/')
@@ -241,23 +257,28 @@ class SriBillsLoad(models.Model):
 
                 no_fact = "{}{}{}".format(obj['infoTributaria']['estab'], obj['infoTributaria']['ptoEmi'],
                                           obj['infoTributaria']['secuencial'])
-                existe = Factura.search([('invoice_number', '=', no_fact), ('partner_id', '=', Cliente.id)])
+                existe = Factura.search([('name', '=', no_fact), ('partner_id', '=', Cliente.id)])
 
                 if existe.id:
                     return True, 'Documento Registrado'
 
                 diario = self.env['account.journal'].search([('type', '=', 'purchase')], limit=1)
 
-                fact = Factura.create({
-                    'journal_id': diario.id,
-                    'type': 'in_invoice',
+                print("journal_id:", diario.name)
+                print("partner_id:", Cliente.name)
+                print("l10n_ec_authorization_number:", obj['infoTributaria']['claveAcceso'])
+                print("Secuencial:", obj['infoTributaria']['secuencial'])
+
+                fact = self.env['account.move'].create({
+                    'move_type': 'in_invoice',
                     'partner_id': Cliente.id,
-                    'reference': obj['infoTributaria']['secuencial'],
-                    'auth_number': obj['infoTributaria']['claveAcceso'],
-                    'date_invoice': fechaEmision,
-                    'auth_inv_id': auth,
-                    'epayment_id': 1,
-                    'sustento_id': 2
+                    'journal_id': diario.id,
+                    'ref': obj['infoTributaria']['secuencial'],
+                    'l10n_ec_authorization_number': obj['infoTributaria']['claveAcceso'],
+                    'invoice_date': fechaEmision,
+                    # 'auth_inv_id': auth,
+                    # 'epayment_id': 1,
+                    # 'sustento_id': 2
                 })
 
                 account_id = self.env['account.account'].search(
@@ -266,31 +287,203 @@ class SriBillsLoad(models.Model):
 
                 for prod in obj['detalles']:
                     if float(prod['valor']) != 0:
-                        product = self.env['product.product'].search([('product_tmpl_id', '=', self.producto_iva12.id)],
+                        product = self.env['product.product'].search([('id', '=', self.producto_iva12.id)],
                                                                      limit=1)
                     else:
-                        product = self.env['product.product'].search([('product_tmpl_id', '=', self.producto_iva0.id)],
+                        product = self.env['product.product'].search([('id', '=', self.producto_iva0.id)],
                                                                      limit=1)
                     val = {
                         'product_id': product.id,
-                        'detalle': '{}'.format(prod['descripcion']),
+                        # 'model': '{}'.format(prod['descripcion']),
                         'name': str(self.producto_iva12.name),
                         'quantity': prod['cantidad'],
                         'price_unit': prod['precioUnitario'],
                         'price_subtotal': prod['precioTotalSinImpuesto'],
                         'account_id': account_id.id,
-                        'invoice_id': fact.id
+                        'move_id': fact.id
                     }
-                    line_id = self.env['account.invoice.line'].create(val)
-                    line_id._onchange_product_id()
-                fact._onchange_journal_id()
-                fact._onchange_invoice_line_ids()
+                    line_id = self.env['account.move.line'].create(val)
+                #     line_id._onchange_product_id()
+                # fact._onchange_journal_id()
+                # fact._onchange_invoice_line_ids()
 
                 return True, 'Generado'
             else:
                 return False, 'Cliente no Registrado'
 
         except Exception as e:
-            self.__logger.error(e.message)
-            return False, e.message
+            self.__logger.error(str(e))
+            return False, str(e)
 
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    authorisation_ids = fields.One2many(
+        'account.authorisation',
+        'partner_id',
+        'Autorizaciones'
+    )
+
+class AccountAuthorisation(models.Model):
+    _name = 'account.authorisation'
+    _order = 'expiration_date desc'
+
+    @api.depends('type_id', 'num_start', 'num_end')
+    def name_get(self):
+        """
+        Nombre
+        :return:
+        """
+        res = []
+        for record in self:
+            name = u'%s. estab: (%s-%s) serie: (%s-%s) ' % (
+                record.type_id.code,
+                record.serie_entidad,
+                record.serie_emision,
+                record.num_start,
+                record.num_end
+            )
+            res.append((record.id, name))
+        return res
+
+    @api.depends('expiration_date')
+    def _compute_active(self):
+        """
+        Calcula si esta activo el documento con las fechas
+        :return:
+        """
+        if self.is_electronic:
+            self.active = True
+        if not self.expiration_date:
+            return
+        now = datetime.strptime(time.strftime("%Y-%m-%d"), '%Y-%m-%d')
+        due_date = datetime.strptime(self.expiration_date, '%Y-%m-%d')
+        self.active = now < due_date
+
+    def _get_type(self):
+        return self._context.get('type', 'in_invoice')  # pylint: disable=E1101
+
+    def _get_in_type(self):
+        return self._context.get('in_type', 'externo')
+
+    def _get_partner(self):
+        """
+        Calcula el partnet
+        :return:
+        """
+        partner = self.env.user.company_id.partner_id
+        if self._context.get('partner_id'):
+            partner = self._context.get('partner_id')
+        return partner
+
+    @api.model
+    @api.returns('self', lambda value: value.id)
+    def create(self, values):
+        """
+        modica el create
+        :param values:
+        :return:
+        """
+        res = self.search([('partner_id', '=', values['partner_id']),
+                           ('type_id', '=', values['type_id']),
+                           ('serie_entidad', '=', values['serie_entidad']),
+                           ('serie_emision', '=', values['serie_emision']),
+                           ('serie_emision', '=', values['serie_emision']),
+                           ('active', '=', True)])
+
+        partner_id = self.env.user.company_id.partner_id.id
+        if values['partner_id'] == partner_id:
+            typ = self.env['account.ats.doc'].browse(values['type_id'])
+            name_type = '{0}_{1}'.format(values['name'], values['type_id'])
+            if values['num_start'] == 0 or not values['num_start']:
+                values['num_start'] =1
+            sequence_data = {
+                'code': typ.code == '07' and 'account.retention' or 'account.invoice',  # noqa
+                'name': name_type,
+                'padding': 9,
+                'number_next': values['num_start'],
+            }
+            seq = self.env['ir.sequence'].create(sequence_data)
+            values.update({'sequence_id': seq.id})
+        return super(AccountAuthorisation, self).create(values)
+
+    def unlink(self):
+        """
+        Modifica el eliminar
+        :return:
+        """
+        inv = self.env['account.invoice']
+        res = inv.search([('auth_inv_id', '=', self.id)])
+        if res:
+            raise UserError(
+                'Esta autorización esta relacionada a un documento.'
+            )
+        return super(AccountAuthorisation, self).unlink()
+
+    name = fields.Char('Num. de Autorización', size=128)
+    serie_entidad = fields.Char('Serie Entidad', size=3, required=True)
+    serie_emision = fields.Char('Serie Emision', size=3, required=True)
+    num_start = fields.Integer('Desde')
+    num_end = fields.Integer('Hasta')
+    is_electronic = fields.Boolean('Documento Electrónico ?')
+    expiration_date = fields.Date('Fecha de Vencimiento')
+    address = fields.Text('Direccion de Establecimiento')
+    active = fields.Boolean(
+        compute='_compute_active',
+        string='Activo',
+        store=True,
+        default=True
+    )
+    in_type = fields.Selection(
+        [('interno', 'Internas'),
+         ('externo', 'Externas')],
+        string='Tipo Interno',
+        readonly=True,
+        change_default=True,
+        default=_get_in_type
+    )
+    type_id = fields.Many2one(
+        'account.ats.doc',
+        'Tipo de Comprobante',
+        required=True
+    )
+    partner_id = fields.Many2one(
+        'res.partner',
+        'Empresa',
+        required=True,
+        default=_get_partner
+    )
+
+    company_id = fields.Many2one(
+        'res.company',
+        'Company',
+        required=True,
+        change_default=True,
+        readonly=True,
+        states={'draft': [('readonly', False)]},
+        default=lambda self: self.env.user.company_id.id  # noqa
+    )
+
+    sequence_id = fields.Many2one(
+        'ir.sequence',
+        'Secuencia',
+        help='Secuencia Alfanumerica para el documento, se debe registrar cuando pertenece a la compañia',  # noqa
+        ondelete='cascade'
+    )
+
+    _sql_constraints = [
+        ('number_unique',
+         'unique(partner_id,expiration_date,type_id)',
+         u'La relación de autorización, serie entidad, serie emisor y tipo, debe ser única.'),  # noqa
+    ]
+
+    def is_valid_number(self, number):
+        """
+        Metodo que verifica si @number esta en el rango
+        de [@num_start,@num_end]
+        """
+        if self.is_electronic:
+            return True
+        if self.num_start <= number <= self.num_end:
+            return True
+        return False

@@ -14,6 +14,7 @@
     ],
     'data': [
         'security/ir.model.access.csv',
-        'views/srifact.xml'
+        'views/srifact.xml',
+        'views/authorisation_view.xml'
     ]
 }

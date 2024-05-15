@@ -8,11 +8,11 @@
                 <form>
                     <header>
                         <button name="action_generate" string="Importar Archivo"
-                                confirm="Este proceso se conectara al Sri e importa los documentos."
+                                confirm="Este proceso se conectará con el sistema del SRI e importará los documentos adjuntos."
                                 attrs="{'invisible':[('state','!=','draft')]}"
                                 type="object"/>
                         <button name="import_documentos" string="Importar Facturas"
-                                confirm="Se generarán los documentos en borrador, verificarlos antes de validarlos."
+                                confirm="Se generarán los documentos en estado borrador, verificarlos antes de validarlos."
                                 attrs="{'invisible':[('state','!=','import')]}"
                                 type="object"/>
                         <field name="state" widget="statusbar"/>
@@ -37,8 +37,8 @@
                                     <tree colors="red:generada == False">
                                         <field name="generada" invisible="1" />
                                         <field name="comprobante" string="Tipo de Comprobante"/>
-                                        <field name="serie_comprobante" string="Numero del Comprobante"/>
-                                        <field name="ruc_emisor" string="Identificacion"/>
+                                        <field name="serie_comprobante" string="Número del Comprobante"/>
+                                        <field name="ruc_emisor" string="Identificación"/>
                                         <field name="razon_social_emisor" string="Nombre"/>
                                         <field name="importe_total" string="Valor"/>
                                         <field name="comentario" string="Detalle"/>

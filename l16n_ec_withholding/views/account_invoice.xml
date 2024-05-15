@@ -14,7 +14,7 @@
                     </xpath>
 
                     <xpath expr="//field[@name='l10n_latam_document_number']" position="attributes">
-                         <attribute name="attrs">{'invisible': True}</attribute>
+                         <attribute name="attrs">{'invisible': False}</attribute>
                      </xpath>
 
                     <xpath expr="//field[@name='invoice_vendor_bill_id']" position="after">

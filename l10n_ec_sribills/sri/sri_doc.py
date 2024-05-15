@@ -114,20 +114,21 @@ class SRIRequest(object):
         :return:
         """
         messages = []
-        client = Client('https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl')
+        client = Client('https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl')
         result = client.service.autorizacionComprobante(access_key)
-        self.logger.debug(access_key)
-        self.logger.debug("Respuesta de autorizacionComprobante:SRI")
-        self.logger.debug(result)
+        print(access_key)
+        print("Respuesta de autorizacionComprobante:SRI")
+        print(result)
         if result.autorizaciones:
-            autorizacion = result.autorizaciones[0][0]
-            mensajes = autorizacion.mensajes and autorizacion.mensajes[0] or []
+            autorizacion = result.autorizaciones['autorizacion'][0]
+            mensajes = autorizacion.mensajes
             self.logger.info('Estado de autorizacion %s' % autorizacion.estado)
-            for m in mensajes:
-                self.logger.error('{0} {1}'.format(
-                    m.identificador, m.mensaje)
-                )
-                messages.append([m.identificador, m.mensaje])
+            if mensajes:
+                for m in mensajes:
+                    self.logger.error('{0} {1}'.format(
+                        m.identificador, m.mensaje)
+                    )
+                    messages.append([m.identificador, m.mensaje])
             if not autorizacion.estado == 'AUTORIZADO':
                 return autorizacion.estado, messages
             return autorizacion.estado, autorizacion
