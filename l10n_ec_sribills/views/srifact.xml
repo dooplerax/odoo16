@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_sri_bills_form" model="ir.ui.view">
+            <field name="name">sri.bills.load.form</field>
+            <field name="model">sri.bills.load</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_generate" string="Importar Archivo"
+                                confirm="Este proceso se conectará con el sistema del SRI e importará los documentos adjuntos."
+                                attrs="{'invisible':[('state','!=','draft')]}"
+                                type="object"/>
+                        <button name="import_documentos" string="Importar Facturas"
+                                confirm="Se generarán los documentos en estado borrador, verificarlos antes de validarlos."
+                                attrs="{'invisible':[('state','!=','import')]}"
+                                type="object"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="descripcion" />
+                                <field name="producto_iva0" domain="[('purchase_ok', '=', True)]" />
+                                <field name="producto_iva12" domain="[('purchase_ok', '=', True)]" />
+                            </group>
+                            <group>
+                                <field name="document_file" filename="file_name" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="file_name" invisible="1" />
+                                <field name="numero_facturas" readonly="1" />
+                            </group>
+
+                        </group>
+                        <notebook>
+                            <page string="Documentos">
+                                <field name="documentos_id">
+                                    <tree colors="red:generada == False">
+                                        <field name="generada" invisible="1" />
+                                        <field name="comprobante" string="Tipo de Comprobante"/>
+                                        <field name="serie_comprobante" string="Número del Comprobante"/>
+                                        <field name="ruc_emisor" string="Identificación"/>
+                                        <field name="razon_social_emisor" string="Nombre"/>
+                                        <field name="importe_total" string="Valor"/>
+                                        <field name="comentario" string="Detalle"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="action_sri_bills_list" model="ir.ui.view">
+            <field name="model">sri.bills.load</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state == 'draft'" decoration-muted="state == 'cancel'">
+                    <field name="descripcion"/>
+                    <field name="file_name" ></field>
+                    <field name="numero_facturas"></field>
+                    <field name="documentos_importados"></field>
+                    <field name="documentos_error"></field>
+
+                    <field name="state"></field>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_sri_bills_tree" model="ir.actions.act_window">
+            <field name="name">Importar Facturas</field>
+            <field name="res_model">sri.bills.load</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem action="action_sri_bills_tree" name="Importar Facturas" id="menu_action_sri_bills"
+                  parent="account.menu_finance_payables"/>
+    </data>
+</odoo>

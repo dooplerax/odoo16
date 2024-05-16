@@ -210,7 +210,7 @@
                                             <span t-esc="line.product_id.code"/>
                                         </div>
                                         <div class="col-4" style="padding-left: 0px; text-align: center;">
-                                            <span t-esc="line.product_id.name"/>
+                                            <span t-esc="line.name"/>
                                         </div>
                                         <div class="col-2" style="padding-left: 0px; text-align: center;">
                                             <span t-esc="'%.2f' % line.price_unit"/>
@@ -254,6 +254,11 @@
                                             <strong>Doc. Fuente:</strong>
                                         </span>
                                         <span t-esc="o.invoice_origin"/>
+                                        <br/>
+                                        <span>
+                                            <strong>Comercial:</strong>
+                                        </span>
+                                        <span t-esc="o.invoice_user_id.name"/>
                                         <br/>
                                         <table>
                                             <tr>

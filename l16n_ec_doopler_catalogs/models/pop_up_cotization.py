@@ -1,6 +1,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import (UserError)
 from odoo.exceptions import ValidationError
+from odoo.fields import Command
 
 
 class SaleOrder(models.Model):
@@ -37,6 +38,27 @@ class SaleOrderLine(models.Model):
         compute='calculated_quantity_field',
         digits='Product Unit of Measure', default=0.0,
         store=True, readonly=False, required=True, precompute=True)
+
+    @api.model
+    def _prepare_invoice_line(self, **optional_values):
+        self.ensure_one()
+        res = super(SaleOrderLine, self)._prepare_invoice_line(**optional_values)
+
+        res.update({
+            'display_type': self.display_type or 'product',
+            'sequence': self.sequence,
+            'name': '{} - {} - {}'.format(self.name, dict(self._get_tipo_cortina_options()).get(self.courtain_type), self.material.name).upper() if self.courtain_type and self.material else self.name,
+            'product_id': self.product_id.id,
+            'product_uom_id': self.product_uom.id,
+            'quantity': self.qty_to_invoice,
+            'discount': self.discount,
+            'price_unit': self.price_unit,
+            'tax_ids': [Command.set(self.tax_id.ids)],
+            'sale_line_ids': [Command.link(self.id)],
+            'is_downpayment': self.is_downpayment,
+        })
+
+        return res
 
     @api.model
     def _get_tipo_cortina_options(self):
