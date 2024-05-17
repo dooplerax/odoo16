@@ -13,6 +13,7 @@ import chardet
 from ..sri.sri_doc import SRIRequest
 from ..sri.generar_factura import generarFactura, generarRetencion
 from odoo import fields, models, api, _
+import xml.etree.ElementTree as ET
 from lxml import etree
 from datetime import datetime
 from odoo.exceptions import (
@@ -44,6 +45,7 @@ class SriBillsLoad(models.Model):
     documentos_importados = fields.Integer(string='Documentos Importados')
     documentos_error = fields.Integer(string='Documentos con Error')
     existing_invoice_id = fields.Many2one('account.move', string="Factura Existente")
+    create_partner = fields.Boolean("¿Crear provedoores no existentes?")
 
     # tabla sri_bills
     documentos_id = fields.One2many('sri.bills', 'sribill_id', string='Documentos', ondelete='cascade')
@@ -177,7 +179,7 @@ class SriBillsLoad(models.Model):
                     raise ValueError(f'Tipo desconocido: {tipo}')
 
                 if tipo == 'factura':
-                    line.generada, line.comentario = self._factura(objFactura,comprobante_num)
+                    line.generada, line.comentario = self._factura(objFactura,xslt_content,comprobante_num)
                 elif tipo == 'comprobanteRetencion':
                     line.generada, line.comentario = self._retencion(objFactura)
                 else:
@@ -269,22 +271,59 @@ class SriBillsLoad(models.Model):
             return False, 'Cliente o Factura no registrada'
 
 
-    def _factura(self, obj, comprobante_num):
+    def _factura(self, obj, xslt_content, comprobante_num):
         """
         Metodo para generar las facturas desde los xml del SRI
         :param obj:
         :return:
         """
         try:
-            Factura = self.env['account.move']
+            root = ET.fromstring(xslt_content)
             Cliente = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])], limit=1)
+            cuenta_pagar = self.env['account.account'].search([('name', '=', 'Proveedores'), ('account_type', '=', 'liability_payable')], limit=1)
+            country_default = self.env['res.country'].search([('name', '=', 'Ecuador')], limit=1)
+            state_id = self.env['res.country.state'].search([('name', '=', 'Pichincha')], limit=1)
+            email_default = 'none@gmail.com'
+            street1_default = 'none'
+            street2_default = 'none'
+            country_default_id = country_default.id
+            city_default = 'none'
+            state_id_default = state_id.id
 
-            if Cliente:
-                print("Cliente encontrado", Cliente.name)
+            # for campo in root.findall(".//campoAdicional"):
+            #     if campo.get('nombre') == 'Email1':
+            #         email = campo
+            #         break
+            #
+            # dir_establecimiento = root.find(".//dirEstablecimiento")
+
+            if self.create_partner == True:
+                if not Cliente:
+                    Cliente = self.env['res.partner'].create({
+                        'name': obj['infoTributaria']['razonSocial'],
+                        'vat': obj['infoTributaria']['ruc'],
+                        'street': street1_default,
+                        'street2': street2_default,
+                        'city': city_default,
+                        'state_id': state_id_default,
+                        'country_id': country_default_id,
+                        'email': email_default,
+                        'property_account_payable_id': cuenta_pagar.id,
+                        'company_type': 'company',
+                        # 'customer_rank': 1,
+                    })
+                    print("Cliente creado", Cliente.name)
+                else:
+                    print("Cliente encontrado", Cliente.name)
+
+            Cliente_search = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])], limit=1)
+
+            if Cliente_search:
+                print("Cliente encontrado", Cliente_search.name)
                 arrFechaEmision = obj['infoFactura']['fechaEmision'].split('/')
                 fechaEmision = "{}-{}-{}".format(arrFechaEmision[2], arrFechaEmision[1], arrFechaEmision[0])
                 auth = None
-                for aut in Cliente.authorisation_ids:
+                for aut in Cliente_search.authorisation_ids:
                     if aut.serie_emision == obj['infoTributaria']['ptoEmi'] and aut.serie_entidad == \
                             obj['infoTributaria']['estab']:
                         auth = aut.id
@@ -295,7 +334,7 @@ class SriBillsLoad(models.Model):
                         'serie_entidad': obj['infoTributaria']['estab'],
                         'type_id': 1,
                         'num_end': 0,
-                        'partner_id': Cliente.id
+                        'partner_id': Cliente_search.id
                     })
 
                 no_fact = "{}{}{}".format(obj['infoTributaria']['estab'], obj['infoTributaria']['ptoEmi'],
@@ -309,13 +348,13 @@ class SriBillsLoad(models.Model):
                 diario = self.env['account.journal'].search([('type', '=', 'purchase')], limit=1)
 
                 print("journal_id:", diario.name)
-                print("partner_id:", Cliente.name)
+                print("partner_id:", Cliente_search.name)
                 print("l10n_ec_authorization_number:", obj['infoTributaria']['claveAcceso'])
                 print("Secuencial:", obj['infoTributaria']['secuencial'])
 
                 fact = self.env['account.move'].create({
                     'move_type': 'in_invoice',
-                    'partner_id': Cliente.id,
+                    'partner_id': Cliente_search.id,
                     'journal_id': diario.id,
                     'ref': obj['infoTributaria']['secuencial'],
                     'l10n_ec_authorization_number': obj['infoTributaria']['claveAcceso'],
