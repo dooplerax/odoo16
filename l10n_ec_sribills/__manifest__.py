@@ -10,11 +10,11 @@
     'website': '',
     'license': 'AGPL-3',
     'depends': [
-        'account',
+        'account', 'contacts'
     ],
     'data': [
         'security/ir.model.access.csv',
         'views/srifact.xml',
-        'views/authorisation_view.xml'
+        # 'views/authorisation_view.xml'
     ]
 }
