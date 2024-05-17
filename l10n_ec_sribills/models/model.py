@@ -8,6 +8,7 @@
 import base64
 import logging
 import time
+import chardet
 
 from ..sri.sri_doc import SRIRequest
 from ..sri.generar_factura import generarFactura, generarRetencion
@@ -42,6 +43,7 @@ class SriBillsLoad(models.Model):
     numero_facturas = fields.Integer(string='No Documentos')
     documentos_importados = fields.Integer(string='Documentos Importados')
     documentos_error = fields.Integer(string='Documentos con Error')
+    existing_invoice_id = fields.Many2one('account.move', string="Factura Existente")
 
     # tabla sri_bills
     documentos_id = fields.One2many('sri.bills', 'sribill_id', string='Documentos', ondelete='cascade')
@@ -82,11 +84,42 @@ class SriBillsLoad(models.Model):
         :return:
         """
         inv_xml = SRIRequest()
-        data_file = base64.b64decode(self.document_file).decode('utf-8')  # Decodifica y convierte a cadena de texto
-        data_file = data_file.replace('\t\t', '\t')  # Realiza el reemplazo de texto
+
+        # Detectar la codificación del archivo
+        raw_data = base64.b64decode(self.document_file)
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
+
+        if not encoding:
+            raise ValidationError("No se pudo detectar la codificación del archivo.")
+
+        # Decodificar utilizando la codificación detectada
+        try:
+            data_file = raw_data.decode(encoding)
+        except UnicodeDecodeError as e:
+            raise ValidationError(f"Error al decodificar el archivo: {e}")
+
+        required_fields = [
+            'RUC_EMISOR', 'RAZON_SOCIAL_EMISOR', 'TIPO_COMPROBANTE', 'SERIE_COMPROBANTE',
+            'CLAVE_ACCESO', 'FECHA_AUTORIZACION', 'FECHA_EMISION', 'IDENTIFICACION_RECEPTOR',
+            'VALOR_SIN_IMPUESTOS', 'IVA', 'IMPORTE_TOTAL'
+        ]
+
+        #Obtener la primera fila
+        lines = data_file.split('\n')
+        header = lines[0].split('\t')
+
+        #Comprobar campos faltantes
+        missing_fields = [field for field in required_fields if field not in header]
+        if missing_fields:
+            raise ValidationError(f"Faltan los siguientes campos en el archivo: {', '.join(missing_fields)}")
+
+        #Realiza el reemplazo de texto
+        data_file = data_file.replace('\t\t', '\t')
         lines = data_file.split('\n')
         count = 0
         total = 0
+
         for line in lines:
             if count > 0:
                 try:
@@ -156,6 +189,14 @@ class SriBillsLoad(models.Model):
                     self.documentos_error += 1
                 if not line.generada and estadoGeneral:
                     estadoGeneral = False
+
+                existe_fact = self.env['account.move'].search(
+                    [('l10n_latam_document_number_stored', '=', line.serie_comprobante)], limit=1)
+
+                if existe_fact:
+                    line.existing_invoice_id = existe_fact.id
+                else:
+                    line.existing_invoice_id = False
 
             except etree.XMLSyntaxError as e:
                 # Capturar y registrar el error de manera más detallada
@@ -236,9 +277,10 @@ class SriBillsLoad(models.Model):
         """
         try:
             Factura = self.env['account.move']
-            Cliente = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])])
+            Cliente = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])], limit=1)
 
-            if Cliente.id:
+            if Cliente:
+                print("Cliente encontrado", Cliente.name)
                 arrFechaEmision = obj['infoFactura']['fechaEmision'].split('/')
                 fechaEmision = "{}-{}-{}".format(arrFechaEmision[2], arrFechaEmision[1], arrFechaEmision[0])
                 auth = None
@@ -258,10 +300,11 @@ class SriBillsLoad(models.Model):
 
                 no_fact = "{}{}{}".format(obj['infoTributaria']['estab'], obj['infoTributaria']['ptoEmi'],
                                           obj['infoTributaria']['secuencial'])
-                existe = Factura.search([('name', '=', no_fact), ('partner_id', '=', Cliente.id)])
+
+                existe = self.env['account.move'].search([('l10n_latam_document_number_stored', '=', comprobante_num)])
 
                 if existe.id:
-                    return True, 'Documento Registrado'
+                    return True, 'Documento Existente'
 
                 diario = self.env['account.journal'].search([('type', '=', 'purchase')], limit=1)
 

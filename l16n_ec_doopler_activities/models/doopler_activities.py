@@ -8,6 +8,16 @@ class AccountMove(models.Model):
 
     opportunity_id = fields.Many2one('crm.lead', string='Opportunity')
 
+    l10n_latam_document_number_stored = fields.Char(
+        compute='_compute_l10n_latam_document_number_stored',
+        store=True,
+    )
+
+    @api.depends('l10n_latam_document_number')
+    def _compute_l10n_latam_document_number_stored(self):
+        for record in self:
+            record.l10n_latam_document_number_stored = record.l10n_latam_document_number
+
 
 class MailActivity(models.Model):
     _inherit = 'mail.activity'
