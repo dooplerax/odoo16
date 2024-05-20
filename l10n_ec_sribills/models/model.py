@@ -45,7 +45,7 @@ class SriBillsLoad(models.Model):
     documentos_importados = fields.Integer(string='Documentos Importados')
     documentos_error = fields.Integer(string='Documentos con Error')
     existing_invoice_id = fields.Many2one('account.move', string="Factura Existente")
-    create_partner = fields.Boolean("¿Crear provedoores no existentes?")
+    create_partner = fields.Boolean("¿Crear provedoores no existentes?", default=True)
 
     # tabla sri_bills
     documentos_id = fields.One2many('sri.bills', 'sribill_id', string='Documentos', ondelete='cascade')

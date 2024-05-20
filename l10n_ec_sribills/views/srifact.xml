@@ -28,7 +28,7 @@
                                 <field name="document_file" filename="file_name" attrs="{'readonly':[('state','!=','draft')]}"/>
                                 <field name="file_name" invisible="1" />
                                 <field name="numero_facturas" readonly="1" />
-                                <field name="create_partner" attrs="{'readonly': [('state', '=', 'done')]}"/>
+                                <field name="create_partner" invisible="1" attrs="{'readonly': [('state', '=', 'done')]}"/>
                             </group>
 
                         </group>
