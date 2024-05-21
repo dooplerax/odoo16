@@ -62,6 +62,9 @@ class SriBillsLoad(models.Model):
         default=lambda self: self.env['res.company']._company_default_get('account.invoice')  # noqa
     )
 
+    def unlink(self):
+        raise ValidationError("No se permite eliminar registros despues de una importación.")
+
     def name_get(self):
         resul = []
         for data in self:
@@ -385,10 +388,10 @@ class SriBillsLoad(models.Model):
                         'product_id': product.id,
                         # 'model': '{}'.format(prod['descripcion']),
                         'name': prod['descripcion'],
+                        'account_id': product.property_account_expense_id.id,
                         'quantity': prod['cantidad'],
                         'price_unit': prod['precioUnitario'],
                         'price_subtotal': prod['precioTotalSinImpuesto'],
-                        'account_id': account_id.id,
                         'move_id': fact.id
                     }
                     _logger.info(f"Valores de la línea de factura antes de crear: {val}")

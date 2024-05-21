@@ -7,6 +7,10 @@ from odoo import fields, models, api, _
 
 from datetime import datetime
 from datetime import date
+from odoo.exceptions import (
+    ValidationError,
+    Warning as UserError
+)
 
 class SriBills(models.Model):
     # taba sri_bills
@@ -29,3 +33,6 @@ class SriBills(models.Model):
     documento_firmado = fields.Text('xml SRI')
     comentario = fields.Char('Detalle')
     existing_invoice_id = fields.Many2one('account.move', string="Factura Existente")
+
+    def unlink(self):
+        raise ValidationError("No se permite eliminar registros despues de una importación.")
