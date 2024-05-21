@@ -6,9 +6,11 @@
 # Requerimiento: P00038
 
 import base64
-import logging
 import time
 import chardet
+import logging
+
+_logger = logging.getLogger(__name__)
 
 from ..sri.sri_doc import SRIRequest
 from ..sri.generar_factura import generarFactura, generarRetencion
@@ -289,6 +291,7 @@ class SriBillsLoad(models.Model):
             country_default_id = country_default.id
             city_default = 'none'
             state_id_default = state_id.id
+            id_type = self.env['l10n_latam.identification.type'].search([('name', '=', 'RUC')], limit=1)
 
             # for campo in root.findall(".//campoAdicional"):
             #     if campo.get('nombre') == 'Email1':
@@ -301,6 +304,7 @@ class SriBillsLoad(models.Model):
                 if not Cliente:
                     Cliente = self.env['res.partner'].create({
                         'name': obj['infoTributaria']['razonSocial'],
+                        'l10n_latam_identification_type_id': id_type.id,
                         'vat': obj['infoTributaria']['ruc'],
                         'street': street1_default,
                         'street2': street2_default,
@@ -371,23 +375,26 @@ class SriBillsLoad(models.Model):
 
                 for prod in obj['detalles']:
                     if float(prod['valor']) != 0:
-                        product = self.env['product.product'].search([('id', '=', self.producto_iva12.id)],
+                        product = self.env['product.product'].search([('name', '=', self.producto_iva12.name)],
                                                                      limit=1)
                     else:
-                        product = self.env['product.product'].search([('id', '=', self.producto_iva0.id)],
+                        product = self.env['product.product'].search([('name', '=', self.producto_iva0.name)],
                                                                      limit=1)
+                    print('Producto', product.name)
                     val = {
                         'product_id': product.id,
                         # 'model': '{}'.format(prod['descripcion']),
-                        'name': str(self.producto_iva12.name),
+                        'name': prod['descripcion'],
                         'quantity': prod['cantidad'],
                         'price_unit': prod['precioUnitario'],
                         'price_subtotal': prod['precioTotalSinImpuesto'],
                         'account_id': account_id.id,
                         'move_id': fact.id
                     }
+                    _logger.info(f"Valores de la línea de factura antes de crear: {val}")
                     line_id = self.env['account.move.line'].create(val)
-                #     line_id._onchange_product_id()
+                    _logger.info(f"Línea de factura creada con ID: {line_id.id}")
+                    # line_id._onchange_product_id()
                 # fact._onchange_journal_id()
                 # fact._onchange_invoice_line_ids()
 
