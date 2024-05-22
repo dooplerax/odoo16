@@ -28,6 +28,7 @@
                                 <field name="document_file" filename="file_name" attrs="{'readonly':[('state','!=','draft')]}"/>
                                 <field name="file_name" invisible="1" />
                                 <field name="numero_facturas" readonly="1" />
+                                <field name="create_partner" invisible="1" attrs="{'readonly': [('state', '=', 'done')]}"/>
                             </group>
 
                         </group>
@@ -41,7 +42,8 @@
                                         <field name="ruc_emisor" string="Identificación"/>
                                         <field name="razon_social_emisor" string="Nombre"/>
                                         <field name="importe_total" string="Valor"/>
-                                        <field name="comentario" string="Detalle"/>
+                                        <field name="comentario" string="Detalle" widget="badge" decoration-danger="comentario in ('Fecha de emisión extemporánea, ocurrió un error en el SRI')" decoration-warning="comentario in ('Documento Existente', 'Cliente no Registrado')"  decoration-success="comentario in ('Generado')"/>
+                                        <field name="existing_invoice_id" widget="many2one" readonly="True"/>
 
                                     </tree>
                                 </field>
@@ -62,7 +64,7 @@
                     <field name="documentos_importados"></field>
                     <field name="documentos_error"></field>
 
-                    <field name="state"></field>
+                    <field name="state" widget="badge" decoration-danger="state in ('draft')" decoration-warning="state in ('import')"  decoration-success="state in ('done')"></field>
                 </tree>
             </field>
         </record>

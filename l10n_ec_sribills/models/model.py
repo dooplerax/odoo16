@@ -6,12 +6,16 @@
 # Requerimiento: P00038
 
 import base64
-import logging
 import time
+import chardet
+import logging
+
+_logger = logging.getLogger(__name__)
 
 from ..sri.sri_doc import SRIRequest
 from ..sri.generar_factura import generarFactura, generarRetencion
 from odoo import fields, models, api, _
+import xml.etree.ElementTree as ET
 from lxml import etree
 from datetime import datetime
 from odoo.exceptions import (
@@ -42,6 +46,8 @@ class SriBillsLoad(models.Model):
     numero_facturas = fields.Integer(string='No Documentos')
     documentos_importados = fields.Integer(string='Documentos Importados')
     documentos_error = fields.Integer(string='Documentos con Error')
+    existing_invoice_id = fields.Many2one('account.move', string="Factura Existente")
+    create_partner = fields.Boolean("¿Crear provedoores no existentes?", default=True)
 
     # tabla sri_bills
     documentos_id = fields.One2many('sri.bills', 'sribill_id', string='Documentos', ondelete='cascade')
@@ -55,6 +61,9 @@ class SriBillsLoad(models.Model):
         states={'draft': [('readonly', False)]},
         default=lambda self: self.env['res.company']._company_default_get('account.invoice')  # noqa
     )
+
+    def unlink(self):
+        raise ValidationError("No se permite eliminar registros despues de una importación.")
 
     def name_get(self):
         resul = []
@@ -82,11 +91,42 @@ class SriBillsLoad(models.Model):
         :return:
         """
         inv_xml = SRIRequest()
-        data_file = base64.b64decode(self.document_file).decode('utf-8')  # Decodifica y convierte a cadena de texto
-        data_file = data_file.replace('\t\t', '\t')  # Realiza el reemplazo de texto
+
+        # Detectar la codificación del archivo
+        raw_data = base64.b64decode(self.document_file)
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
+
+        if not encoding:
+            raise ValidationError("No se pudo detectar la codificación del archivo.")
+
+        # Decodificar utilizando la codificación detectada
+        try:
+            data_file = raw_data.decode(encoding)
+        except UnicodeDecodeError as e:
+            raise ValidationError(f"Error al decodificar el archivo: {e}")
+
+        required_fields = [
+            'RUC_EMISOR', 'RAZON_SOCIAL_EMISOR', 'TIPO_COMPROBANTE', 'SERIE_COMPROBANTE',
+            'CLAVE_ACCESO', 'FECHA_AUTORIZACION', 'FECHA_EMISION', 'IDENTIFICACION_RECEPTOR',
+            'VALOR_SIN_IMPUESTOS', 'IVA', 'IMPORTE_TOTAL'
+        ]
+
+        #Obtener la primera fila
+        lines = data_file.split('\n')
+        header = lines[0].split('\t')
+
+        #Comprobar campos faltantes
+        missing_fields = [field for field in required_fields if field not in header]
+        if missing_fields:
+            raise ValidationError(f"Faltan los siguientes campos en el archivo: {', '.join(missing_fields)}")
+
+        #Realiza el reemplazo de texto
+        data_file = data_file.replace('\t\t', '\t')
         lines = data_file.split('\n')
         count = 0
         total = 0
+
         for line in lines:
             if count > 0:
                 try:
@@ -144,7 +184,7 @@ class SriBillsLoad(models.Model):
                     raise ValueError(f'Tipo desconocido: {tipo}')
 
                 if tipo == 'factura':
-                    line.generada, line.comentario = self._factura(objFactura,comprobante_num)
+                    line.generada, line.comentario = self._factura(objFactura,xslt_content,comprobante_num)
                 elif tipo == 'comprobanteRetencion':
                     line.generada, line.comentario = self._retencion(objFactura)
                 else:
@@ -156,6 +196,14 @@ class SriBillsLoad(models.Model):
                     self.documentos_error += 1
                 if not line.generada and estadoGeneral:
                     estadoGeneral = False
+
+                existe_fact = self.env['account.move'].search(
+                    [('l10n_latam_document_number_stored', '=', line.serie_comprobante)], limit=1)
+
+                if existe_fact:
+                    line.existing_invoice_id = existe_fact.id
+                else:
+                    line.existing_invoice_id = False
 
             except etree.XMLSyntaxError as e:
                 # Capturar y registrar el error de manera más detallada
@@ -228,21 +276,61 @@ class SriBillsLoad(models.Model):
             return False, 'Cliente o Factura no registrada'
 
 
-    def _factura(self, obj, comprobante_num):
+    def _factura(self, obj, xslt_content, comprobante_num):
         """
         Metodo para generar las facturas desde los xml del SRI
         :param obj:
         :return:
         """
         try:
-            Factura = self.env['account.move']
-            Cliente = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])])
+            root = ET.fromstring(xslt_content)
+            Cliente = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])], limit=1)
+            cuenta_pagar = self.env['account.account'].search([('name', '=', 'Proveedores'), ('account_type', '=', 'liability_payable')], limit=1)
+            country_default = self.env['res.country'].search([('name', '=', 'Ecuador')], limit=1)
+            state_id = self.env['res.country.state'].search([('name', '=', 'Pichincha')], limit=1)
+            email_default = 'none@gmail.com'
+            street1_default = 'none'
+            street2_default = 'none'
+            country_default_id = country_default.id
+            city_default = 'none'
+            state_id_default = state_id.id
+            id_type = self.env['l10n_latam.identification.type'].search([('name', '=', 'RUC')], limit=1)
 
-            if Cliente.id:
+            # for campo in root.findall(".//campoAdicional"):
+            #     if campo.get('nombre') == 'Email1':
+            #         email = campo
+            #         break
+            #
+            # dir_establecimiento = root.find(".//dirEstablecimiento")
+
+            if self.create_partner == True:
+                if not Cliente:
+                    Cliente = self.env['res.partner'].create({
+                        'name': obj['infoTributaria']['razonSocial'],
+                        'l10n_latam_identification_type_id': id_type.id,
+                        'vat': obj['infoTributaria']['ruc'],
+                        'street': street1_default,
+                        'street2': street2_default,
+                        'city': city_default,
+                        'state_id': state_id_default,
+                        'country_id': country_default_id,
+                        'email': email_default,
+                        'property_account_payable_id': cuenta_pagar.id,
+                        'company_type': 'company',
+                        # 'customer_rank': 1,
+                    })
+                    print("Cliente creado", Cliente.name)
+                else:
+                    print("Cliente encontrado", Cliente.name)
+
+            Cliente_search = self.env['res.partner'].search([('vat', '=', obj['infoTributaria']['ruc'])], limit=1)
+
+            if Cliente_search:
+                print("Cliente encontrado", Cliente_search.name)
                 arrFechaEmision = obj['infoFactura']['fechaEmision'].split('/')
                 fechaEmision = "{}-{}-{}".format(arrFechaEmision[2], arrFechaEmision[1], arrFechaEmision[0])
                 auth = None
-                for aut in Cliente.authorisation_ids:
+                for aut in Cliente_search.authorisation_ids:
                     if aut.serie_emision == obj['infoTributaria']['ptoEmi'] and aut.serie_entidad == \
                             obj['infoTributaria']['estab']:
                         auth = aut.id
@@ -253,26 +341,27 @@ class SriBillsLoad(models.Model):
                         'serie_entidad': obj['infoTributaria']['estab'],
                         'type_id': 1,
                         'num_end': 0,
-                        'partner_id': Cliente.id
+                        'partner_id': Cliente_search.id
                     })
 
                 no_fact = "{}{}{}".format(obj['infoTributaria']['estab'], obj['infoTributaria']['ptoEmi'],
                                           obj['infoTributaria']['secuencial'])
-                existe = Factura.search([('name', '=', no_fact), ('partner_id', '=', Cliente.id)])
+
+                existe = self.env['account.move'].search([('l10n_latam_document_number_stored', '=', comprobante_num)])
 
                 if existe.id:
-                    return True, 'Documento Registrado'
+                    return True, 'Documento Existente'
 
                 diario = self.env['account.journal'].search([('type', '=', 'purchase')], limit=1)
 
                 print("journal_id:", diario.name)
-                print("partner_id:", Cliente.name)
+                print("partner_id:", Cliente_search.name)
                 print("l10n_ec_authorization_number:", obj['infoTributaria']['claveAcceso'])
                 print("Secuencial:", obj['infoTributaria']['secuencial'])
 
                 fact = self.env['account.move'].create({
                     'move_type': 'in_invoice',
-                    'partner_id': Cliente.id,
+                    'partner_id': Cliente_search.id,
                     'journal_id': diario.id,
                     'ref': obj['infoTributaria']['secuencial'],
                     'l10n_ec_authorization_number': obj['infoTributaria']['claveAcceso'],
@@ -289,23 +378,26 @@ class SriBillsLoad(models.Model):
 
                 for prod in obj['detalles']:
                     if float(prod['valor']) != 0:
-                        product = self.env['product.product'].search([('id', '=', self.producto_iva12.id)],
+                        product = self.env['product.product'].search([('name', '=', self.producto_iva12.name)],
                                                                      limit=1)
                     else:
-                        product = self.env['product.product'].search([('id', '=', self.producto_iva0.id)],
+                        product = self.env['product.product'].search([('name', '=', self.producto_iva0.name)],
                                                                      limit=1)
+                    print('Producto', product.name)
                     val = {
                         'product_id': product.id,
                         # 'model': '{}'.format(prod['descripcion']),
-                        'name': str(self.producto_iva12.name),
+                        'name': prod['descripcion'],
+                        'account_id': product.property_account_expense_id.id,
                         'quantity': prod['cantidad'],
                         'price_unit': prod['precioUnitario'],
                         'price_subtotal': prod['precioTotalSinImpuesto'],
-                        'account_id': account_id.id,
                         'move_id': fact.id
                     }
+                    _logger.info(f"Valores de la línea de factura antes de crear: {val}")
                     line_id = self.env['account.move.line'].create(val)
-                #     line_id._onchange_product_id()
+                    _logger.info(f"Línea de factura creada con ID: {line_id.id}")
+                    # line_id._onchange_product_id()
                 # fact._onchange_journal_id()
                 # fact._onchange_invoice_line_ids()
 
