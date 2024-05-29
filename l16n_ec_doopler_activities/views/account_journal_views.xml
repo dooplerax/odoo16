@@ -1,0 +1,68 @@
+<odoo>
+    <record id="view_account_journal_form_inherit" model="ir.ui.view">
+        <field name="name">account.journal.form.inherit</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@id='inbound_payment_settings']/field[@name='inbound_payment_method_line_ids']/tree/field[@name='payment_method_id']" position="attributes">
+                <attribute name="domain">[('payment_type', '=', 'inbound')]</attribute>
+            </xpath>
+            <xpath expr="//page[@id='outbound_payment_settings']/field[@name='outbound_payment_method_line_ids']/tree/field[@name='payment_method_id']" position="attributes">
+                <attribute name="domain">[('payment_type', '=', 'outbound')]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='aml_tab']" position="attributes">
+                <attribute name="attrs">{'invisible': 1}</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='other_info']" position="after">
+                <page string="Apuntes Contables">
+                    <field name="invoice_lines">
+                        <tree editable="bottom">
+                            <field name="account_id"/>
+                            <field name="partner_id"/>
+                            <field name="label"/>
+                            <field name="debit"  sum="Total"/>
+                            <field name="credit" sum="Total"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_payment_form_inherit" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <!-- Añadir el notebook al final del formulario -->
+            <xpath expr="//group[@name='group2']" position="after">
+                <notebook>
+                    <page string="Facturas">
+                        <field name="invoice_ids" attrs="{'readonly': [('state', 'in', ['posted', 'cancel'])]}">
+                            <tree string="Facturas" create="false" delete="false" editable="bottom">
+                                <field name="name" readonly="True"/>
+                                <field name="invoice_date" string="Fecha de factura" readonly="True"/>
+                                <field name="invoice_date_due" readonly="True"/>
+                                <field name="invoice_origin" readonly="True"/>
+                                <field name="amount_untaxed_signed" string="Base Imponible" readonly="True"/>
+                                <field name="amount_total_signed" string="Total" readonly="True"/>
+                                <field name="amount_residual" string="Saldo" readonly="True"/>
+                                <field name="state" invisible="1"/>
+                                <field name="payment_state" invisible="0" widget="badge" decoration-danger="payment_state in ('not_paid')"  decoration-success="payment_state in ('paid')"/>
+                                <field name="pagos"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>

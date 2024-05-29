@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_sale_create_activity,Access Sale Create Activity,mail.model_mail_activity,base.group_user,1,1,1,0
 access_sale_create_lead,Access Sale Create Lead,crm.model_crm_lead,base.group_user,1,1,1,0
+access_account_payment_method_user,access_account_payment_method_user,account.model_account_payment_method,base.group_user,1,1,1,1
+access_account_payment_method_line_user,access_account_payment_method_line_user,account.model_account_payment_method_line,base.group_user,1,1,1,1
+access_account_move_invoice_line_user,access_account_move_invoice_line_user,l16n_ec_doopler_activities.model_account_move_invoice_line,base.group_user,1,1,1,1
