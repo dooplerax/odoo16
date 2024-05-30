@@ -18,11 +18,8 @@
         <field name="model">account.move</field>
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='aml_tab']" position="attributes">
-                <attribute name="attrs">{'invisible': 1}</attribute>
-            </xpath>
             <xpath expr="//notebook/page[@name='other_info']" position="after">
-                <page string="Apuntes Contables">
+                <page string="Detalles">
                     <field name="invoice_lines">
                         <tree editable="bottom">
                             <field name="account_id"/>
@@ -33,6 +30,25 @@
                         </tree>
                     </field>
                 </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_payment_form_invoice_inherit" model="ir.ui.view">
+        <field name="name">account.payment.form.invoice.inherit</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_button_box']/button[@name='button_open_journal_entry']" position="before">
+                <button name="action_open_invoices" type="object"
+                        class="oe_stat_button" icon="fa-bars" attrs="{'invisible': [('paid_invoices_count','=', 0)]}">
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_text">
+                            <field name="paid_invoices_count"/>
+                            Detalles
+                        </span>
+                    </div>
+                </button>
             </xpath>
         </field>
     </record>
@@ -51,10 +67,11 @@
                                 <field name="name" readonly="True"/>
                                 <field name="invoice_date" string="Fecha de factura" readonly="True"/>
                                 <field name="invoice_date_due" readonly="True"/>
-                                <field name="invoice_origin" readonly="True"/>
+                                <field name="invoice_origin" readonly="False"/>
                                 <field name="amount_untaxed_signed" string="Base Imponible" readonly="True"/>
-                                <field name="amount_total_signed" string="Total" readonly="True"/>
-                                <field name="amount_residual" string="Saldo" readonly="True"/>
+                                <field name="amount_total_signed" string="Total" readonly="True" sum="Total"/>
+                                <field name="saldo" string="Saldo" readonly="True" sum="Total Residual"/>
+                                <field name="amount_pay" readonly="False" sum="Valor total"/>
                                 <field name="state" invisible="1"/>
                                 <field name="payment_state" invisible="0" widget="badge" decoration-danger="payment_state in ('not_paid')"  decoration-success="payment_state in ('paid')"/>
                                 <field name="pagos"/>

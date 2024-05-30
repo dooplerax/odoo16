@@ -5,6 +5,87 @@ from odoo import models, fields, api, _, Command
 
 
 
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    def reconcile(self):
+        ''' Reconcile the current move lines all together.
+        :return: A dictionary representing a summary of what has been done during the reconciliation:
+                * partials:             A recorset of all account.partial.reconcile created during the reconciliation.
+                * exchange_partials:    A recorset of all account.partial.reconcile created during the reconciliation
+                                        with the exchange difference journal entries.
+                * full_reconcile:       An account.full.reconcile record created when there is nothing left to reconcile
+                                        in the involved lines.
+                * tax_cash_basis_moves: An account.move recordset representing the tax cash basis journal entries.
+        '''
+        results = {'exchange_partials': self.env['account.partial.reconcile']}
+
+        if not self:
+            return results
+
+        not_paid_invoices = self.move_id.filtered(lambda move:
+                                                  move.is_invoice(include_receipts=True)
+                                                  and move.payment_state not in ('paid', 'in_payment')
+                                                  )
+
+        # ==== Check the lines can be reconciled together ====
+        company = None
+        account = None
+        for line in self:
+            if line.reconciled:
+                raise UserError(_("You are trying to reconcile some entries that are already reconciled."))
+            if not line.account_id.reconcile and line.account_id.account_type not in (
+            'asset_cash', 'liability_credit_card'):
+                raise UserError(
+                    _("Account %s does not allow reconciliation. First change the configuration of this account to allow it.")
+                    % line.account_id.display_name)
+            if line.move_id.state not in ('posted', 'draft'):
+                raise UserError(_('You can only reconcile posted entries.'))
+            if company is None:
+                company = line.company_id
+            elif line.company_id != company:
+                raise UserError(_("Entries doesn't belong to the same company: %s != %s")
+                                % (company.display_name, line.company_id.display_name))
+            if account is None:
+                account = line.account_id
+            elif line.account_id != account:
+                raise UserError(_("Entries are not from the same account: %s != %s")
+                                % (account.display_name, line.account_id.display_name))
+
+        if self._context.get('reduced_line_sorting'):
+            sorting_f = lambda line: (line.date_maturity or line.date, line.currency_id)
+        else:
+            sorting_f = lambda line: (line.date_maturity or line.date, line.currency_id, line.amount_currency)
+        sorted_lines = self.sorted(key=sorting_f)
+
+        # ==== Collect all involved lines through the existing reconciliation ====
+
+        involved_lines = sorted_lines._all_reconciled_lines()
+        involved_partials = involved_lines.matched_credit_ids | involved_lines.matched_debit_ids
+
+        # ==== Create partials ====
+
+        partial_no_exch_diff = bool(
+            self.env['ir.config_parameter'].sudo().get_param('account.disable_partial_exchange_diff'))
+        sorted_lines_ctx = sorted_lines.with_context(
+            no_exchange_difference=self._context.get('no_exchange_difference') or partial_no_exch_diff)
+        partials = sorted_lines_ctx._create_reconciliation_partials()
+        results['partials'] = partials
+        involved_partials += partials
+        exchange_move_lines = partials.exchange_move_id.line_ids.filtered(lambda line: line.account_id == account)
+        involved_lines += exchange_move_lines
+        exchange_diff_partials = exchange_move_lines.matched_debit_ids + exchange_move_lines.matched_credit_ids
+        involved_partials += exchange_diff_partials
+        results['exchange_partials'] += exchange_diff_partials
+
+        # ==== Create entries for cash basis taxes ====
+
+        is_cash_basis_needed = account.company_id.tax_exigibility and account.account_type in (
+        'asset_receivable', 'liability_payable')
+        if is_cash_basis_needed and not self._context.get('move_reverse_cancel') and not self._context.get(
+                'no_cash_basis'):
+            tax_cash_basis_moves = partials._create_tax_cash_basis_moves()
+            results['tax_cash_basis_moves'] = tax_cash_basis_moves
 
 class AccountPaymentMethod(models.Model):
     _inherit = "account.payment.method"
@@ -29,41 +110,71 @@ class AccountMove(models.Model):
 
     pagos = fields.Boolean(string="Pagos", readonly=False)
 
-    invoice_lines = fields.One2many('account.move.invoice.line', 'move_id', string='Invoice Lines')
+    amount_pay = fields.Monetary(string="A pagar", compute='_compute_amount_pay', store=True, copy=False)
+
+    saldo = fields.Monetary(string="Saldo", compute='_compute_saldo', store=True, copy=False)
+
+    invoice_lines = fields.One2many('account.move.invoice.line', 'move_id', string='Invoice Lines', copy=False)
+
+    @api.depends('amount_residual')
+    def _compute_saldo(self):
+        for move in self:
+            move.saldo = sum(move.mapped('amount_residual'))
+
+    @api.depends('amount_residual')
+    def _compute_amount_pay(self):
+        for move in self:
+            move.amount_pay = sum(move.mapped('amount_residual'))
+            print("Valor residual de la factura", move.amount_pay)
 
 class AccountPayment(models.Model):
     _inherit = "account.payment"
 
-    invoice_ids = fields.Many2many('account.move', string='Facturas')
+    invoice_ids = fields.Many2many('account.move', string='Facturas', copy=False)
 
-    move_id = fields.Many2one('account.move', string="Journal Entry", readonly=False)
+    move_id = fields.Many2one('account.move', string="Journal Entry", readonly=False, copy=False)
 
-    move_ids = fields.One2many('account.move', 'payment_id', string="Moves")
+    move_ids = fields.One2many('account.move', 'payment_id', string="Moves", copy=False)
 
-    move_name = fields.Char(related='move_id.name', string="Journal Entry Name", readonly=True)
-    move_invoice_partner_display_name = fields.Char(related='move_id.invoice_partner_display_name', string="Vendor/Customer", readonly=True)
-    move_invoice_date = fields.Date(related='move_id.invoice_date', string="Invoice/Bill Date", readonly=True)
-    move_date = fields.Date(related='move_id.date', string="Accounting Date", readonly=True)
-    move_invoice_date_due = fields.Date(related='move_id.invoice_date_due', string="Due Date", readonly=True)
-    move_invoice_origin = fields.Char(related='move_id.invoice_origin', string="Source Document", readonly=True)
-    move_payment_reference = fields.Char(related='move_id.payment_reference', string="Payment Reference", readonly=True)
-    move_ref = fields.Char(related='move_id.ref', string="Reference", readonly=True)
-    move_invoice_user_id = fields.Many2one(related='move_id.invoice_user_id', string="Salesperson", readonly=True)
-    move_activity_ids = fields.One2many(related='move_id.activity_ids', string="Activities", readonly=True)
-    move_company_id = fields.Many2one(related='move_id.company_id', string="Company", readonly=True)
-    move_amount_untaxed_signed = fields.Monetary(related='move_id.amount_untaxed_signed', string="Tax Excluded", readonly=True)
-    move_amount_tax_signed = fields.Monetary(related='move_id.amount_tax_signed', string="Tax", readonly=True)
-    move_amount_total_signed = fields.Monetary(related='move_id.amount_total_signed', string="Total", readonly=True)
-    move_amount_total_in_currency_signed = fields.Monetary(related='move_id.amount_total_in_currency_signed', string="Total in Currency", readonly=True)
-    move_amount_residual_signed = fields.Monetary(related='move_id.amount_residual_signed', string="Amount Due", readonly=True)
-    move_currency_id = fields.Many2one(related='move_id.currency_id', string="Currency", readonly=True)
-    move_company_currency_id = fields.Many2one(related='move_id.company_currency_id', string="Company Currency", readonly=True)
-    move_to_check = fields.Boolean(related='move_id.to_check', string="To Check", readonly=True)
-    move_payment_state = fields.Selection(related='move_id.payment_state', string="Payment State", readonly=True)
-    move_state = fields.Selection(related='move_id.state', string="State", readonly=True)
-    move_move_type = fields.Selection(related='move_id.move_type', string="Move Type", readonly=True)
-    move_pagos = fields.Boolean(related='move_id.pagos', string="Pagos", readonly=False)
-    move_residual = fields.Monetary(related='move_id.amount_residual', readonly=True, string="Saldo")
+    move_name = fields.Char(related='move_id.name', string="Journal Entry Name", readonly=True, copy=False)
+    move_invoice_partner_display_name = fields.Char(related='move_id.invoice_partner_display_name', string="Vendor/Customer", readonly=True, copy=False)
+    move_invoice_date = fields.Date(related='move_id.invoice_date', string="Invoice/Bill Date", readonly=True, copy=False)
+    move_date = fields.Date(related='move_id.date', string="Accounting Date", readonly=True, copy=False)
+    move_invoice_date_due = fields.Date(related='move_id.invoice_date_due', string="Due Date", readonly=True, copy=False)
+    move_invoice_origin = fields.Char(related='move_id.invoice_origin', string="Source Document", readonly=False, copy=False)
+    move_payment_reference = fields.Char(related='move_id.payment_reference', string="Payment Reference", readonly=True, copy=False)
+    move_ref = fields.Char(related='move_id.ref', string="Reference", readonly=True, copy=False)
+    move_invoice_user_id = fields.Many2one(related='move_id.invoice_user_id', string="Salesperson", readonly=True, copy=False)
+    move_activity_ids = fields.One2many(related='move_id.activity_ids', string="Activities", readonly=True, copy=False)
+    move_company_id = fields.Many2one(related='move_id.company_id', string="Company", readonly=True, copy=False)
+    move_amount_untaxed_signed = fields.Monetary(related='move_id.amount_untaxed_signed', string="Tax Excluded", readonly=True, copy=False)
+    move_amount_tax_signed = fields.Monetary(related='move_id.amount_tax_signed', string="Tax", readonly=True, copy=False)
+    move_amount_total_signed = fields.Monetary(related='move_id.amount_total_signed', string="Total", readonly=True, copy=False)
+    move_amount_total_in_currency_signed = fields.Monetary(related='move_id.amount_total_in_currency_signed', string="Total in Currency", readonly=True, copy=False)
+    move_amount_residual_signed = fields.Monetary(related='move_id.amount_residual_signed', string="Amount Due", readonly=True, copy=False)
+    move_currency_id = fields.Many2one(related='move_id.currency_id', string="Currency", readonly=True, copy=False)
+    move_company_currency_id = fields.Many2one(related='move_id.company_currency_id', string="Company Currency", readonly=True, copy=False)
+    move_to_check = fields.Boolean(related='move_id.to_check', string="To Check", readonly=True, copy=False)
+    move_payment_state = fields.Selection(related='move_id.payment_state', string="Payment State", readonly=True, copy=False)
+    move_state = fields.Selection(related='move_id.state', string="State", readonly=True, copy=False)
+    move_move_type = fields.Selection(related='move_id.move_type', string="Move Type", readonly=True, copy=False)
+    move_pagos = fields.Boolean(related='move_id.pagos', string="Pagos", readonly=False, copy=False)
+    move_residual = fields.Monetary(related='move_id.saldo', readonly=True, string="Saldo", copy=False)
+    residual = fields.Monetary(related='move_id.amount_pay', readonly=False, string="A pagar", copy=False)
+    invoice_count = fields.Integer(string='Invoice Count', compute='_compute_invoice_count')
+    paid_invoices_count = fields.Integer(string='Paid Invoices Count', compute='_compute_paid_invoices_count')
+
+    @api.depends('invoice_ids')
+    def _compute_invoice_count(self):
+        for payment in self:
+            payment.invoice_count = len(payment.invoice_ids)
+
+    @api.depends('invoice_ids')
+    def _compute_paid_invoices_count(self):
+        for payment in self:
+            paid_invoices = payment.invoice_ids.filtered(lambda inv: inv.payment_state in ['paid', 'partial'])
+            payment.paid_invoices_count = len(paid_invoices)
+
 
     @api.depends('amount_residual')
     def _compute_residual(self):
@@ -96,6 +207,21 @@ class AccountPayment(models.Model):
             self.invoice_ids = [(6, 0, invoices.ids)]
         else:
             self.invoice_ids = [(5,)]
+
+    def action_open_invoices(self):
+        self.ensure_one()
+        # Obteniendo las IDs de las facturas asociadas al pago
+        invoice_ids = self.invoice_ids.ids
+
+        # Retornando la acción para abrir la vista de las facturas
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Facturas Asociadas',
+            'res_model': 'account.move',
+            'view_mode': 'tree,form',
+            'domain': [('id', 'in', invoice_ids)],
+            'context': dict(self._context),
+        }
 
     def action_post(self):
         # Llamar al método original
@@ -136,8 +262,14 @@ class AccountPayment(models.Model):
                 if remaining_amount <= 0:
                     break
 
+                if invoice.amount_pay <= 0:
+                    raise UserError(f"El valor a pagar de la factura {invoice.name} es menor o igual a 0.")
+
+                if invoice.amount_pay > invoice.amount_residual:
+                    raise UserError(f"El valor a pagar de la factura {invoice.name} es mayor que el monto restante.")
+
                 account_id = invoice.partner_id.property_account_receivable_id.id if invoice.move_type == 'out_invoice' else invoice.partner_id.property_account_payable_id.id
-                invoice_amount = min(invoice.amount_residual, remaining_amount)
+                invoice_amount = min(invoice.amount_pay, remaining_amount)
 
                 move_vals['line_ids'].append((0, 0, {
                     'name': invoice.name,
@@ -147,20 +279,31 @@ class AccountPayment(models.Model):
                     'credit': invoice_amount if invoice.move_type == 'out_invoice' else 0.0,
                 }))
 
-                remaining_amount -= invoice_amount
+                remaining_amount -= invoice_amount  # Reducir el monto restante a pagar
                 total_debit += 0.0 if invoice.move_type == 'out_invoice' else invoice_amount
                 total_credit += invoice_amount if invoice.move_type == 'out_invoice' else 0.0
 
-                # Asignar líneas pendientes a las facturas pagadas
-                move_lines = self.move_id.line_ids.filtered(
-                    lambda record: record.account_type in (
-                        'asset_receivable', 'liability_payable') and not record.reconciled
-                )
-                for line in move_lines:
-                    invoice.js_assign_outstanding_line(line.id)
-
                 # Marcar las facturas como pagadas o parcialmente pagadas
+                invoice.amount_residual -= invoice_amount
                 invoice.payment_state = 'paid' if invoice.amount_residual == 0 else 'partial'
+
+                # Crear el registro del pago y reconciliar
+                payment = self.env['account.payment'].create({
+                    'payment_type': 'inbound' if invoice.move_type == 'out_invoice' else 'outbound',
+                    'partner_type': 'customer' if invoice.move_type == 'out_invoice' else 'supplier',
+                    'partner_id': invoice.partner_id.id,
+                    'amount': invoice_amount,
+                    'journal_id': self.journal_id.id,
+                    'payment_method_id': self.env.ref(
+                        'account.account_payment_method_manual_in').id if invoice.move_type == 'out_invoice' else self.env.ref(
+                        'account.account_payment_method_manual_out').id,
+                    'invoice_ids': [(6, 0, [invoice.id])],
+                })
+
+                # Reconciliar el pago con la factura
+                for line in (invoice.line_ids + payment.move_id.line_ids).filtered(
+                        lambda record: record.account_type in ('asset_receivable', 'liability_payable') and not record.reconciled):
+                    line.reconcile()
 
             # Ajustar el asiento contable si es necesario
             if total_debit != total_credit:
@@ -202,8 +345,8 @@ class AccountPayment(models.Model):
                 'account_id': self.journal_id.default_account_id.id,
                 'partner_id': self.partner_id.id,
                 'label': label_text_cli if invoice.move_type == 'out_invoice' else label_text_prov,
-                'debit': self.amount if invoice.move_type == 'out_invoice' else 0.0,
-                'credit': 0.0 if invoice.move_type == 'out_invoice' else self.amount,
+                'debit': invoice_amount if invoice.move_type == 'out_invoice' else 0.0,
+                'credit': 0.0 if invoice.move_type == 'out_invoice' else invoice_amount,
             }
 
             # Añadir la línea adicional al principio de la lista
@@ -243,140 +386,10 @@ class AccountPayment(models.Model):
             # Publicar el movimiento contable
             move.action_post()
 
+            for invoice in invoices_to_pay:
+                print(f"Valor residual de la factura {invoice.name}: {invoice.amount_residual}")
 
-
-    def _synchronize_from_moves(self, changed_fields):
-        ''' Update the account.payment regarding its related account.move.
-        Also, check both models are still consistent.
-        :param changed_fields: A set containing all modified fields on account.move.
-        '''
-        if self._context.get('skip_account_move_synchronization'):
-            return
-
-        for pay in self.with_context(skip_account_move_synchronization=True):
-
-            # After the migration to 14.0, the journal entry could be shared between the account.payment and the
-            # account.bank.statement.line. In that case, the synchronization will only be made with the statement line.
-            if pay.move_id.statement_line_id:
-                continue
-
-            move = pay.move_id
-            move_vals_to_write = {}
-            payment_vals_to_write = {}
-
-            if 'journal_id' in changed_fields:
-                if pay.journal_id.type not in ('bank', 'cash'):
-                    raise UserError(_("A payment must always belongs to a bank or cash journal."))
-
-            if 'line_ids' in changed_fields:
-                all_lines = move.line_ids
-                liquidity_lines, counterpart_lines, writeoff_lines = pay._seek_for_lines()
-
-                if len(liquidity_lines) != 1:
-                    raise UserError(_(
-                        "Journal Entry %s is not valid. In order to proceed, the journal items must "
-                        "include one and only one outstanding payments/receipts account.",
-                        move.display_name,
-                    ))
-
-                # if len(counterpart_lines) != 1:
-                #     raise UserError(_(
-                #         "Journal Entry %s is not valid. In order to proceed, the journal items must "
-                #         "include one and only one receivable/payable account (with an exception of "
-                #         "internal transfers).",
-                #         move.display_name,
-                #     ))
-
-                if any(line.currency_id != all_lines[0].currency_id for line in all_lines):
-                    raise UserError(_(
-                        "Journal Entry %s is not valid. In order to proceed, the journal items must "
-                        "share the same currency.",
-                        move.display_name,
-                    ))
-
-                if any(line.partner_id != all_lines[0].partner_id for line in all_lines):
-                    raise UserError(_(
-                        "Journal Entry %s is not valid. In order to proceed, the journal items must "
-                        "share the same partner.",
-                        move.display_name,
-                    ))
-
-                if counterpart_lines.account_id.account_type == 'asset_receivable':
-                    partner_type = 'customer'
-                else:
-                    partner_type = 'supplier'
-
-                liquidity_amount = liquidity_lines.amount_currency
-
-                move_vals_to_write.update({
-                    'currency_id': liquidity_lines.currency_id.id,
-                    'partner_id': liquidity_lines.partner_id.id,
-                })
-                payment_vals_to_write.update({
-                    'amount': abs(liquidity_amount),
-                    'partner_type': partner_type,
-                    'currency_id': liquidity_lines.currency_id.id,
-                    'destination_account_id': counterpart_lines.account_id.id,
-                    'partner_id': liquidity_lines.partner_id.id,
-                })
-                if liquidity_amount > 0.0:
-                    payment_vals_to_write.update({'payment_type': 'inbound'})
-                elif liquidity_amount < 0.0:
-                    payment_vals_to_write.update({'payment_type': 'outbound'})
-
-            move.write(move._cleanup_write_orm_values(move, move_vals_to_write))
-            pay.write(move._cleanup_write_orm_values(pay, payment_vals_to_write))
-
-    def _synchronize_to_moves(self, changed_fields):
-        ''' Update the account.move regarding the modified account.payment.
-        :param changed_fields: A list containing all modified fields on account.payment.
-        '''
-        if self._context.get('skip_account_move_synchronization'):
-            return
-
-        if not any(field_name in changed_fields for field_name in self._get_trigger_fields_to_synchronize()):
-            return
-
-        for pay in self.with_context(skip_account_move_synchronization=True):
-            liquidity_lines, counterpart_lines, writeoff_lines = pay._seek_for_lines()
-
-            # Make sure to preserve the write-off amount.
-            # This allows to create a new payment with custom 'line_ids'.
-
-            write_off_line_vals = []
-            if liquidity_lines and counterpart_lines and writeoff_lines:
-                write_off_line_vals.append({
-                    'name': writeoff_lines[0].name,
-                    'account_id': writeoff_lines[0].account_id.id,
-                    'partner_id': writeoff_lines[0].partner_id.id,
-                    'currency_id': writeoff_lines[0].currency_id.id,
-                    'amount_currency': sum(writeoff_lines.mapped('amount_currency')),
-                    'balance': sum(writeoff_lines.mapped('balance')),
-                })
-
-            line_vals_list = pay._prepare_move_line_default_vals(write_off_line_vals=write_off_line_vals)
-
-            line_ids_commands = [
-                Command.update(liquidity_lines.id, line_vals_list[0]) if liquidity_lines else Command.create(line_vals_list[0]),
-                Command.update(counterpart_lines[0].id, line_vals_list[1]) if counterpart_lines else Command.create(line_vals_list[1])
-            ]
-
-            for line in writeoff_lines:
-                line_ids_commands.append((2, line.id))
-
-            for extra_line_vals in line_vals_list[2:]:
-                line_ids_commands.append((0, 0, extra_line_vals))
-
-            # Update the existing journal items.
-            # If dealing with multiple write-off lines, they are dropped and a new one is generated.
-
-            pay.move_id\
-                .with_context(skip_invoice_sync=True)\
-                .write({
-                    'partner_id': pay.partner_id.id,
-                    'currency_id': pay.currency_id.id,
-                    'partner_bank_id': pay.partner_bank_id.id,
-                    'line_ids': line_ids_commands,
-                })
+            invoices_to_pay.write({'pagos': False})
+            invoices_to_pay.write({'amount_pay': invoice.amount_residual})
 
 
