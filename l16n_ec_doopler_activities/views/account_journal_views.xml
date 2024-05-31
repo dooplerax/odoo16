@@ -70,7 +70,7 @@
                                 <field name="invoice_origin" readonly="False"/>
                                 <field name="amount_untaxed_signed" string="Base Imponible" readonly="True"/>
                                 <field name="amount_total_signed" string="Total" readonly="True" sum="Total"/>
-                                <field name="saldo" string="Saldo" readonly="True" sum="Total Residual"/>
+                                <field name="saldo" string="Saldo" readonly="True" sum="Total Residual" invisible="0"/>
                                 <field name="amount_pay" readonly="False" sum="Valor total"/>
                                 <field name="state" invisible="1"/>
                                 <field name="payment_state" invisible="0" widget="badge" decoration-danger="payment_state in ('not_paid')"  decoration-success="payment_state in ('paid')"/>
