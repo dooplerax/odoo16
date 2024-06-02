@@ -79,18 +79,35 @@ class AccountPayment(models.Model):
     residual = fields.Monetary(related='move_id.amount_pay', readonly=False, string="A pagar", copy=False)
     invoice_count = fields.Integer(string='Invoice Count', compute='_compute_invoice_count')
     paid_invoices_count = fields.Integer(string='Paid Invoices Count', compute='_compute_paid_invoices_count')
+    saldo_favor = fields.Monetary(readonly=True, string="Saldo a favor", copy=False)
+    mark_payment_checkbox = fields.Boolean(string="Seleccionar todas las facturas")
+    # amount = fields.Monetary(currency_field='currency_id', compute='_compute_total_amount_pay')
+    #
+    # @api.depends('invoice_ids')
+    # def _compute_total_amount_pay(self):
+    #     self.amount = sum(self.invoice_ids.mapped('amount_pay'))
+
+    @api.onchange('mark_payment_checkbox')
+    def _onchange_mark_payment_checkbox(self):
+        if self.mark_payment_checkbox:
+            self.invoice_ids.write({'pagos': True})
+        else:
+            self.invoice_ids.write({'pagos': False})
 
     @api.depends('invoice_ids')
     def _compute_invoice_count(self):
         for payment in self:
             payment.invoice_count = len(payment.invoice_ids)
 
-    @api.depends('invoice_ids')
+    @api.depends('invoice_ids', 'move_ids.line_ids.move_id')
     def _compute_paid_invoices_count(self):
         for payment in self:
-            paid_invoices = payment.invoice_ids.filtered(lambda inv: inv.payment_state in ['paid', 'partial'])
+            # Obtener las facturas relacionadas directamente con el pago y aquellas enlazadas mediante move_ids
+            related_invoices = payment.invoice_ids | payment.move_ids.mapped('line_ids.move_id')
+            # Filtrar las facturas que están pagadas o parcialmente pagadas y que fueron pagadas con este pago
+            paid_invoices = related_invoices.filtered(
+                lambda inv: inv.payment_state in ['paid', 'partial'] and payment in inv.payment_ids)
             payment.paid_invoices_count = len(paid_invoices)
-
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
@@ -114,6 +131,9 @@ class AccountPayment(models.Model):
                 ])
             else:
                 invoices = self.env['account.move']
+
+            if not invoices:
+                raise UserError("No hay facturas pendientes para %s." % self.partner_id.name)
 
             self.invoice_ids = [(6, 0, invoices.ids)]
         else:
@@ -156,7 +176,7 @@ class AccountPayment(models.Model):
                     raise UserError(f"El valor a pagar de la factura {invoice.name} es menor o igual a 0.")
 
                 if invoice.amount_pay > invoice.amount_residual:
-                    raise UserError(f"El valor a pagar de la factura {invoice.name} es mayor que el monto restante.")
+                    raise UserError(f"El valor a pagar de la factura {invoice.name} es mayor que el saldo restante.")
 
                 # Obtener el valor a pagar en la factura
                 payment_amount = min(remaining_amount, invoice.amount_pay)
@@ -173,7 +193,7 @@ class AccountPayment(models.Model):
 
                     # Restar el importe pagado del total disponible
                     remaining_amount -= payment_amount
-                    self.amount = remaining_amount
+                    self.saldo_favor = remaining_amount
 
                     # Actualizar el estado de pago de la factura
                     invoice._compute_amount()
@@ -198,8 +218,8 @@ class AccountPayment(models.Model):
                         'account_id': self.journal_id.default_account_id.id,
                         'partner_id': self.partner_id.id,
                         'label': label_text_cli if invoice.move_type == 'out_invoice' else label_text_prov,
-                        'debit': payment_amount if invoice.move_type == 'out_invoice' else 0.0,
-                        'credit': 0.0 if invoice.move_type == 'out_invoice' else payment_amount,
+                        'debit': remaining_amount if invoice.move_type == 'out_invoice' else 0.0,
+                        'credit': 0.0 if invoice.move_type == 'out_invoice' else remaining_amount,
                     }
 
                     # Añadir la línea adicional al principio de la lista
@@ -227,13 +247,17 @@ class AccountPayment(models.Model):
                             'move_id': self.move_id.id,
                             'account_id': self.journal_id.default_account_id.id,
                             'partner_id': self.partner_id.id,
-                            'label': 'Saldo diferencial de Asiento Contable',
-                            'debit': adjustment_amount if total_debit < total_credit else 0.0,
-                            'credit': adjustment_amount if total_debit > total_credit else 0.0,
+                            'label': 'Saldo diferencial',
+                            'debit': adjustment_amount if total_debit > total_credit else 0.0,
+                            'credit': adjustment_amount if total_debit < total_credit else 0.0,
                         }
                         new_invoice_lines.append(adjustment_line)
 
                     # Crear las líneas de factura en el modelo AccountMoveInvoiceLine
                     self.env['account.move.invoice.line'].create(new_invoice_lines)
 
+    def action_draft(self):
+        if self.move_id.state == 'posted' and self.move_id.move_type == 'entry':
+            raise UserError(_("“No se puede cambiar a estado borrador, debido que, este pago esta atado a un asiento publicado"))
 
+        self.move_id.button_draft()
