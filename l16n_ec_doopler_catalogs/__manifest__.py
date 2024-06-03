@@ -14,7 +14,7 @@
     'website': "https://citytech.ec",
     'category': 'Inventary',
     'version': '0.1',
-    'depends': ['base','stock','mail', 'uom', 'product', 'sale','web', 'crm'],
+    'depends': ['base','stock','mail', 'uom', 'product', 'sale','web', 'crm', 'account'],
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',

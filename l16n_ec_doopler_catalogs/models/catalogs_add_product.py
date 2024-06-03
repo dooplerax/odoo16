@@ -22,7 +22,6 @@ class AddCatalogInProduct(models.Model):
     classification = fields.Boolean('Clasificación', default=False)
     alternative_code = fields.Char(string="Código Alterno", required=True, copy=False, default="")
 
-
     # @api.onchange('class_inherit')
         # for record in self.class_inherit:
         #    if record.cl_name:
