@@ -262,6 +262,6 @@ class AccountPayment(models.Model):
 
     def action_draft(self):
         if self.move_id.state == 'posted' and self.move_id.move_type == 'entry':
-            raise UserError(_("“No se puede cambiar a estado borrador, debido que, este pago esta atado a un asiento publicado"))
+            raise UserError(_("No se puede cambiar a estado borrador, debido que, este pago esta atado a un asiento publicado"))
 
         self.move_id.button_draft()

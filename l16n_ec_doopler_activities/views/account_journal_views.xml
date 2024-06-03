@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <xpath expr="//notebook/page[@name='other_info']" position="after">
                 <page string="Detalles">
-                    <field name="invoice_lines">
+                    <field name="invoice_lines" attrs="{'readonly': [('state', 'in', ['posted', 'cancel'])]}">
                         <tree editable="bottom">
                             <field name="account_id"/>
                             <field name="partner_id"/>
