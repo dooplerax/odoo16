@@ -167,7 +167,7 @@ class AccountPayment(models.Model):
         if invoices_to_pay:
             # Inicializar el monto restante a pagar
             remaining_amount = self.amount
-
+            new_invoice_lines = []
             for invoice in invoices_to_pay:
                 if remaining_amount <= 0:
                     break
@@ -179,6 +179,66 @@ class AccountPayment(models.Model):
                     raise UserError(f"El valor a pagar de la factura {invoice.name} es mayor que el saldo restante.")
 
                 # Obtener el valor a pagar en la factura
+                payment_amount = min(remaining_amount, invoice.amount_pay)
+
+                if payment_amount > 0:
+                    # Restar el importe pagado del total disponible
+                    remaining_amount -= payment_amount
+
+                    # Agregar los datos de las facturas pagadas al modelo AccountMoveInvoiceLine
+                    account_id = invoice.partner_id.property_account_receivable_id.id if invoice.move_type == 'out_invoice' else invoice.partner_id.property_account_payable_id.id
+                    label_text = invoice.name
+
+                    new_invoice_lines.append({
+                        'move_id': self.move_id.id,  # Aquí se usa el ID del asiento contable actual
+                        'account_id': account_id,
+                        'partner_id': invoice.partner_id.id,
+                        'label': label_text,
+                        'debit': 0.0 if invoice.move_type == 'out_invoice' else payment_amount,
+                        'credit': payment_amount if invoice.move_type == 'out_invoice' else 0.0,
+                    })
+
+            # Agregar la línea adicional
+            label_text_cli = f"Pago de cliente ${self.amount:.2f} - {self.partner_id.name} - {self.move_id.date}"
+            label_text_prov = f"Pago de Proveedor ${self.amount:.2f} - {self.partner_id.name} - {self.move_id.date}"
+            additional_line = {
+                'move_id': self.move_id.id,
+                'account_id': self.journal_id.default_account_id.id,
+                'partner_id': self.partner_id.id,
+                'label': label_text_cli if self.payment_type == 'inbound' else label_text_prov,
+                'debit': self.amount if self.payment_type == 'inbound' else 0.0,
+                'credit': 0.0 if self.payment_type == 'inbound' else self.amount,
+            }
+            new_invoice_lines.insert(0, additional_line)
+
+            # Calcular los totales de débito y crédito
+            total_debit = sum(line['debit'] for line in new_invoice_lines)
+            total_credit = sum(line['credit'] for line in new_invoice_lines)
+
+            # Verificar si se necesita una línea de ajuste
+            if total_debit != total_credit:
+                adjustment_amount = abs(total_debit - total_credit)
+                adjustment_line = {
+                    'move_id': self.move_id.id,
+                    'account_id': self.journal_id.default_account_id.id,
+                    'partner_id': self.partner_id.id,
+                    'label': 'Saldo diferencial',
+                    'debit': adjustment_amount if total_debit > total_credit else 0.0,
+                    'credit': adjustment_amount if total_debit < total_credit else 0.0,
+                }
+                new_invoice_lines.append(adjustment_line)
+
+            # Crear las líneas de factura en el modelo AccountMoveInvoiceLine
+            self.env['account.move.invoice.line'].create(new_invoice_lines)
+
+            # Volver a inicializar el monto restante a pagar
+            remaining_amount = self.amount
+
+            # Realizar los pagos usando account.payment.register
+            for invoice in invoices_to_pay:
+                if remaining_amount <= 0:
+                    break
+
                 payment_amount = min(remaining_amount, invoice.amount_pay)
 
                 if payment_amount > 0:
@@ -199,62 +259,6 @@ class AccountPayment(models.Model):
                     invoice._compute_amount()
 
                     invoice.write({'pagos': False})
-
-                    # Recuperar las líneas de factura asociadas al asiento contable vinculado al pago
-                    existing_lines = self.env['account.move.invoice.line'].search([('move_id', '=', self.move_id.id)])
-                    print("Existing Lines: %s", existing_lines)
-
-                    # Verificar si existen líneas para eliminar
-                    if existing_lines:
-                        # Eliminar las líneas existentes
-                        existing_lines.unlink()
-
-                    # Agregar los datos de las facturas pagadas al modelo AccountMoveInvoiceLine
-                    new_invoice_lines = []
-                    label_text_cli = f"Pago de cliente ${self.amount:.2f} - {self.partner_id.name} - {self.move_id.date}"
-                    label_text_prov = f"Pago de Proveedor ${self.amount:.2f} - {self.partner_id.name} - {self.move_id.date}"
-                    additional_line = {
-                        'move_id': self.move_id.id,
-                        'account_id': self.journal_id.default_account_id.id,
-                        'partner_id': self.partner_id.id,
-                        'label': label_text_cli if invoice.move_type == 'out_invoice' else label_text_prov,
-                        'debit': remaining_amount if invoice.move_type == 'out_invoice' else 0.0,
-                        'credit': 0.0 if invoice.move_type == 'out_invoice' else remaining_amount,
-                    }
-
-                    # Añadir la línea adicional al principio de la lista
-                    new_invoice_lines.append(additional_line)
-                    for invoice in invoices_to_pay:
-                        account_id = invoice.partner_id.property_account_receivable_id.id if invoice.move_type == 'out_invoice' else invoice.partner_id.property_account_payable_id.id
-                        invoice_amount = invoice.amount_residual if invoice.amount_residual != 0 else invoice.amount_total
-                        new_invoice_lines.append({
-                            'move_id': self.move_id.id,  # Aquí se usa el ID del asiento contable actual
-                            'account_id': account_id,
-                            'partner_id': invoice.partner_id.id,
-                            'label': invoice.name,
-                            'debit': 0.0 if invoice.move_type == 'out_invoice' else payment_amount,
-                            'credit': payment_amount if invoice.move_type == 'out_invoice' else 0.0,
-                        })
-
-                    # Calcular los totales de débito y crédito
-                    total_debit = sum(line['debit'] for line in new_invoice_lines)
-                    total_credit = sum(line['credit'] for line in new_invoice_lines)
-
-                    # Verificar si se necesita una línea de ajuste
-                    if total_debit != total_credit:
-                        adjustment_amount = abs(total_debit - total_credit)
-                        adjustment_line = {
-                            'move_id': self.move_id.id,
-                            'account_id': self.journal_id.default_account_id.id,
-                            'partner_id': self.partner_id.id,
-                            'label': 'Saldo diferencial',
-                            'debit': adjustment_amount if total_debit > total_credit else 0.0,
-                            'credit': adjustment_amount if total_debit < total_credit else 0.0,
-                        }
-                        new_invoice_lines.append(adjustment_line)
-
-                    # Crear las líneas de factura en el modelo AccountMoveInvoiceLine
-                    self.env['account.move.invoice.line'].create(new_invoice_lines)
 
     def action_draft(self):
         if self.move_id.state == 'posted' and self.move_id.move_type == 'entry':
