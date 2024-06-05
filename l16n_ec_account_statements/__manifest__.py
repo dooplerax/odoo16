@@ -13,6 +13,9 @@
     'data': [
         'security/ir.model.access.csv',
         # 'views/client_statements.xml',
-        'wizard/account_statements.xml'
+        'wizard/custom_paper_format.xml',
+        'wizard/account_statements.xml',
+        'wizard/partner_invoice_report.xml',
+        'views/partner_report_template.xml'
     ]
 }

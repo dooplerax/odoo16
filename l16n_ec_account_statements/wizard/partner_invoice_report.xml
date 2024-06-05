@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_invoices_partner_report" model="ir.actions.report">
+            <field name="name">Estado_de_cuenta</field>
+            <field name="model">res.partner</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l16n_ec_account_statements.template_report_partner</field>
+            <field name="report_file">l16n_ec_account_statements.template_report_partner</field>
+            <field name="paperformat_id" ref="l16n_ec_account_statements.custom_paperformat_id"/>
+        </record>
+
+        <!-- Add action entry in the Action Menu for Partners -->
+        <record id="action_custom_contact_report" model="ir.actions.server">
+            <field name="name">Estado de cuenta</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = env['res.partner'].browse(record.id).print_partner_report()
+            </field>
+        </record>
+    </data>
+</odoo>

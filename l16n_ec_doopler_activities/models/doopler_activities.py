@@ -13,6 +13,16 @@ class AccountMove(models.Model):
         store=True,
     )
 
+    days_due = fields.Integer(string='Days Due', compute='_compute_days_due')
+
+    @api.depends('invoice_date_due')
+    def _compute_days_due(self):
+        for move in self:
+            if move.invoice_date_due:
+                move.days_due = (fields.Date.today() - move.invoice_date_due).days
+            else:
+                move.days_due = 0
+
     @api.depends('l10n_latam_document_number')
     def _compute_l10n_latam_document_number_stored(self):
         for record in self:

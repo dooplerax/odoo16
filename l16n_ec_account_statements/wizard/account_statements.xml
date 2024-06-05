@@ -1,12 +1,14 @@
 <odoo>
     <data>
-        <record id="account_statement_wizard_form" model="ir.ui.view">
-            <field name="name">Estado de Cuuentas</field>
+        <!-- Vista para Clientes -->
+        <record id="account_statement_wizard_form_customer" model="ir.ui.view">
+            <field name="name">Estado de Cuentas Clientes</field>
             <field name="model">account.statements.wizard</field>
             <field name="arch" type="xml">
                 <form>
                     <group>
                         <group>
+                            <field name="partner_id" string="Cliente"/>
                             <field name="start_date"/>
                             <field name="report_type"/>
                         </group>
@@ -14,44 +16,69 @@
                             <field name="end_date"/>
                         </group>
                     </group>
-
                     <footer>
-                        <button name="action_report" string="XLS" type="object"
-                                class="btn-primary "/>
-
-                        <button special="cancel" string="Cancel"
-                                type="object" class="btn-default"/>
+                        <button name="action_report" string="XLS" type="object" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" type="object" class="btn-default"/>
                     </footer>
                 </form>
             </field>
         </record>
+
+        <!-- Vista para Proveedores -->
+        <record id="account_statement_wizard_form_supplier" model="ir.ui.view">
+            <field name="name">Estado de Cuentas Proveedores</field>
+            <field name="model">account.statements.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="partner_id" string="Proveedor"/>
+                            <field name="start_date"/>
+                            <field name="report_type"/>
+                        </group>
+                        <group>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_report" string="XLS" type="object" class="btn-primary"/>
+                        <button special="cancel" string="Cancel" type="object" class="btn-default"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción de ventana para Clientes -->
         <record id="account_statements_wizard_customer" model="ir.actions.act_window">
-            <field name="name">Estado de cuentas</field>
+            <field name="name">Estado de cuentas Clientes</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.statements.wizard</field>
             <field name="view_mode">form</field>
+            <field name="view_id" ref="account_statement_wizard_form_customer"/>
             <field name="target">new</field>
             <field name="context">{'types': 'out_invoice'}</field>
         </record>
 
+        <!-- Menú para Clientes -->
         <menuitem action="account_statements_wizard_customer" id="account_statements_wizard_customer_menu"
                   parent="account.menu_finance_receivables" sequence="4"/>
 
-
+        <!-- Acción de ventana para Proveedores -->
         <record id="account_statements_wizard_supplier" model="ir.actions.act_window">
-            <field name="name">Estado de cuentas</field>
+            <field name="name">Estado de cuentas Proveedores</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">account.statements.wizard</field>
             <field name="view_mode">form</field>
+            <field name="view_id" ref="account_statement_wizard_form_supplier"/>
             <field name="target">new</field>
             <field name="context">{'types': 'in_invoice'}</field>
         </record>
 
+        <!-- Menú para Proveedores -->
         <menuitem action="account_statements_wizard_supplier" id="account_statements_wizard_supplier_menu"
                   parent="account.menu_finance_payables" sequence="4"/>
 
-
-
+        <!-- Vista para Descargar Reporte -->
         <record id="excel_download" model="ir.ui.view">
             <field name="name">Descargar Reporte</field>
             <field name="model">download.xlsx</field>
@@ -59,8 +86,7 @@
                 <form create="0" string="Excel Report">
                     <group>
                         <div class="col-xl-2">
-                            <label for="excel_file" string="Descargar "/>
-
+                            <label for="excel_file" string="Descargar"/>
                         </div>
                         <div class="col-xl-6">
                             <field name="file_name" invisible="1"/>
@@ -73,7 +99,9 @@
                 </form>
             </field>
         </record>
-        <record id="excel_form_view_dowload" model="ir.actions.act_window">
+
+        <!-- Acción de ventana para Descargar Reporte -->
+        <record id="excel_form_view_download" model="ir.actions.act_window">
             <field name="name">Descargar Xsl</field>
             <field name="view_id" ref="excel_download"/>
             <field name="type">ir.actions.act_window</field>
