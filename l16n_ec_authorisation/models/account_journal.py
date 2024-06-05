@@ -72,7 +72,7 @@ class AccountMove(models.Model):
             user_billing_location = self.env.user.billing_location.location
             suitable_journals = self.env['account.journal'].search(
                 [('billing_location.location', '=', user_billing_location)])
-            if self.move_type != 'in_invoice':
+            if self.move_type != 'in_invoice' and self.move_type != 'entry':
                 if suitable_journals:
                     record.journal_id = suitable_journals[0].id
                     continue
