@@ -10,6 +10,17 @@ class SaleOrder(models.Model):
     dirEntrega = fields.Char(string="Direccion de entrega")
     customer = fields.Char(string="Customer ")
 
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    quantity = fields.Float(
+        string='Quantity',
+        compute='_compute_quantity', store=True, readonly=False, precompute=True,
+        digits=(16, 3),
+        help="The optional quantity expressed by this line, eg: number of product sold. "
+             "The quantity is not a legal requirement but is very useful for some reports.",
+    )
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
     _description = "Descripción"
@@ -24,8 +35,8 @@ class SaleOrderLine(models.Model):
         selection='_get_tipo_cortina_options', string="Tipo Cortina")
     material = fields.Many2one(
         "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
-    broad = fields.Float(string="Ancho", default=None)
-    high = fields.Float(string="Alto", default=None)
+    broad = fields.Float(string="Ancho", default=None, digits=(16, 3))
+    high = fields.Float(string="Alto", default=None, digits=(16, 3))
     command = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha',
                                                            'DERECHA'), ('Ambos', 'AMBOS')], string="Mando")
     # ambiente = fields.Char(string="Ambiente", required=True)
@@ -36,7 +47,7 @@ class SaleOrderLine(models.Model):
     product_uom_qty = fields.Float(
         string="Quantity",
         compute='calculated_quantity_field',
-        digits='Product Unit of Measure', default=0.0,
+        digits=(16, 3), default=0.0,
         store=True, readonly=False, required=True, precompute=True)
 
     @api.model

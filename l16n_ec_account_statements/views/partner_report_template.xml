@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <template id="template_report_partner">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <div class="page" style="margin-top: 0;">
+                            <t t-set="company" t-value="o._get_company()"/>
+                            <p class="fw-bold">
+                                <img t-att-src="image_data_uri(company.logo)" alt="Company Logo" style="max-height: 300px; max-width: 300px; margin-top: 0;"/>
+                                <p class="fw-bold mt-3">
+                                    <span t-field="company.name"/>
+                                </p>
+                            </p>
+                            <p>
+                                <strong>RUC:</strong> <span t-field="company.vat"/>
+                            </p>
+                            <p>
+                                <strong>DIRECCIÓN:</strong> <span t-field="company.street"/> - <span t-field="company.street2"/> – <span t-field="company.city"/> – <span t-field="company.state_id.name"/> – <span t-field="company.country_id.name"/>
+                            </p>
+                            <p>
+                                <strong>Nombre:</strong> <span t-field="o.name"/>
+                            </p>
+
+                            <p class="fw-bold">
+                                Facturas:
+                            </p>
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Número de Documento</th>
+                                        <th>Fecha de emisión</th>
+                                        <th>Valor Total</th>
+                                        <th>Valor Pendiente de Pago</th>
+                                        <th>Días de Vencimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="total_amount_total" t-value="0"/>
+                                    <t t-set="total_amount_residual" t-value="0"/>
+                                    <t t-foreach="o.invoices" t-as="invoice">
+                                        <t t-set="total_amount_total" t-value="total_amount_total + invoice.amount_total"/>
+                                        <t t-set="total_amount_residual" t-value="total_amount_residual + invoice.amount_residual"/>
+                                        <tr>
+                                            <td><span t-field="invoice.name"/></td>
+                                            <td><span t-field="invoice.invoice_date"/></td>
+                                            <td><span t-field="invoice.amount_total"/></td>
+                                            <td><span t-field="invoice.amount_residual"/></td>
+                                            <td><span t-field="invoice.days_due"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr>
+                                        <td colspan="2"><strong>Total</strong></td>
+                                        <td><strong>$<span t-esc="round(total_amount_total, 2)"/></strong></td>
+                                        <td><strong>$<span t-esc="round(total_amount_residual, 2)"/></strong></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
