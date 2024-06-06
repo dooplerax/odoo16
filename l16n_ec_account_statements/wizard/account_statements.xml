@@ -39,6 +39,8 @@
                             <field name="report_type"/>
                         </group>
                         <group>
+                            <label for="end_date" string=" "  class="o_form_label"/>
+                            <span></span>
                             <field name="end_date"/>
                         </group>
                     </group>
