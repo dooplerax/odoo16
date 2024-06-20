@@ -181,7 +181,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
         if self.env.context.get('open_invoices'):
             return self.sale_order_ids.action_view_invoice()
 
-        self.sale_order_ids.state = 'accredited_confirm'
+        #self.sale_order_ids.state = 'accredited_confirm'
 
         return {'type': 'ir.actions.act_window_close'}
 

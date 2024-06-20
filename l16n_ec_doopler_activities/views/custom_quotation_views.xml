@@ -16,7 +16,9 @@
                         class="oe_highlight" type="object"
                         attrs="{
                             'invisible': [
-                                ('state', '!=', 'sale')
+                                '|',
+                                ('state', '!=', 'sale'),
+                                ('invoice_count', '>', 0)
                             ]
                         }"/>
             </xpath>
@@ -28,6 +30,9 @@
                                 ('state', '!=', 'accredited')
                             ]
                         }" groups="account.group_account_manager"/>
+            </xpath>
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,accredited,accredited_confirm,sale</attribute>
             </xpath>
         </field>
     </record>
