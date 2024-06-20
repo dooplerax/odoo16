@@ -963,7 +963,7 @@ msgstr "Métodos de pago"
 #. module: l16n_ec_doopler_activities
 #: model:ir.model.fields,field_description:l16n_ec_doopler_activities.field_sale_order__payment_option
 msgid "Payment Option"
-msgstr ""
+msgstr "Registrar Abono"
 
 #. module: l16n_ec_doopler_activities
 #: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_activities.view_sale_order_payment_form
