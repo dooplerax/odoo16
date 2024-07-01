@@ -103,7 +103,7 @@ class Pricelist(models.Model):
             kwargs['pricelist'] = self
             price = suitable_rule._compute_price(product, qty, target_uom, date=date, currency=self.currency_id)
             results[product.id] = (price, suitable_rule.id)
-            print(f"Computed Price for Product {product.id}: {price}")
+            _logger.info(f"Computed Price for Product {product.id}: {price}")
 
         return results
 
@@ -145,13 +145,14 @@ class Pricelist(models.Model):
             '|', ('fa_class_inherit', '=', False), ('fa_class_inherit', 'in', fa_class_inherit_ids),
         ]
 
-        print("Generated domain:", domain)  # Imprimir el dominio generado
         #print("Generated domain:", domain)  # Imprimir el dominio generado
-        _logger.info("TEST DE LISTADO")
+        #print("Generated domain:", domain)  # Imprimir el dominio generado
+        _logger.info(f"Generated domain: {domain}")
 
         # Ejecutar la búsqueda manualmente
         pricelist_items = self.env['product.pricelist.item'].search(domain)
-        print("Pricelist items found:", pricelist_items)
+        #print("Pricelist items found:", pricelist_items)
+        _logger.info(f"Pricelist items found: {pricelist_items}")
 
         return domain
 
