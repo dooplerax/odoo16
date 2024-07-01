@@ -144,6 +144,7 @@ class Pricelist(models.Model):
         ]
 
         print("Generated domain:", domain)  # Imprimir el dominio generado
+        #print("Generated domain:", domain)  # Imprimir el dominio generado
 
         # Ejecutar la búsqueda manualmente
         pricelist_items = self.env['product.pricelist.item'].search(domain)
