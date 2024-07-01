@@ -1,7 +1,9 @@
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError, UserError
 from odoo.tools import format_datetime, formatLang
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class PricelistItem(models.Model):
     _inherit = 'product.pricelist.item'
@@ -145,6 +147,7 @@ class Pricelist(models.Model):
 
         print("Generated domain:", domain)  # Imprimir el dominio generado
         #print("Generated domain:", domain)  # Imprimir el dominio generado
+        _logger.info("TEST DE LISTADO")
 
         # Ejecutar la búsqueda manualmente
         pricelist_items = self.env['product.pricelist.item'].search(domain)
