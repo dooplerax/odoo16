@@ -230,3 +230,16 @@ class SaleOrderLine(models.Model):
     def _compute_price_total_extra(self):
         for line in self:
             line.price_total_extra = line.price_total
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    def name_get(self):
+        result = []
+        for record in self:
+            if record.class_inherit and record.class_inherit.cl_name == 'TELAS':
+                name = record.name  # Solo muestra el nombre del producto
+            else:
+                name = super(ProductTemplate, record).name_get()[0][1]
+            result.append((record.id, name))
+        return result
