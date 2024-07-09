@@ -37,8 +37,18 @@ class SaleOrderLine(models.Model):
         "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
     broad = fields.Float(string="Ancho", default=None, digits=(16, 3))
     high = fields.Float(string="Alto", default=None, digits=(16, 3))
-    command = fields.Selection([('Izquierda', 'IZQUIERDA'), ('Derecha',
-                                                           'DERECHA'), ('Ambos', 'AMBOS')], string="Mando")
+    def _get_command_selection(self):
+        return [
+            ('Izquierda', 'IZQUIERDA'),
+            ('Derecha', 'DERECHA'),
+            ('Ambos', 'AMBOS'),
+            ('Fijo', 'FIJO')
+        ]
+
+    command = fields.Selection(
+        selection=_get_command_selection,
+        string="Mando"
+    )
     # ambiente = fields.Char(string="Ambiente", required=True)
     encj = fields.Boolean(string="ENCJ.", default=False)
     mot = fields.Boolean(string="MOT.", default=False)

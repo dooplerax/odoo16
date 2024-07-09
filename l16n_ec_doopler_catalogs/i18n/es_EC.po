@@ -1,0 +1,1502 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l16n_ec_doopler_catalogs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0+e-20240404\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-09 19:23+0000\n"
+"PO-Revision-Date: 2024-07-09 19:23+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_1
+msgid "100,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_2
+msgid "100,90"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_1
+msgid "10x6"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_2
+msgid "10x7"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_3
+msgid "115,50"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_apertura_3_screen
+msgid "12%"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_3
+msgid "12x8"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_4
+msgid "130,90"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_5
+msgid "143,50"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_6
+msgid "145,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_4
+msgid "14x10"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_7
+msgid "159,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_apertura_4_screen
+msgid "16%"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_8
+msgid "160,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_5
+msgid "19.5x14"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_1_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_1_screen
+msgid "2.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_1_traslucidas
+msgid "2.20"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_2_traslucidas
+msgid "2.30"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_2
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_2_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_2_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_3_traslucidas
+msgid "2.50"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_4_traslucidas
+msgid "2.60"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_5_traslucidas
+msgid "2.70"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_1
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_3_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_3_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_6_traslucidas
+msgid "2.80"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_9
+msgid "203,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_10
+msgid "203,30"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_1_blackout
+msgid "225.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_11
+msgid "237,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_12
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_1_screen
+msgid "255,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_2_screen
+msgid "275,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_3_screen
+msgid "280,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_4_screen
+msgid "295,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_4_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_4_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_rollo_7_traslucidas
+msgid "3.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_13
+msgid "302,10"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_14
+msgid "306,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_2_blackout
+msgid "340.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_5_screen
+msgid "355,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_3_blackout
+msgid "365.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_6_screen
+msgid "375,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_7_screen
+msgid "380,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_8_screen
+msgid "380,50"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_4_blackout
+msgid "380.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_9_screen
+msgid "385,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_10_screen
+msgid "395,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_5_blackout
+msgid "400.00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_11_screen
+msgid "416,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_12_screen
+msgid "425,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_13_screen
+msgid "460,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_peso_14_screen
+msgid "480,00"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_6
+msgid "7.5x5"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_ancho_franja_7
+msgid "7x5"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "<span>Comercial no asignado</span>"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "<span>Identificación no disponible</span>"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "<strong>Signature</strong>"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,help:l16n_ec_doopler_catalogs.field_sale_order_line__product_type
+msgid ""
+"A storable product is a product for which you manage stock. The Inventory app has to be installed.\n"
+"A consumable product is a product for which stock is not managed.\n"
+"A service is a non-material product you provide."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "ALTO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "ANCHO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_ancho_franja
+msgid "ANCHO DE FRANJA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_ancho_rollo
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_ancho_rollo_blackout
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_ancho_rollo_screen
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_ancho_rollo_traslucidas
+msgid "ANCHO DE ROLLO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_apertura_screen
+msgid "APERTURA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__active
+msgid "Activo/Inactivo"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__high
+msgid "Alto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__ambience
+msgid "Ambiente"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__broad
+msgid "Ancho"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template_attribute_line__attribute_id_readonly
+msgid "Attribute Id Readonly"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_1_blackout
+msgid "BARLEY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_1
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_1_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_1_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_2_blackout
+msgid "BEIGE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_2
+msgid "BLACK"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_3
+msgid "BLUE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_2_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_4
+msgid "BROWN"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "CANT. / M2"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "CANTIDAD"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_5
+msgid "CAPUCHINO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_3_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_6
+msgid "CARAMEL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_7
+msgid "CHARCOAL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_8
+msgid "CHERRY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_3_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_9
+msgid "CHOCOLATE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "CINT"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__clnt
+msgid "CINT."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_10
+msgid "CLASSICO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_11
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_4_blackout
+msgid "COFFE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_color
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_color_blackout
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_color_screen
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_color_traslucidas
+msgid "COLOR"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_composicion
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_composicion_blackout
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_composicion_traslucidas
+msgid "COMPOSICION"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_5_blackout
+msgid "CREAM"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.ec_doopler_catalogs_menu_root
+msgid "Catalogos de productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__category_id
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+msgid "Categoria del cliente"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Ciudad:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__cl_product_id
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.cproduct_doclass_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_list_view
+msgid "Clase"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_attribute__class_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__class_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__class_inherit
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.doopler_product_template_tree_view
+msgid "Clase de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.actions.act_window,name:l16n_ec_doopler_catalogs.cproduct_doclass_action_window
+msgid "Clases de Productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.cproduct_doclass_menu
+msgid "Clases de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__cl_name
+msgid "Clases de productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__classification
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__classification
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template_attribute_line__classification
+msgid "Clasificación"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.cproduct_doclass_list_view
+msgid "Class Pro"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_cproduct_doclass
+msgid "Class Product Doopler"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Cliente:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Comercial:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Cotización Nro.:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__create_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__create_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__create_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__create_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__create_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__create_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__create_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__create_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__create_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__create_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.sale_order_inherit_form_2
+msgid "Customer"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order__customer
+msgid "Customer "
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Customer:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.cproduct_doclass_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.fproduct_dofamily_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.mproduct_domodel_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_list_view
+msgid "Código"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__alternative_code
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__alternative_code
+msgid "Código Alterno"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__m_name_code
+msgid "Código de Modelo"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__cl_name_code
+msgid "Código de clase"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__f_name_code
+msgid "Código de familia"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__scl_name_code
+msgid "Código de subclase"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.constraint,message:l16n_ec_doopler_catalogs.constraint_cproduct_doclass_cl_name_code_uniq
+#: model:ir.model.constraint,message:l16n_ec_doopler_catalogs.constraint_fproduct_dofamily_f_name_code_uniq
+#: model:ir.model.constraint,message:l16n_ec_doopler_catalogs.constraint_mproduct_domodel_f_mproduct_name_code_uniq
+#: model:ir.model.constraint,message:l16n_ec_doopler_catalogs.constraint_subproduct_dosubclass_scl_name_code_uniq
+msgid "Código ya registrado!"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_12
+msgid "DARK BEIGE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_4_traslucidas
+msgid "DARK BLUE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_13
+msgid "DARK CARAMEL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_14
+msgid "DARK CHERRY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_15
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_6_blackout
+msgid "DARK GREY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "DESCRIPCIÓN"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Datos de Entrega"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_sale_order_pop
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__details_name
+msgid "Descripción"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.actions.act_window,name:l16n_ec_doopler_catalogs.descuentos_model_action
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_descuentos_model
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.account_descuentos_menu
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.menu_action_descuentos
+msgid "Descuentos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__details_ok
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__details_ok
+msgid "Detalles"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order__dirEntrega
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.sale_order_inherit_form_2
+msgid "Direccion de entrega"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Dirección:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__display_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__display_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__display_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__display_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__display_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "ENCJ"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__encj
+msgid "ENCJ."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/pop_up_cotization.py:0
+#, python-format
+msgid "El producto \"{}\" tiene campos faltantes que son obligatorios: {}"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/descuentos.py:0
+#, python-format
+msgid ""
+"El valor del descuento máximo no puede ser igual o menor que el descuento "
+"mínimo."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/descuentos.py:0
+#, python-format
+msgid ""
+"El valor del descuento mínimo no puede ser igual a cero o mayor que 100"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Emitido por:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__active_text
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+msgid "Estado"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__fa_class_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__f_product_id
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.fproduct_dofamily_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.mproduct_domodel_list_view
+msgid "Familia"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__f_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_pricelist_item__fa_class_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__fa_class_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__fa_class_inherit
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.doopler_product_template_tree_view
+msgid "Familia de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.fproduct_dofamily_list_view
+msgid "Familias Productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.actions.act_window,name:l16n_ec_doopler_catalogs.fproduct_dofamily_action_window
+msgid "Familias de Productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.fproduct_dofamily_menu
+msgid "Familias de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_fproduct_dofamily
+msgid "Family Product Doopler"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__fecha_inicio
+msgid "Fecha Inicio"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__fecha_vencimiento
+msgid "Fecha Vencimiento"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Fecha de entrega:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+msgid "Fecha de inicio"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+msgid "Fecha de vencimiento"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Fecha:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Fecha: …………………………"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Firma: …………………………"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.cproduct_doclass_form_view
+msgid "Formulario Clase"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_form_view
+msgid "Formulario SubClase"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_16
+msgid "GREEN"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_17
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_2_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_5_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_7_blackout
+msgid "GREY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:uom.category,name:l16n_ec_doopler_catalogs.uom_category_gramaje
+msgid "Gramaje"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid ""
+"He recibido y revisado las cortinas entregadas, la cantidad, tipo y material, así\n"
+"              como\n"
+"              soportes, empaque, a mí completa satisfacción:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_18
+msgid "ICE WHITE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__id
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__id
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__id
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__id
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__id
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__id
+msgid "ID"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "ITEMS"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "IVA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_19
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_3_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_6_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_8_blackout
+msgid "IVORY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.cproduct_doclass_form_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_form_view
+msgid "Información"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__default_code
+msgid "Internal Reference"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__items
+msgid "Items"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_textura_1
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_textura_1_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_textura_traslucidas
+msgid "JASPEADO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_20
+msgid "KHAKI"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_21
+msgid "LATE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_7_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_9_blackout
+msgid "LIGHT GREY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_22
+msgid "LIGTH CARAMEL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_23
+msgid "LIGTH GREY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_10_blackout
+msgid "LILA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_24
+msgid "LINEN IVORY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_25
+msgid "LINEN WHITE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_textura_1_screen
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_textura_2
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_textura_2_blackout
+msgid "LLANO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/descuentos.py:0
+#, python-format
+msgid "La fecha de inicio no puede ser menor a la fecha actual"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/descuentos.py:0
+#, python-format
+msgid ""
+"La fecha de vencimiento no puede ser menor o igual a la fecha de inicio"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass____last_update
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model____last_update
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily____last_update
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel____last_update
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop____last_update
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__write_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__write_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__write_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__write_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__write_uid
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__write_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__write_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__write_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__write_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__write_date
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/pop_up_cotization.py:0
+#, python-format
+msgid "Los valores de ancho o alto deben ser mayores a cero."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Lugar de entrega:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__m2
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_pop__m2
+msgid "M2"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_visillo_1
+msgid "MALLA FINA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_visillo_2
+msgid "MALLA GRUESA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "MANDO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "MATERIAL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_4_screen
+msgid "MILK"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_26
+msgid "MOCACHINO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_27
+msgid "MOCHA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "MOT"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__mot
+msgid "MOT."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_28
+msgid "MUSHROOM"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__command
+msgid "Mando"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__material
+msgid "Material"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+msgid "Max Descuento"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__max_descuento
+msgid "Maximo descuento"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_tree
+msgid "Min. Descuento"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__min_descuento
+msgid "Minimo descuento"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_mproduct_domodel
+msgid "Model Product Doopler"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.mproduct_domodel_list_view
+msgid "Modelo"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_mproduct_domodel__m_name
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__mod_class_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__mod_class_inherit
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.doopler_product_template_tree_view
+msgid "Modelo de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.actions.act_window,name:l16n_ec_doopler_catalogs.mproduct_domodel_action_window
+msgid "Modelos de Productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.mproduct_domodel_menu
+msgid "Modelos de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_5_screen
+msgid "NATURAL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid ""
+"NOTA: Una vez salida la mercadería del Almacén, no se aceptan\n"
+"              reclamos\n"
+"              posteriores."
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__name_extra
+msgid "Name Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/catalogs_add_product.py:0
+#, python-format
+msgid "New"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#. odoo-python
+#: code:addons/l16n_ec_doopler_catalogs/models/ec_models.py:0
+#: code:addons/l16n_ec_doopler_catalogs/models/ec_models.py:0
+#, python-format
+msgid ""
+"No se puede eliminar debido que forma parte de otro catálogo o producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Nombres y apellidos: …………………………"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Nro de identificacion:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_29
+msgid "OFF IVORY"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_11_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_30
+msgid "OFF WHITE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_31
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_8_traslucidas
+msgid "ORANGE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Observaciones:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__order_id_extra
+msgid "Order Id Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_32
+msgid "PEACH"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_12_blackout
+msgid "PEPPER"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_peso
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_peso_blackout
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_peso_screen
+msgid "PESO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_33
+msgid "PINK"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "PRECIO UNITARIO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_34
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_9_traslucidas
+msgid "PURPLE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Pedido #"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_composicion_1
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_composicion_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_composicion_traslucidas
+msgid "Polyester 100%"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__price_subtotal_extra
+msgid "Price Subtotal Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__price_total_extra
+msgid "Price Total Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__price_unit_extra
+msgid "Price Unit Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_product_pricelist
+msgid "Pricelist"
+msgstr "Lista de precios"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_product_pricelist_item
+msgid "Pricelist Rule"
+msgstr "Regla de Tarifa"
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid ""
+"Pro-Forma Factura\n"
+"                  #"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_product_template
+msgid "Product"
+msgstr "Producto"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_product_attribute
+msgid "Product Attribute"
+msgstr "Atributo del Producto"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__product_details_ok
+msgid "Product Details"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__product_id_extra
+msgid "Product Id Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_product_template_attribute_line
+msgid "Product Template Attribute Line"
+msgstr "Linea de atributo de la plantilla de producto"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__product_type
+msgid "Product Type"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_account_move_line__quantity
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__product_uom_qty
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__quantity_extra
+msgid "Quantity Extra"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_10_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_35
+msgid "RED"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Recibido del Cliente"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_11_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_13_blackout
+msgid "SAND"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_36
+msgid "SKY BLUE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "SUBTOTAL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de Venta"
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_sale_order_line
+msgid "Sales Order Line"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model,name:l16n_ec_doopler_catalogs.model_subproduct_dosubclass
+msgid "Sub Class Product Doopler"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.mproduct_domodel_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_list_view
+msgid "SubClass Pro"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_fproduct_dofamily__scl_product_id
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.descuentos_model_view_form
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.fproduct_dofamily_list_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_list_view
+msgid "Subclase"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_descuentos_model__subclass_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_attribute__subclass_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_pricelist_item__subclass_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_product__subclass_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template__subclass_inherit
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__scl_name
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.doopler_product_template_tree_view
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.subproduct_dosubclass_form_view
+msgid "Subclase de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_cproduct_doclass__scl_product_ids
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_subproduct_dosubclass__f_product_ids
+msgid "Subclases"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.actions.act_window,name:l16n_ec_doopler_catalogs.subproduct_dosubclass_action_window
+msgid "Subclases de Productos"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.ui.menu,name:l16n_ec_doopler_catalogs.subproduct_dosubclass_menu
+msgid "Subclases de producto"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_37
+msgid "TAUPE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_38
+msgid "TEAK"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_textura
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_textura_blackout
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_textura_screen
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_textura_traslucidas
+msgid "TEXTURA"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "TOTAL"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "Teléfono cliente:"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,help:l16n_ec_doopler_catalogs.field_account_move_line__quantity
+msgid ""
+"The optional quantity expressed by this line, eg: number of product sold. "
+"The quantity is not a legal requirement but is very useful for some reports."
+msgstr ""
+"La cantidad opcional expresada en el apunte, por ejemplo: número de "
+"productos vendidos. Esta cantidad no supone un requisito legal pero es útil "
+"para algunos informes."
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_pricelist_item__courtain_type
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order_line__courtain_type
+msgid "Tipo Cortina"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_sale_order__name
+msgid "Título"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_attribute__product_uom_id
+#: model:ir.model.fields,field_description:l16n_ec_doopler_catalogs.field_product_template_attribute_line__product_uom_id
+msgid "Unidad de Medida"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model_terms:ir.ui.view,arch_db:l16n_ec_doopler_catalogs.report_saleorder_document_custom
+msgid "VALOR"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_visillo_3
+msgid "VELO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute,name:l16n_ec_doopler_catalogs.attribute_visillo
+msgid "VISILLO"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_12_traslucidas
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_14_blackout
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_39
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_6_screen
+msgid "WHITE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_40
+msgid "WHITE/PURPLE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_41
+msgid "WINE"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:product.attribute.value,name:l16n_ec_doopler_catalogs.attribute_value_color_42
+msgid "YELLOW"
+msgstr ""
+
+#. module: l16n_ec_doopler_catalogs
+#: model:uom.uom,name:l16n_ec_doopler_catalogs.uom_gramaje_g_per_m2
+msgid "g/m2"
+msgstr ""
