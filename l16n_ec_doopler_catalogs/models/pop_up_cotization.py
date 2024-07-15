@@ -240,6 +240,6 @@ class ProductTemplate(models.Model):
             if record.class_inherit and record.class_inherit.cl_name == 'TELAS':
                 name = record.name  # Solo muestra el nombre del producto
             else:
-                name = super(ProductTemplate, record).name_get()[0][1]
+                name = record.name
             result.append((record.id, name))
         return result
