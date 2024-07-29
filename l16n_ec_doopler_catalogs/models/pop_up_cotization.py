@@ -102,7 +102,7 @@ class SaleOrderLine(models.Model):
     @api.onchange('product_id')
     def calculated_quantity_field(self):
         for record in self:
-            if record.broad == 0.0 and record.high == 0.0:
+            if (record.broad <= 0.0 or record.high <= 0.0):
                 record.product_uom_qty = 1
             else:
                 record.product_uom_qty = record.broad * record.high
@@ -131,7 +131,7 @@ class SaleOrderLine(models.Model):
     #         if record.product_type != 'service' and (record.broad <= 0.0 or record.high <= 0.0):
     #             raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
 
-    @api.constrains('broad', 'high', 'courtain_type', 'ambience', 'command', 'material', 'product_details_ok', 'name')
+    @api.constrains('broad', 'high', 'courtain_type', 'ambience', 'command', 'material', 'product_details_ok', 'name', 'product_uom_qty')
     def _check_values(self):
         for record in self:
             if record.courtain_type or record.product_details_ok:
@@ -151,6 +151,19 @@ class SaleOrderLine(models.Model):
                         _('El producto "{}" tiene campos faltantes que son obligatorios: {}').format(product_name, missing_fields_str))
                 if record.broad <= 0.0 or record.high <= 0.0:
                     raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
+                if record.product_uom_qty <= 0.0:
+                    raise ValidationError(_('No deben existir registros con cantidades menores a 1.'))
+
+
+    @api.onchange('material')
+    def _check_material_available(self):
+        for record in self:
+            # Verificar existencia en stock del material
+            if record.material:
+                product_qty_available = record.material.qty_available
+                if product_qty_available <= 0:
+                    raise ValidationError(
+                        _('El material "{}" no tiene existencias en stock.').format(record.material.name))
 
     # @api.onchange('product_id')
     # def onchange_product_id(self):
@@ -240,6 +253,6 @@ class ProductTemplate(models.Model):
             if record.class_inherit and record.class_inherit.cl_name == 'TELAS':
                 name = record.name  # Solo muestra el nombre del producto
             else:
-                name = super(ProductTemplate, record).name_get()[0][1]
+                name = record.name
             result.append((record.id, name))
         return result
