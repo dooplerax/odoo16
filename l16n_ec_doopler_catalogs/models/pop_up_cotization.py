@@ -155,15 +155,15 @@ class SaleOrderLine(models.Model):
                     raise ValidationError(_('No deben existir registros con cantidades menores a 1.'))
 
 
-    @api.onchange('material')
-    def _check_material_available(self):
-        for record in self:
-            # Verificar existencia en stock del material
-            if record.material:
-                product_qty_available = record.material.qty_available
-                if product_qty_available <= 0:
-                    raise ValidationError(
-                        _('El material "{}" no tiene existencias en stock.').format(record.material.name))
+    # @api.onchange('material')
+    # def _check_material_available(self):
+    #     for record in self:
+    #         # Verificar existencia en stock del material
+    #         if record.material:
+    #             product_qty_available = record.material.qty_available
+    #             if product_qty_available <= 0:
+    #                 raise ValidationError(
+    #                     _('El material "{}" no tiene existencias en stock.').format(record.material.name))
 
     # @api.onchange('product_id')
     # def onchange_product_id(self):
