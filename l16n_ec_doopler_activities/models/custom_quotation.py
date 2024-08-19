@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     state = fields.Selection(
         selection=[
             ('draft', "Quotation"),
-            ('pending', "Pending"),
+            ('pending', "Presupuesto"),
             ('sent', "Quotation Sent"),
             ('accredited', "Accredited"),
             ('accredited_confirm', "Accredited Confirm"),
@@ -31,10 +31,23 @@ class SaleOrder(models.Model):
         ],
         string="Payment Option",
     )
+    observation = fields.Char(string="Observaciones", readonly=False, tracking=True)
 
     all_pickings_done = fields.Boolean("All Pickings Done", compute='_compute_all_pickings_done')
     # has_invoices = fields.Boolean("Has Invoices", compute='_compute_has_invoices')
     # ready_for_invoice = fields.Boolean("Ready for Invoice", compute='_compute_ready_for_invoice')
+
+    is_pichincha_user = fields.Boolean(string="Is Pichincha User", compute="_compute_is_pichincha_user", store=True, readonly=False)
+
+
+    def action_view_delivery(self):
+        current_user = self.env.user
+        # Accedemos directamente a la ubicación de facturación del usuario logueado
+        user_billing_location = current_user.billing_location
+        if user_billing_location and user_billing_location.state_id.name == 'Pichincha':
+            return self._get_action_view_picking(self.picking_ids)
+        else:
+            raise ValidationError("Solo usuarios de Quito pueden acceder a ordenes de producción")
 
     @api.depends('picking_ids', 'picking_ids.state')
     def _compute_all_pickings_done(self):
@@ -94,7 +107,7 @@ class SaleOrder(models.Model):
             'date_order': fields.Datetime.now()
         }
 
-    def action_confirm_custom(self):
+    def action_confirm(self):
         """ Confirm the given quotation(s) and set their confirmation date.
 
         If the corresponding setting is enabled, also locks the Sale Order.
@@ -129,6 +142,8 @@ class SaleOrder(models.Model):
         if self[:1].create_uid.has_group('sale.group_auto_done_setting'):
             # Public user can confirm SO, so we check the group on any record creator.
             self.action_done()
+
+        self.write({'state': 'pending'})
 
         return True
 
