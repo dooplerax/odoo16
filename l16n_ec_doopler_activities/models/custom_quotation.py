@@ -37,7 +37,7 @@ class SaleOrder(models.Model):
     # has_invoices = fields.Boolean("Has Invoices", compute='_compute_has_invoices')
     # ready_for_invoice = fields.Boolean("Ready for Invoice", compute='_compute_ready_for_invoice')
 
-    is_pichincha_user = fields.Boolean(string="Is Pichincha User", compute="_compute_is_pichincha_user", store=True, readonly=False)
+    is_pichincha_user = fields.Boolean(string="Is Pichincha User", store=True, readonly=False)
 
 
     def action_view_delivery(self):
