@@ -200,5 +200,56 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
         return {'type': 'ir.actions.act_window_close'}
 
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    price_unit = fields.Float(
+        string='Unit Price',
+        compute="_compute_price_unit",
+        store=True,
+        readonly=False,
+        precompute=True,
+        digits=(16, 3)
+    )
+
+    @api.onchange('product_id')
+    def _onchange_product_id_update_account(self):
+        if not self.product_id or not self.move_id:
+            return
+
+        # Obtener la cuenta contable del producto
+        fiscal_position = self.move_id.fiscal_position_id
+        accounts = self.with_company(self.company_id).product_id \
+            .product_tmpl_id.get_product_accounts(fiscal_pos=fiscal_position)
+
+        if self.move_id.is_sale_document(include_receipts=True):
+            self.account_id = accounts['income'] or self.account_id
+        elif self.move_id.is_purchase_document(include_receipts=True):
+            self.account_id = accounts['expense'] or self.account_id
+
+        if self.move_id.l10n_ec_authorization_number:
+            self.account_id = accounts['expense']
+
+    @api.depends('product_id', 'product_uom_id')
+    def _compute_price_unit(self):
+        for line in self:
+            if not line.move_id.l10n_ec_authorization_number:
+                if not line.product_id or line.display_type in ('line_section', 'line_note'):
+                    continue
+                if line.move_id.is_sale_document(include_receipts=True):
+                    document_type = 'sale'
+                elif line.move_id.is_purchase_document(include_receipts=True):
+                    document_type = 'purchase'
+                else:
+                    document_type = 'other'
+                line.price_unit = line.product_id._get_tax_included_unit_price(
+                    line.move_id.company_id,
+                    line.move_id.currency_id,
+                    line.move_id.date,
+                    document_type,
+                    fiscal_position=line.move_id.fiscal_position_id,
+                    product_uom=line.product_uom_id,
+                )
+
 
 
