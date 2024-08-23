@@ -10,7 +10,7 @@ class SaleOrder(models.Model):
     state = fields.Selection(
         selection=[
             ('draft', "Quotation"),
-            ('pending', "Pending"),
+            ('pending', "Presupuesto"),
             ('sent', "Quotation Sent"),
             ('accredited', "Accredited"),
             ('accredited_confirm', "Accredited Confirm"),
@@ -31,10 +31,23 @@ class SaleOrder(models.Model):
         ],
         string="Payment Option",
     )
+    observation = fields.Char(string="Observaciones", readonly=False, tracking=True)
 
     all_pickings_done = fields.Boolean("All Pickings Done", compute='_compute_all_pickings_done')
     # has_invoices = fields.Boolean("Has Invoices", compute='_compute_has_invoices')
     # ready_for_invoice = fields.Boolean("Ready for Invoice", compute='_compute_ready_for_invoice')
+
+    is_pichincha_user = fields.Boolean(string="Is Pichincha User", store=True, readonly=False)
+
+
+    def action_view_delivery(self):
+        current_user = self.env.user
+        # Accedemos directamente a la ubicación de facturación del usuario logueado
+        user_billing_location = current_user.billing_location
+        if user_billing_location and user_billing_location.state_id.name == 'Pichincha':
+            return self._get_action_view_picking(self.picking_ids)
+        else:
+            raise ValidationError("Solo usuarios de Quito pueden acceder a ordenes de producción")
 
     @api.depends('picking_ids', 'picking_ids.state')
     def _compute_all_pickings_done(self):
@@ -94,7 +107,7 @@ class SaleOrder(models.Model):
             'date_order': fields.Datetime.now()
         }
 
-    def action_confirm_custom(self):
+    def action_confirm(self):
         """ Confirm the given quotation(s) and set their confirmation date.
 
         If the corresponding setting is enabled, also locks the Sale Order.
@@ -129,6 +142,8 @@ class SaleOrder(models.Model):
         if self[:1].create_uid.has_group('sale.group_auto_done_setting'):
             # Public user can confirm SO, so we check the group on any record creator.
             self.action_done()
+
+        self.write({'state': 'pending'})
 
         return True
 
@@ -185,5 +200,61 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
         return {'type': 'ir.actions.act_window_close'}
 
+class AccountMoveLine(models.Model):
+    _inherit = 'account.move.line'
+
+    price_unit = fields.Float(
+        string='Unit Price',
+        compute="_compute_price_unit",
+        store=True,
+        readonly=False,
+        precompute=True,
+        digits=(16, 3)
+    )
+
+    @api.onchange('product_id')
+    def _onchange_product_id_update_account(self):
+        if not self.product_id or not self.move_id:
+            return
+
+        # Obtener la cuenta contable del producto
+        fiscal_position = self.move_id.fiscal_position_id
+        accounts = self.with_company(self.company_id).product_id \
+            .product_tmpl_id.get_product_accounts(fiscal_pos=fiscal_position)
+
+        if self.move_id.is_sale_document(include_receipts=True):
+            self.account_id = accounts['income'] or self.account_id
+        elif self.move_id.is_purchase_document(include_receipts=True):
+            self.account_id = accounts['expense'] or self.account_id
+
+        if self.move_id.l10n_ec_authorization_number:
+            self.account_id = accounts['expense']
+
+    @api.depends('product_id', 'product_uom_id')
+    def _compute_price_unit(self):
+        for line in self:
+            if not line.move_id.l10n_ec_authorization_number:
+                if not line.product_id or line.display_type in ('line_section', 'line_note'):
+                    continue
+                if line.move_id.is_sale_document(include_receipts=True):
+                    document_type = 'sale'
+                elif line.move_id.is_purchase_document(include_receipts=True):
+                    document_type = 'purchase'
+                else:
+                    document_type = 'other'
+                line.price_unit = line.product_id._get_tax_included_unit_price(
+                    line.move_id.company_id,
+                    line.move_id.currency_id,
+                    line.move_id.date,
+                    document_type,
+                    fiscal_position=line.move_id.fiscal_position_id,
+                    product_uom=line.product_uom_id,
+                )
+
+class Currency(models.Model):
+    _inherit = "res.currency"
+
+    decimal_places = fields.Integer(compute='_compute_decimal_places', readonly=False, store=True,
+                                    help='Decimal places taken into account for operations on amounts in this currency. It is determined by the rounding factor.')
 
 

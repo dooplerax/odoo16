@@ -24,7 +24,7 @@ class LineImportWizard(models.TransientModel):
         if active_model == 'stock.picking':
             file_exam = 'line_picking_exam.xlsx'
         if active_model == 'sale.order':
-            file_exam = 'line_sale_plantilla.xlsx'
+            file_exam = 'import_line_sale_plantilla.xlsx'
         if active_model == 'purchase.order':
             file_exam = 'line_purchase_exam.xlsx'
         return {
@@ -169,7 +169,7 @@ class LineImportWizard(models.TransientModel):
         ]
 
         allowed_command = [
-            'Izquierda', 'Derecha', 'Ambos'
+            'Izquierda', 'Derecha', 'Ambos', 'Fijo'
         ]
 
         for line in reader_line:
