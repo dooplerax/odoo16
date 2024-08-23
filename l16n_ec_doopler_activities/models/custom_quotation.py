@@ -251,5 +251,10 @@ class AccountMoveLine(models.Model):
                     product_uom=line.product_uom_id,
                 )
 
+class Currency(models.Model):
+    _inherit = "res.currency"
+
+    decimal_places = fields.Integer(compute='_compute_decimal_places', readonly=False, store=True,
+                                    help='Decimal places taken into account for operations on amounts in this currency. It is determined by the rounding factor.')
 
 
