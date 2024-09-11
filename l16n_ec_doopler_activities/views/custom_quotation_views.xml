@@ -57,8 +57,10 @@
                 <attribute name="attrs">
                     {'invisible': [
                         '|',
+                        '|',
                         ('all_pickings_done', '=', False),
                         ('invoice_count', '>', 0),
+                        ('state', '=', 'draft')
                     ]}
                 </attribute>
             </xpath>
