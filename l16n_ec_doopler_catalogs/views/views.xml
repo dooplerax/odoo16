@@ -180,6 +180,7 @@
       <field name="arch" type="xml">
         <xpath expr="//field[@name='partner_id']" position="after">
             <field name="customer" string="Customer" />
+            <field name="dirEntrega" string="Direccion de entrega" />
         </xpath>
         <xpath expr="//field[@name='product_template_id']" position="attributes">
             <attribute name="width">100px</attribute>
@@ -203,11 +204,6 @@
             <field name="clnt" width="100px"/>
             <field name="mot" width="100px"/>
             <field name="encj" width="100px"/>
-        </xpath>
-        <xpath
-          expr="//notebook//page[@name='other_information']/group/group[@name='sale_shipping']/label[@for='commitment_date']"
-          position="before">
-          <field name="dirEntrega" string="Direccion de entrega" />
         </xpath>
       </field>
     </record>
