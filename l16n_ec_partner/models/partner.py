@@ -63,7 +63,9 @@ class ResPartner(models.Model):
                 raise ValidationError('Número de Identificación campo requerido')
             if obj.l10n_latam_identification_type_id.name != 'Pasaporte':
                 partner = self.search(
-                    [('vat', '=', obj.vat), ('company_id', '=', obj.env.user.company_id.id)])  # noqa
+                    [('vat', '=', obj.vat),
+                     ('company_id', '=', obj.env.user.company_id.id),
+                     ('id', '!=', obj.id)])
                 if len(partner) > 0:
                     raise ValidationError('Cliente registrado en el sistema')
             res = False
