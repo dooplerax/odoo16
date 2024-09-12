@@ -39,8 +39,8 @@ class SaleOrderLine(models.Model):
     high = fields.Float(string="Alto", default=None, digits=(16, 3))
     def _get_command_selection(self):
         return [
-            ('Izquierda', 'IZQUIERDA'),
-            ('Derecha', 'DERECHA'),
+            ('Izquierda', 'IZQUIERDO'),
+            ('Derecha', 'DERECHO'),
             ('Ambos', 'AMBOS'),
             ('Fijo', 'FIJO')
         ]
