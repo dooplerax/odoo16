@@ -42,7 +42,7 @@ class SaleOrderLine(models.Model):
             ('Izquierda', 'IZQUIERDO'),
             ('Derecha', 'DERECHO'),
             ('Ambos', 'AMBOS'),
-            ('Fijo', 'FIJO')
+            ('Fijo', 'FIJA')
         ]
 
     command = fields.Selection(
