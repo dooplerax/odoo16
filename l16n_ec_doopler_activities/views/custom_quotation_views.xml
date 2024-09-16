@@ -11,6 +11,15 @@
             <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="all_pickings_done" invisible="1"/>
             </xpath>
+            <xpath expr="//field[@name='dirEntrega']" position="after">
+                <label for="commitment_date" string="Fecha de entrega"/>
+                <div name="commitment_date_div" class="o_row">
+                    <field name="commitment_date"/>
+                    <span name="expected_date_span" class="text-muted">Esperado:
+                        <field name="expected_date" class="oe_inline" widget="date"/>
+                    </span>
+                </div>
+            </xpath>
             <xpath expr="/form/header/button[last()]" position="before">
                 <button name="action_open_payment_wizard" string="Abono"
                         class="oe_highlight" type="object"
@@ -82,6 +91,9 @@
                 <group>
                     <field name="payment_option" widget="radio"/>
                     <field name="observation"/>
+                </group>
+                <group name="attachment_group" string="Seleccionar">
+                    <field name="attachment_ids" widget='many2many_binary'/>
                 </group>
                 <footer>
                     <button string="Abonar" type="object" name="action_apply_payment" class="oe_highlight"/>

@@ -3,6 +3,7 @@ from odoo.tools.translate import _
 from odoo.exceptions import UserError
 from odoo import models, fields, api, _, Command
 from odoo.exceptions import AccessError, UserError, ValidationError
+import base64
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -32,6 +33,14 @@ class SaleOrder(models.Model):
         string="Payment Option",
     )
     observation = fields.Char(string="Observaciones", readonly=False, tracking=True)
+
+    attachment_ids = fields.Many2many(
+        'ir.attachment',
+        'sale_order_ir_attachment_rel',
+        'sale_order_id',
+        'attachment_id',
+        string='Adjuntar documento'
+    )
 
     all_pickings_done = fields.Boolean("All Pickings Done", compute='_compute_all_pickings_done')
     # has_invoices = fields.Boolean("Has Invoices", compute='_compute_has_invoices')
@@ -85,6 +94,19 @@ class SaleOrder(models.Model):
         # Registrar el evento en el historial
         message = f"Abonado por {dict(self._fields['payment_option'].selection).get(self.payment_option)} el {fields.Datetime.to_string(fields.Datetime.now())} por {self.env.user.name}"
         self.message_post(body=message)
+
+        # Procesar archivos adjuntos si existen
+        if self.attachment_ids:
+            for attachment in self.attachment_ids:
+                # Crear el enlace HTML al archivo adjunto
+                attachment_link = f"<a href='/web/content/{attachment.id}?download=true'>{attachment.name}</a>"
+                attachment_message = f"Archivo adjunto: {attachment_link}"
+
+                # Registrar el archivo adjunto en el historial
+                self.message_post(
+                    body=attachment_message,
+                    attachment_ids=[attachment.id]
+                )
 
     def action_confirm_accredited(self):
         # Cambiar el estado a 'accredited'
