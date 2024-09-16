@@ -39,7 +39,7 @@ class SaleOrder(models.Model):
         'sale_order_ir_attachment_rel',
         'sale_order_id',
         'attachment_id',
-        string='Attachments'
+        string='Adjuntar documento'
     )
 
     all_pickings_done = fields.Boolean("All Pickings Done", compute='_compute_all_pickings_done')

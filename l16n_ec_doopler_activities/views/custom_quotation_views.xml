@@ -92,7 +92,7 @@
                     <field name="payment_option" widget="radio"/>
                     <field name="observation"/>
                 </group>
-                <group name="attachment_group" string="Attachments">
+                <group name="attachment_group" string="Seleccionar">
                     <field name="attachment_ids" widget='many2many_binary'/>
                 </group>
                 <footer>
