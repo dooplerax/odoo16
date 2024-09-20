@@ -4,9 +4,16 @@ from odoo.exceptions import UserError
 from odoo import models, fields, api, _, Command
 from odoo.exceptions import AccessError, UserError, ValidationError
 import base64
+from odoo.tools import html2plaintext
+import logging
+_logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
+
+    note = fields.Text(
+        string="Terms and conditions",
+        store=True, readonly=False)
 
     state = fields.Selection(
         selection=[
@@ -115,6 +122,41 @@ class SaleOrder(models.Model):
         # Registrar el evento en el historial
         message = f"Abonado confirmado el {fields.Datetime.to_string(fields.Datetime.now())} por {self.env.user.name}"
         self.message_post(body=message)
+
+        # Crear la orden de producción
+        production_order = self.env['mrp.production'].create({
+            'client': self.partner_id.id,
+            'costumer': self.customer,
+            'user_input': self.env.user.id,
+            'entry_date': self.date_order,
+            'delivery_date': self.commitment_date,
+            'installation_req': 'yes',
+            'shift': 'day',
+            'delivery_address': self.dirEntrega,
+            'quotation_note': html2plaintext(self.note),
+            'sale_id': self.id,
+        })
+
+        for line in self.order_line:
+            values = {
+                'product_id': line.product_template_id.id,
+                'command': line.command,
+                'ambience': line.ambience,
+                'courtain_type': line.courtain_type,
+                'material': line.material.id,
+                'broad': line.broad,
+                'high': line.high,
+                'encj': line.encj,
+                'mot': line.mot,
+                'clnt': line.clnt,
+                'quantity': line.product_uom_qty,
+                'raw_material_production_id': production_order.id,
+            }
+
+            try:
+                self.env['stock.move'].create(values)
+            except Exception as e:
+                _logger.error("Error al crear stock.move: %s", e)
 
     def _prepare_confirmation_values(self):
         """ Prepare the sales order confirmation values.

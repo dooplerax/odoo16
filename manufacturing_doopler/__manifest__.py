@@ -19,7 +19,7 @@
     'category': 'Manufacturing',
     'version': '16.0',
 
-    'depends': ['base','mrp'],
+    'depends': ['base','mrp','sale'],
 
     'data': [
         'security/ir.model.access.csv',
