@@ -19,10 +19,11 @@
     'category': 'Manufacturing',
     'version': '16.0',
 
-    'depends': ['base','mrp','sale'],
+    'depends': ['base','mrp','sale', 'sale_stock'],
 
     'data': [
         'security/ir.model.access.csv',
+        'wizard/production_order_views.xml',
         'views/mrp_work_center_views.xml',
         'views/mrp_production_views.xml',
     ],

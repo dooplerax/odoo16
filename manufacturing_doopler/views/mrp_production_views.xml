@@ -22,7 +22,7 @@
                         <group name="state">
                             <field name="client"/>
                             <field name="costumer"/>
-                            <field name="user_input" required="1"/>
+                            <field name="user_input" required="1" readonly="1"/>
                             <field name="entry_date" required="1"/>
                         </group>
                     </div>
@@ -30,8 +30,8 @@
                     <div class="o_col o_col-4">
                         <group>
                             <field name="delivery_date" required="1"/>
-                            <field name="installation_req" required="1"/>
-                            <field name="shift" required="1"/>
+                            <field name="installation_req" required="1" readonly="1" widget="badge" decoration-success="installation_req in ['yes']" decoration-danger="installation_req in ['no']"/>
+                            <field name="shift" required="1" readonly="1"/>
                             <field name="delivery_address" required="1"/>
                         </group>
                     </div>
@@ -40,7 +40,7 @@
                         <group>
                             <field name="production_date" required="1"/>
                             <field name="production_table"/>
-                            <field name="sale_id" readonly="True"/>
+                            <field name="sale_id" readonly="True" widget="badge" decoration-info="1"/>
                         </group>
                     </div>
                 </div>
@@ -57,6 +57,17 @@
                         </group>
                     </div>
                 </div>
+            </xpath>
+            <xpath expr="//field[@name='sale_id']" position="after">
+                <field name="en_ct" invisible="1"/>
+                <field name="ze_ct" invisible="1"/>
+                <field name="ro_ct" invisible="1"/>
+                <field name="pa_ct" invisible="1"/>
+                <field name="cla_ct" invisible="1"/>
+                <field name="tsh_ct" invisible="1"/>
+                <field name="di_ct" invisible="1"/>
+                <field name="top_ct" invisible="1"/>
+                <field name="tcp_ct" invisible="1"/>
             </xpath>
             <field name="product_id" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -78,6 +89,15 @@
             </xpath>
             <xpath expr="//label[@for='product_qty']" position="attributes">
                 <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_reception_report']" position="before">
+                <button type="object"
+                        name="action_view_sale_order"
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart"
+                        attrs="{'invisible': [('sale_id', '=', False)]}">
+                    <field name="sale_id" widget="statinfo" string="Sales Order"/>
+                </button>
             </xpath>
         </field>
     </record>
@@ -123,6 +143,23 @@
                 <field name="clnt"/>
                 <field name="quantity"/>
             </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Ocultar el botón de Cancelar -->
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        <!-- Agregar nuevo botón de Confirmar -->
+            <xpath expr="//button[@name='action_cancel']" position="after">
+                <button name="action_confirm_custom" type="object" string="CONFIRMAR" class="btn-success"
+                attrs="{'invisible': [('status_custom', 'in', ['confirm_custom', 'cancel_custom'])]}"/>
+                <button name="action_cancel_custom" type="object" string="CANCELAR" class="btn-danger" attrs="{'invisible': [('status_custom', '=', 'cancel_custom')]}"/>
+                <field name="status_custom" widget="statusbar" statusbar_visible="draft,confirm_custom,progress,done,cancel_custom"/>
+            </xpath>
         </field>
     </record>
 
@@ -133,6 +170,36 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='note']" position="attributes">
                 <attribute name="placeholder">Notas</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_preview_sale_order']" position="before">
+                <button class="oe_stat_button" type="object" name="action_view_mrp_productions"
+                    groups="sales_team.group_sale_salesman"
+                    icon="fa-wrench">
+                    <field name="production_order_count" widget="statinfo" string="Producción"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit_sale_stock" model="ir.ui.view">
+        <field name="name">sale.order.form.sale.stock</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_delivery']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.enable_production_order</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_ok']" position="before">
+                    <field name="enable_production_order"/>
+                    <label for="enable_production_order"/>
             </xpath>
         </field>
     </record>

@@ -24,22 +24,97 @@ class MrpProduction(models.Model):
 
     client = fields.Many2one('res.partner', string='Client', required=True)
     costumer = fields.Char(string='Customer')
-    user_input = fields.Selection(
-        selection=lambda self: [(user.id, user.name) for user in self.env['res.users'].search([])],
-        string='User input', required=True, help="User who created the production order")
+    user_input = fields.Many2one('res.users', string='User input', readonly=False, default=False)
 
     entry_date = fields.Datetime(string='Entry date', required=True, default=fields.Datetime.now)
     delivery_date = fields.Datetime(string='Delivery date', required=True)
     installation_req = fields.Selection(
-        [('yes', 'Sí'), ('no', 'No')], string='Installation Req.', required=True)
+        [('yes', 'Sí'), ('no', 'No')], string='Installation Req.', required=False)
     shift = fields.Selection(
-        [('day', 'Diurno'), ('night', 'Nocturno')], string='Turn', required=True)
+        [('day', 'Diurno'), ('night', 'Nocturno')], string='Turn', required=False)
     delivery_address = fields.Text(string='Delivery address', required=True)
     production_date = fields.Date(string='Production date', required=False)
     production_table = fields.Many2one('mrp.workcenter', string='Production table', required=False)
     quotation_note = fields.Text(string='Quotation note')
     production_note = fields.Text(string='Production note')
     sale_id = fields.Many2one('sale.order', string="Cotización")
+
+    en_ct = fields.Integer(string="EN", compute="_compute_curtain_counts", help="Tipo de cortina Enrollable", readonly=True)
+    ze_ct = fields.Integer(string="ZE", compute="_compute_curtain_counts", help="Tipo de cortina Zebra", readonly=True)
+    ro_ct = fields.Integer(string="RO", compute="_compute_curtain_counts", help="Tipo de cortina Romana", readonly=True)
+    pa_ct = fields.Integer(string="PA", compute="_compute_curtain_counts", help="Tipo de cortina Panelada", readonly=True)
+    cla_ct = fields.Integer(string="CLA", compute="_compute_curtain_counts", help="Tipo de cortina Claraboya", readonly=True)
+    tsh_ct = fields.Integer(string="TSH", compute="_compute_curtain_counts", help="Tipo de cortina Shade", readonly=True)
+    di_ct = fields.Integer(string="DI", compute="_compute_curtain_counts", help="Tipo de cortina Divergence", readonly=True)
+    top_ct = fields.Integer(string="TOP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Onda Perfecta", readonly=True)
+    tcp_ct = fields.Integer(string="TCP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Con Pliegues", readonly=True)
+
+    status_custom = fields.Selection(
+        [
+            ('draft', 'Borrador'),
+            ('confirm_custom', 'Confirmado'),
+            ('cancel_custom', 'Cancelado'),
+            ('progress', 'En Progreso'),
+            ('done', 'Terminado'),
+        ],
+        string='Estado',
+        default='draft',
+    )
+
+    def action_view_sale_order(self):
+        self.ensure_one()
+        if self.sale_id:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Sales Order',
+                'res_model': 'sale.order',
+                'res_id': self.sale_id.id,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'target': 'current',
+            }
+        return {'type': 'ir.actions.act_window_close'}
+
+    @api.depends('move_raw_ids.courtain_type')
+    def _compute_curtain_counts(self):
+        for production in self:
+            en_ct = ze_ct = ro_ct = pa_ct = cla_ct = tsh_ct = di_ct = top_ct = tcp_ct = 0
+
+            for line in production.move_raw_ids:
+                if line.courtain_type == 'enrollable':
+                    en_ct += 1
+                elif line.courtain_type == 'zebra':
+                    ze_ct += 1
+                elif line.courtain_type == 'romana':
+                    ro_ct += 1
+                elif line.courtain_type == 'panelada':
+                    pa_ct += 1
+                elif line.courtain_type == 'claraboya':
+                    cla_ct += 1
+                elif line.courtain_type == 'triple_shade':
+                    tsh_ct += 1
+                elif line.courtain_type == 'divergence':
+                    di_ct += 1
+                elif line.courtain_type == 'tradicional_onda_perfecta':
+                    top_ct += 1
+                elif line.courtain_type == 'tradicional_con_pliegues':
+                    tcp_ct += 1
+
+            production.en_ct = en_ct
+            production.ze_ct = ze_ct
+            production.ro_ct = ro_ct
+            production.pa_ct = pa_ct
+            production.cla_ct = cla_ct
+            production.tsh_ct = tsh_ct
+            production.di_ct = di_ct
+            production.top_ct = top_ct
+            production.tcp_ct = tcp_ct
+
+    def action_confirm_custom(self):
+        self.write({'status_custom': 'confirm_custom'})
+
+    def action_cancel_custom(self):
+        self.write({'status_custom': 'cancel_custom'})
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
@@ -146,4 +221,84 @@ class StockMove(models.Model):
             else:
                 record.quantity = record.broad * record.high
 
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
 
+    production_order_count = fields.Integer(
+        string="Production Orders",
+        compute='_compute_production_order_count',
+        store=False
+    )
+
+    production_order_confirmed = fields.Boolean(compute='_compute_production_order_confirmed')
+
+    @api.depends('production_order_id.state')
+    def _compute_production_order_confirmed(self):
+        for order in self:
+            order.production_order_confirmed = order.production_order_id.status_custom == 'confirm_custom'
+
+    @api.depends('name')
+    def _compute_production_order_count(self):
+        for order in self:
+            order.production_order_count = self.env['mrp.production'].search_count([('sale_id', '=', order.id)])
+
+    def action_view_mrp_productions(self):
+        self.ensure_one()
+        production_orders = self.env['mrp.production'].search([('sale_id', '=', self.id)])
+
+        # Verificar si hay órdenes de producción
+        for order in production_orders:
+            if not order.installation_req or not order.shift:
+                # Si falta información, abre un popup
+                return {
+                    'name': 'Complete Production Order',
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'production.order.wizard',
+                    'view_mode': 'form',
+                    'target': 'new',
+                    'context': {
+                        'default_order_id': order.id,
+                    }
+                }
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Ordenes de producción',
+            'view_mode': 'tree,form',
+            'res_model': 'mrp.production',
+            'domain': [('sale_id', '=', self.id)],
+            'context': dict(self.env.context),
+        }
+
+class ProductionOrderWizard(models.TransientModel):
+    _name = 'production.order.wizard'
+
+    installation_req = fields.Selection(
+        [('yes', 'Sí'), ('no', 'No')], string='Installation Req.', required=True
+    )
+    shift = fields.Selection(
+        [('day', 'Diurno'), ('night', 'Nocturno')], string='Turn', required=True
+    )
+    user_id = fields.Many2one('res.users', string='Usuario Responsable', readonly=True, default=lambda self: self.env.user)
+    order_id = fields.Many2one('mrp.production', string='Orden de Producción')
+
+    def action_save(self):
+        if self.order_id:
+            self.order_id.write({
+                'installation_req': self.installation_req,
+                'shift': self.shift,
+                'user_input': self.user_id.id,
+            })
+
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'mrp.production',
+            'res_id': self.order_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    enable_production_order = fields.Boolean(string='Habilitar órdenes de producción', default=False)

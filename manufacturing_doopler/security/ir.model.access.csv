@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_mrp_workcenter,mrp_workcenter,model_mrp_workcenter,base.group_user,1,1,1,1
+access_production_order_wizard,production_order_wizard,model_production_order_wizard,base.group_user,1,1,1,1
