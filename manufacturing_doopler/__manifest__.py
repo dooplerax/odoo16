@@ -24,6 +24,9 @@
     'data': [
         'security/ir.model.access.csv',
         'wizard/production_order_views.xml',
+        'wizard/custom_paper_format.xml',
+        'report/report_actions.xml',
+        'report/order_production_report.xml',
         'views/mrp_work_center_views.xml',
         'views/mrp_production_views.xml',
     ],

@@ -52,6 +52,10 @@ class MrpProduction(models.Model):
     top_ct = fields.Integer(string="TOP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Onda Perfecta", readonly=True)
     tcp_ct = fields.Integer(string="TCP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Con Pliegues", readonly=True)
 
+    encj_count = fields.Integer(string="ENCJ Activos", compute='_compute_encj_mot_clnt_count', store=True)
+    mot_count = fields.Integer(string="MOT Activos", compute='_compute_encj_mot_clnt_count', store=True)
+    clnt_count = fields.Integer(string="CINT Activos", compute='_compute_encj_mot_clnt_count', store=True)
+
     status_custom = fields.Selection(
         [
             ('draft', 'Borrador'),
@@ -113,6 +117,25 @@ class MrpProduction(models.Model):
             production.top_ct = top_ct
             production.tcp_ct = tcp_ct
 
+    @api.depends('move_raw_ids.encj', 'move_raw_ids.mot', 'move_raw_ids.clnt')
+    def _compute_encj_mot_clnt_count(self):
+        for production in self:
+            encj_count = 0
+            mot_count = 0
+            clnt_count = 0
+
+            for line in production.move_raw_ids:
+                if line.encj:
+                    encj_count += 1
+                if line.mot:
+                    mot_count += 1
+                if line.clnt:
+                    clnt_count += 1
+
+            production.encj_count = encj_count
+            production.mot_count = mot_count
+            production.clnt_count = clnt_count
+
     def action_confirm_custom(self):
         self.write({'status_custom': 'confirm_custom'})
 
@@ -121,6 +144,18 @@ class MrpProduction(models.Model):
 
     def action_mark_as_done(self):
         self.write({'status_custom': 'done'})
+
+    def print_production_report(self):
+        return self.env.ref('manufacturing_doopler.order_prod_report').report_action(self)
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_done(self):
+        if any(production.status_custom == 'done' for production in self):
+            raise UserError(_('Cannot delete a manufacturing order in done state.'))
+        # not_cancel = self.filtered(lambda m: m.state != 'cancel')
+        # if not_cancel:
+        #     productions_name = ', '.join([prod.display_name for prod in not_cancel])
+        #     raise UserError(_('%s cannot be deleted. Try to cancel them before.', productions_name))
 
 class StockMove(models.Model):
     _inherit = 'stock.move'

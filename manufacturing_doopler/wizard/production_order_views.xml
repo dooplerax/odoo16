@@ -68,6 +68,9 @@
                 <field name="di_ct" widget="badge" decoration-warning="1"/>
                 <field name="top_ct" widget="badge" decoration-warning="1"/>
                 <field name="tcp_ct" widget="badge" decoration-warning="1"/>
+                <field name="encj_count" invisible="1"/>
+                <field name="mot_count" invisible="1"/>
+                <field name="clnt_count" invisible="1"/>
             </field>
         </field>
     </record>
