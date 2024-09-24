@@ -60,7 +60,7 @@ class MrpProduction(models.Model):
             ('progress', 'En Progreso'),
             ('done', 'Terminado'),
         ],
-        string='Estado',
+        string='Estado de la orden',
         default='draft',
     )
 
