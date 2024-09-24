@@ -1,5 +1,8 @@
 from odoo import api, exceptions, fields, models, _
 from odoo.exceptions import UserError, ValidationError
+from odoo.tools import html2plaintext
+import logging
+_logger = logging.getLogger(__name__)
 
 class MrpProduction(models.Model):
     _inherit = 'mrp.production'
@@ -115,6 +118,9 @@ class MrpProduction(models.Model):
 
     def action_cancel_custom(self):
         self.write({'status_custom': 'cancel_custom'})
+
+    def action_mark_as_done(self):
+        self.write({'status_custom': 'done'})
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
@@ -232,10 +238,12 @@ class SaleOrder(models.Model):
 
     production_order_confirmed = fields.Boolean(compute='_compute_production_order_confirmed')
 
-    @api.depends('production_order_id.state')
+    @api.depends('name')
     def _compute_production_order_confirmed(self):
         for order in self:
-            order.production_order_confirmed = order.production_order_id.status_custom == 'confirm_custom'
+            production_orders = self.env['mrp.production'].search([('sale_id', '=', order.id)])
+            confirmed = any(prod.status_custom == 'done' for prod in production_orders)
+            order.production_order_confirmed = confirmed
 
     @api.depends('name')
     def _compute_production_order_count(self):
@@ -246,29 +254,122 @@ class SaleOrder(models.Model):
         self.ensure_one()
         production_orders = self.env['mrp.production'].search([('sale_id', '=', self.id)])
 
-        # Verificar si hay órdenes de producción
-        for order in production_orders:
-            if not order.installation_req or not order.shift:
-                # Si falta información, abre un popup
-                return {
-                    'name': 'Complete Production Order',
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'production.order.wizard',
-                    'view_mode': 'form',
-                    'target': 'new',
-                    'context': {
-                        'default_order_id': order.id,
-                    }
-                }
+        current_user = self.env.user
+        user_billing_location = current_user.billing_location
+        if user_billing_location and user_billing_location.state_id.name == 'Pichincha':
 
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Ordenes de producción',
-            'view_mode': 'tree,form',
-            'res_model': 'mrp.production',
-            'domain': [('sale_id', '=', self.id)],
-            'context': dict(self.env.context),
-        }
+            # Verificar si hay órdenes de producción
+            for order in production_orders:
+                if not order.installation_req or not order.shift:
+                    # Si falta información, abre un popup
+                    return {
+                        'name': 'Complete Production Order',
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'production.order.wizard',
+                        'view_mode': 'form',
+                        'target': 'new',
+                        'context': {
+                            'default_order_id': order.id,
+                        }
+                    }
+
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Ordenes de producción',
+                'view_mode': 'tree,form',
+                'res_model': 'mrp.production',
+                'domain': [('sale_id', '=', self.id)],
+                'context': dict(self.env.context),
+            }
+        else:
+            raise ValidationError("Solo usuarios de Quito pueden acceder a ordenes de producción")
+
+    def action_confirm_accredited(self):
+
+        if not self.commitment_date or not self.dirEntrega:
+            raise ValidationError("Debe llenar el campo de *Fecha de Entrega* o *Dirección de entrega* antes de confirmar el abono")
+
+        # Cambiar el estado a 'accredited'
+        self.state = 'accredited_confirm'
+
+        # Registrar el evento en el historial
+        message = f"Abonado confirmado el {fields.Datetime.to_string(fields.Datetime.now())} por {self.env.user.name}"
+        self.message_post(body=message)
+
+        # Filtrar las líneas de la orden por productos habilitados para producción
+        production_lines = self.order_line.filtered(lambda line: line.product_template_id.enable_production_order)
+
+        if production_lines:
+            # Inicializar los contadores de cortinas
+            en_ct, ze_ct, ro_ct, pa_ct, cla_ct, tsh_ct, di_ct, top_ct, tcp_ct = 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+            # Crear la orden de producción
+            production_order = self.env['mrp.production'].create({
+                'client': self.partner_id.id,
+                'costumer': self.customer,
+                'entry_date': self.date_order,
+                'delivery_date': self.commitment_date,
+                'delivery_address': self.dirEntrega,
+                'quotation_note': html2plaintext(self.note) if self.note else '',
+                'sale_id': self.id,
+            })
+
+            for line in production_lines:
+                # Incrementar el contador basado en el tipo de cortina
+                if line.courtain_type == 'enrollable':
+                    en_ct += 1
+                elif line.courtain_type == 'zebra':
+                    ze_ct += 1
+                elif line.courtain_type == 'romana':
+                    ro_ct += 1
+                elif line.courtain_type == 'panelada':
+                    pa_ct += 1
+                elif line.courtain_type == 'claraboya':
+                    cla_ct += 1
+                elif line.courtain_type == 'triple_shade':
+                    tsh_ct += 1
+                elif line.courtain_type == 'divergence':
+                    di_ct += 1
+                elif line.courtain_type == 'tradicional_onda_perfecta':
+                    top_ct += 1
+                elif line.courtain_type == 'tradicional_con_pliegues':
+                    tcp_ct += 1
+
+                # Crear la línea de stock move
+                values = {
+                    'product_id': line.product_id.id,
+                    'command': line.command,
+                    'ambience': line.ambience,
+                    'courtain_type': line.courtain_type,
+                    'material': line.material.id,
+                    'broad': line.broad,
+                    'high': line.high,
+                    'encj': line.encj,
+                    'mot': line.mot,
+                    'clnt': line.clnt,
+                    'quantity': line.product_uom_qty,
+                    'raw_material_production_id': production_order.id,
+                }
+                try:
+                    self.env['stock.move'].create(values)
+                except Exception as e:
+                    _logger.error("Error al crear stock.move: %s", e)
+
+            # Actualizar los valores en la orden de producción
+            production_order.write({
+                'en_ct': en_ct,
+                'ze_ct': ze_ct,
+                'ro_ct': ro_ct,
+                'pa_ct': pa_ct,
+                'cla_ct': cla_ct,
+                'tsh_ct': tsh_ct,
+                'di_ct': di_ct,
+                'top_ct': top_ct,
+                'tcp_ct': tcp_ct,
+            })
+        else:
+            message_production = "No se encontraron productos habilitados para órdenes de producción en las líneas de cotización."
+            self.message_post(body=message_production)
 
 class ProductionOrderWizard(models.TransientModel):
     _name = 'production.order.wizard'

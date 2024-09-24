@@ -1,0 +1,441 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* manufacturing_doopler
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0+e-20240404\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-09-24 14:22+0000\n"
+"PO-Revision-Date: 2024-09-24 14:22+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: manufacturing_doopler
+#. odoo-python
+#: code:addons/manufacturing_doopler/models/mrp_production.py:0
+#, python-format
+msgid "%(line_description)s (Canceled)"
+msgstr ""
+
+#. module: manufacturing_doopler
+#. odoo-python
+#: code:addons/manufacturing_doopler/models/mrp_production.py:0
+#, python-format
+msgid "%(line_description)s (Draft)"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__high
+msgid "Alto"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__ambience
+msgid "Ambiente"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__broad
+msgid "Ancho"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__status_custom__draft
+msgid "Borrador"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_lines_form_inherit
+msgid "CANCELAR"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__clnt
+msgid "CINT."
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__cla_ct
+msgid "CLA"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_lines_form_inherit
+msgid "CONFIRMAR"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__status_custom__cancel_custom
+msgid "Cancelado"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_production_order_wizard_form
+msgid "Cancelar"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__client
+msgid "Client"
+msgstr "Cliente"
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_production_order_wizard_form
+msgid "Complete la orden de producción"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__status_custom__confirm_custom
+msgid "Confirmado"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__sale_id
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_form_inherit
+msgid "Cotización"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__costumer
+msgid "Customer"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__di_ct
+msgid "DI"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__delivery_address
+msgid "Delivery address"
+msgstr "Dirección de entrega"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__delivery_date
+msgid "Delivery date"
+msgstr "Fecha de entrega"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__name
+msgid "Description"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__shift__day
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__production_order_wizard__shift__day
+msgid "Diurno"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__en_ct
+msgid "EN"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__encj
+msgid "ENCJ."
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__status_custom__progress
+msgid "En Progreso"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__entry_date
+msgid "Entry date"
+msgstr "Fecha de ingreso"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__status_custom
+msgid "Estado"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_production_order_wizard_form
+msgid "Guardar"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_product_product__enable_production_order
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_product_template__enable_production_order
+msgid "Habilitar órdenes de producción"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__installation_req
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__installation_req
+msgid "Installation Req."
+msgstr "Req. Instalación"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_lines_form_inherit
+msgid "MARCAR COMO TERMINADO"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__mot
+msgid "MOT."
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__command
+msgid "Mando"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__material
+msgid "Material"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__installation_req__no
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__production_order_wizard__installation_req__no
+msgid "No"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__shift__night
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__production_order_wizard__shift__night
+msgid "Nocturno"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_sale_order_form_inherit_note
+msgid "Notas"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__order_id
+msgid "Orden de Producción"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__pa_ct
+msgid "PA"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_form_inherit
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_sale_order_form_inherit_note
+msgid "Producción"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model,name:manufacturing_doopler.model_product_template
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__product_uom_id
+msgid "Product Unit of Measure"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model,name:manufacturing_doopler.model_mrp_production
+msgid "Production Order"
+msgstr "Orden de producción"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_sale_order__production_order_confirmed
+msgid "Production Order Confirmed"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_sale_order__production_order_count
+msgid "Production Orders"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__production_date
+msgid "Production date"
+msgstr "Fecha de producción"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__production_note
+msgid "Production note"
+msgstr "Observación de producción"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__production_table
+msgid "Production table"
+msgstr "Mesa de producción"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__quantity
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__quotation_note
+msgid "Quotation note"
+msgstr "Observación de cotización"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__ro_ct
+msgid "RO"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_workcenter__responsible
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: manufacturing_doopler
+#: model:ir.model,name:manufacturing_doopler.model_sale_order
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_form_inherit
+msgid "Sales Order"
+msgstr "Pedido de Venta"
+
+#. module: manufacturing_doopler
+#: model:ir.model,name:manufacturing_doopler.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__installation_req__yes
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__production_order_wizard__installation_req__yes
+msgid "Sí"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__tcp_ct
+msgid "TCP"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__top_ct
+msgid "TOP"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__tsh_ct
+msgid "TSH"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields.selection,name:manufacturing_doopler.selection__mrp_production__status_custom__done
+msgid "Terminado"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__courtain_type
+msgid "Tipo Cortina"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__cla_ct
+msgid "Tipo de cortina Claraboya"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__di_ct
+msgid "Tipo de cortina Divergence"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__en_ct
+msgid "Tipo de cortina Enrollable"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__pa_ct
+msgid "Tipo de cortina Panelada"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__ro_ct
+msgid "Tipo de cortina Romana"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__tsh_ct
+msgid "Tipo de cortina Shade"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__tcp_ct
+msgid "Tipo de cortina Tradicional Con Pliegues"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__top_ct
+msgid "Tipo de cortina Tradicional Onda Perfecta"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,help:manufacturing_doopler.field_mrp_production__ze_ct
+msgid "Tipo de cortina Zebra"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__shift
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__shift
+msgid "Turn"
+msgstr "Turno"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__user_input
+msgid "User input"
+msgstr "Usuario responsable"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__user_id
+msgid "Usuario Responsable"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model,name:manufacturing_doopler.model_mrp_workcenter
+msgid "Work Center"
+msgstr "Centro de producción"
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__ze_ct
+msgid "ZE"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model,name:manufacturing_doopler.model_production_order_wizard
+msgid "production.order.wizard"
+msgstr ""
