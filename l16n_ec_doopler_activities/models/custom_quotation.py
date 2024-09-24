@@ -4,9 +4,15 @@ from odoo.exceptions import UserError
 from odoo import models, fields, api, _, Command
 from odoo.exceptions import AccessError, UserError, ValidationError
 import base64
+import logging
+_logger = logging.getLogger(__name__)
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
+
+    note = fields.Text(
+        string="Terms and conditions",
+        store=True, readonly=False)
 
     state = fields.Selection(
         selection=[
@@ -107,14 +113,6 @@ class SaleOrder(models.Model):
                     body=attachment_message,
                     attachment_ids=[attachment.id]
                 )
-
-    def action_confirm_accredited(self):
-        # Cambiar el estado a 'accredited'
-        self.state = 'accredited_confirm'
-
-        # Registrar el evento en el historial
-        message = f"Abonado confirmado el {fields.Datetime.to_string(fields.Datetime.now())} por {self.env.user.name}"
-        self.message_post(body=message)
 
     def _prepare_confirmation_values(self):
         """ Prepare the sales order confirmation values.

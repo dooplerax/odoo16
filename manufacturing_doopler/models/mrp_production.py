@@ -1,0 +1,405 @@
+from odoo import api, exceptions, fields, models, _
+from odoo.exceptions import UserError, ValidationError
+from odoo.tools import html2plaintext
+import logging
+_logger = logging.getLogger(__name__)
+
+class MrpProduction(models.Model):
+    _inherit = 'mrp.production'
+
+    product_id = fields.Many2one(
+        'product.product', 'Product',
+        domain="""[
+                ('type', 'in', ['product', 'consu']),
+                '|',
+                    ('company_id', '=', False),
+                    ('company_id', '=', company_id)
+            ]
+            """,
+        compute='_compute_product_id', store=True, copy=True, precompute=True,
+        readonly=True, required=False, check_company=True,
+        states={'draft': [('readonly', False)]})
+
+    product_uom_id = fields.Many2one(
+        'uom.uom', 'Product Unit of Measure',
+        readonly=False, required=False, compute='_compute_uom_id', store=True, copy=True, precompute=True,
+        domain="[('category_id', '=', product_uom_category_id)]")
+
+    client = fields.Many2one('res.partner', string='Client', required=True)
+    costumer = fields.Char(string='Customer')
+    user_input = fields.Many2one('res.users', string='User input', readonly=False, default=False)
+
+    entry_date = fields.Datetime(string='Entry date', required=True, default=fields.Datetime.now)
+    delivery_date = fields.Datetime(string='Delivery date', required=True)
+    installation_req = fields.Selection(
+        [('yes', 'Sí'), ('no', 'No')], string='Installation Req.', required=False)
+    shift = fields.Selection(
+        [('day', 'Diurno'), ('night', 'Nocturno')], string='Turn', required=False)
+    delivery_address = fields.Text(string='Delivery address', required=True)
+    production_date = fields.Date(string='Production date', required=False)
+    production_table = fields.Many2one('mrp.workcenter', string='Production table', required=False)
+    quotation_note = fields.Text(string='Quotation note')
+    production_note = fields.Text(string='Production note')
+    sale_id = fields.Many2one('sale.order', string="Cotización")
+
+    en_ct = fields.Integer(string="EN", compute="_compute_curtain_counts", help="Tipo de cortina Enrollable", readonly=True)
+    ze_ct = fields.Integer(string="ZE", compute="_compute_curtain_counts", help="Tipo de cortina Zebra", readonly=True)
+    ro_ct = fields.Integer(string="RO", compute="_compute_curtain_counts", help="Tipo de cortina Romana", readonly=True)
+    pa_ct = fields.Integer(string="PA", compute="_compute_curtain_counts", help="Tipo de cortina Panelada", readonly=True)
+    cla_ct = fields.Integer(string="CLA", compute="_compute_curtain_counts", help="Tipo de cortina Claraboya", readonly=True)
+    tsh_ct = fields.Integer(string="TSH", compute="_compute_curtain_counts", help="Tipo de cortina Shade", readonly=True)
+    di_ct = fields.Integer(string="DI", compute="_compute_curtain_counts", help="Tipo de cortina Divergence", readonly=True)
+    top_ct = fields.Integer(string="TOP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Onda Perfecta", readonly=True)
+    tcp_ct = fields.Integer(string="TCP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Con Pliegues", readonly=True)
+
+    status_custom = fields.Selection(
+        [
+            ('draft', 'Borrador'),
+            ('confirm_custom', 'Confirmado'),
+            ('cancel_custom', 'Cancelado'),
+            ('progress', 'En Progreso'),
+            ('done', 'Terminado'),
+        ],
+        string='Estado de la orden',
+        default='draft',
+    )
+
+    def action_view_sale_order(self):
+        self.ensure_one()
+        if self.sale_id:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Sales Order',
+                'res_model': 'sale.order',
+                'res_id': self.sale_id.id,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'target': 'current',
+            }
+        return {'type': 'ir.actions.act_window_close'}
+
+    @api.depends('move_raw_ids.courtain_type')
+    def _compute_curtain_counts(self):
+        for production in self:
+            en_ct = ze_ct = ro_ct = pa_ct = cla_ct = tsh_ct = di_ct = top_ct = tcp_ct = 0
+
+            for line in production.move_raw_ids:
+                if line.courtain_type == 'enrollable':
+                    en_ct += 1
+                elif line.courtain_type == 'zebra':
+                    ze_ct += 1
+                elif line.courtain_type == 'romana':
+                    ro_ct += 1
+                elif line.courtain_type == 'panelada':
+                    pa_ct += 1
+                elif line.courtain_type == 'claraboya':
+                    cla_ct += 1
+                elif line.courtain_type == 'triple_shade':
+                    tsh_ct += 1
+                elif line.courtain_type == 'divergence':
+                    di_ct += 1
+                elif line.courtain_type == 'tradicional_onda_perfecta':
+                    top_ct += 1
+                elif line.courtain_type == 'tradicional_con_pliegues':
+                    tcp_ct += 1
+
+            production.en_ct = en_ct
+            production.ze_ct = ze_ct
+            production.ro_ct = ro_ct
+            production.pa_ct = pa_ct
+            production.cla_ct = cla_ct
+            production.tsh_ct = tsh_ct
+            production.di_ct = di_ct
+            production.top_ct = top_ct
+            production.tcp_ct = tcp_ct
+
+    def action_confirm_custom(self):
+        self.write({'status_custom': 'confirm_custom'})
+
+    def action_cancel_custom(self):
+        self.write({'status_custom': 'cancel_custom'})
+
+    def action_mark_as_done(self):
+        self.write({'status_custom': 'done'})
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    name = fields.Text(
+        string="Description",
+        compute='_compute_name',
+        store=True, readonly=False, required=True, precompute=True)
+    courtain_type = fields.Selection(
+        selection='_get_tipo_cortina_options', string="Tipo Cortina")
+    ambience = fields.Char(string="Ambiente")
+    command = fields.Selection(
+        selection='_get_command_selection',
+        string="Mando"
+    )
+    material = fields.Many2one(
+        "product.template", string="Material")
+    broad = fields.Float(string="Ancho", default=None, digits=(16, 3))
+    high = fields.Float(string="Alto", default=None, digits=(16, 3))
+    encj = fields.Boolean(string="ENCJ.", default=False)
+    mot = fields.Boolean(string="MOT.", default=False)
+    clnt = fields.Boolean(string="CINT.", default=False)
+
+    quantity = fields.Float(
+        string="Quantity",
+        compute='calculated_quantity_field',
+        digits=(16, 3), default=0.0,
+        store=True, readonly=False, required=True, precompute=True)
+
+    @api.depends('product_id')
+    def _compute_name(self):
+        for line in self:
+            if not line.product_id:
+                continue
+            lang = line.order_id._get_lang()
+            if lang != self.env.lang:
+                line = line.with_context(lang=lang)
+            name = line._get_sale_order_line_multiline_description_sale()
+            if line.is_downpayment and not line.display_type:
+                context = {'lang': lang}
+                dp_state = line._get_downpayment_state()
+                if dp_state == 'draft':
+                    name = _("%(line_description)s (Draft)", line_description=name)
+                elif dp_state == 'cancel':
+                    name = _("%(line_description)s (Canceled)", line_description=name)
+                del context
+            line.name = name
+
+    @api.model
+    def _get_tipo_cortina_options(self):
+        return [
+            ('enrollable', 'Enrollable'),
+            ('zebra', 'Zebra'),
+            ('romana', 'Romana'),
+            ('panelada', 'Panelada'),
+            ('claraboya', 'Claraboya'),
+            ('triple_shade', 'Triple Shade'),
+            ('divergence', 'Divergence'),
+            ('tradicional', 'Tradicional'),
+            ('horizontal', 'Horizontal'),
+            ('vertical', 'Vertical'),
+            ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
+            ('tradicional_con_pliegues', 'Tradicional con pliegues'),
+        ]
+
+    def _get_command_selection(self):
+        return [
+            ('Izquierda', 'IZQUIERDO'),
+            ('Derecha', 'DERECHO'),
+            ('Ambos', 'AMBOS'),
+            ('Fijo', 'FIJA')
+        ]
+
+    # @api.constrains('broad', 'high', 'courtain_type', 'ambience', 'command', 'material', 'product_id')
+    # def _check_values_confirm(self):
+    #     for record in self:
+    #         if record.courtain_type or record.product_id:
+    #             missing_fields = []
+    #             if not record.courtain_type:
+    #                 missing_fields.append("Tipo cortina")
+    #             if not record.ambience:
+    #                 missing_fields.append("Ambiente")
+    #             if not record.command:
+    #                 missing_fields.append("Mando")
+    #             if not record.material:
+    #                 missing_fields.append("Material")
+    #             if missing_fields:
+    #                 missing_fields_str = ", ".join(missing_fields)
+    #                 product_name = record.product_id.name or "Producto sin nombre"
+    #                 raise ValidationError(
+    #                     _('El producto "{}" tiene campos faltantes que son obligatorios: {}').format(product_name,
+    #                                                                                                  missing_fields_str))
+    #             if record.broad <= 0.0 or record.high <= 0.0:
+    #                 raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
+    #             if record.product_uom_qty <= 0.0:
+    #                 raise ValidationError(_('No deben existir registros con cantidades menores a 1.'))
+
+    @api.depends('broad', 'high')
+    @api.onchange('product_id')
+    def calculated_quantity_field(self):
+        for record in self:
+            if (record.broad <= 0.0 or record.high <= 0.0):
+                record.quantity = 1
+            else:
+                record.quantity = record.broad * record.high
+
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
+
+    production_order_count = fields.Integer(
+        string="Production Orders",
+        compute='_compute_production_order_count',
+        store=False
+    )
+
+    production_order_confirmed = fields.Boolean(compute='_compute_production_order_confirmed')
+
+    @api.depends('name')
+    def _compute_production_order_confirmed(self):
+        for order in self:
+            production_orders = self.env['mrp.production'].search([('sale_id', '=', order.id)])
+            confirmed = any(prod.status_custom == 'done' for prod in production_orders)
+            order.production_order_confirmed = confirmed
+
+    @api.depends('name')
+    def _compute_production_order_count(self):
+        for order in self:
+            order.production_order_count = self.env['mrp.production'].search_count([('sale_id', '=', order.id)])
+
+    def action_view_mrp_productions(self):
+        self.ensure_one()
+        production_orders = self.env['mrp.production'].search([('sale_id', '=', self.id)])
+
+        current_user = self.env.user
+        user_billing_location = current_user.billing_location
+        if user_billing_location and user_billing_location.state_id.name == 'Pichincha':
+
+            # Verificar si hay órdenes de producción
+            for order in production_orders:
+                if not order.installation_req or not order.shift:
+                    # Si falta información, abre un popup
+                    return {
+                        'name': 'Complete Production Order',
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'production.order.wizard',
+                        'view_mode': 'form',
+                        'target': 'new',
+                        'context': {
+                            'default_order_id': order.id,
+                        }
+                    }
+
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Ordenes de producción',
+                'view_mode': 'tree,form',
+                'res_model': 'mrp.production',
+                'domain': [('sale_id', '=', self.id)],
+                'context': dict(self.env.context),
+            }
+        else:
+            raise ValidationError("Solo usuarios de Quito pueden acceder a ordenes de producción")
+
+    def action_confirm_accredited(self):
+
+        if not self.commitment_date or not self.dirEntrega:
+            raise ValidationError("Debe llenar el campo de *Fecha de Entrega* o *Dirección de entrega* antes de confirmar el abono")
+
+        # Cambiar el estado a 'accredited'
+        self.state = 'accredited_confirm'
+
+        # Registrar el evento en el historial
+        message = f"Abonado confirmado el {fields.Datetime.to_string(fields.Datetime.now())} por {self.env.user.name}"
+        self.message_post(body=message)
+
+        # Filtrar las líneas de la orden por productos habilitados para producción
+        production_lines = self.order_line.filtered(lambda line: line.product_template_id.enable_production_order)
+
+        if production_lines:
+            # Inicializar los contadores de cortinas
+            en_ct, ze_ct, ro_ct, pa_ct, cla_ct, tsh_ct, di_ct, top_ct, tcp_ct = 0, 0, 0, 0, 0, 0, 0, 0, 0
+
+            # Crear la orden de producción
+            production_order = self.env['mrp.production'].create({
+                'client': self.partner_id.id,
+                'costumer': self.customer,
+                'entry_date': self.date_order,
+                'delivery_date': self.commitment_date,
+                'delivery_address': self.dirEntrega,
+                'quotation_note': html2plaintext(self.note) if self.note else '',
+                'sale_id': self.id,
+            })
+
+            for line in production_lines:
+                # Incrementar el contador basado en el tipo de cortina
+                if line.courtain_type == 'enrollable':
+                    en_ct += 1
+                elif line.courtain_type == 'zebra':
+                    ze_ct += 1
+                elif line.courtain_type == 'romana':
+                    ro_ct += 1
+                elif line.courtain_type == 'panelada':
+                    pa_ct += 1
+                elif line.courtain_type == 'claraboya':
+                    cla_ct += 1
+                elif line.courtain_type == 'triple_shade':
+                    tsh_ct += 1
+                elif line.courtain_type == 'divergence':
+                    di_ct += 1
+                elif line.courtain_type == 'tradicional_onda_perfecta':
+                    top_ct += 1
+                elif line.courtain_type == 'tradicional_con_pliegues':
+                    tcp_ct += 1
+
+                # Crear la línea de stock move
+                values = {
+                    'product_id': line.product_id.id,
+                    'command': line.command,
+                    'ambience': line.ambience,
+                    'courtain_type': line.courtain_type,
+                    'material': line.material.id,
+                    'broad': line.broad,
+                    'high': line.high,
+                    'encj': line.encj,
+                    'mot': line.mot,
+                    'clnt': line.clnt,
+                    'quantity': line.product_uom_qty,
+                    'raw_material_production_id': production_order.id,
+                }
+                try:
+                    self.env['stock.move'].create(values)
+                except Exception as e:
+                    _logger.error("Error al crear stock.move: %s", e)
+
+            # Actualizar los valores en la orden de producción
+            production_order.write({
+                'en_ct': en_ct,
+                'ze_ct': ze_ct,
+                'ro_ct': ro_ct,
+                'pa_ct': pa_ct,
+                'cla_ct': cla_ct,
+                'tsh_ct': tsh_ct,
+                'di_ct': di_ct,
+                'top_ct': top_ct,
+                'tcp_ct': tcp_ct,
+            })
+        else:
+            message_production = "No se encontraron productos habilitados para órdenes de producción en las líneas de cotización."
+            self.message_post(body=message_production)
+
+class ProductionOrderWizard(models.TransientModel):
+    _name = 'production.order.wizard'
+
+    installation_req = fields.Selection(
+        [('yes', 'Sí'), ('no', 'No')], string='Installation Req.', required=True
+    )
+    shift = fields.Selection(
+        [('day', 'Diurno'), ('night', 'Nocturno')], string='Turn', required=True
+    )
+    user_id = fields.Many2one('res.users', string='Usuario Responsable', readonly=True, default=lambda self: self.env.user)
+    order_id = fields.Many2one('mrp.production', string='Orden de Producción')
+
+    def action_save(self):
+        if self.order_id:
+            self.order_id.write({
+                'installation_req': self.installation_req,
+                'shift': self.shift,
+                'user_input': self.user_id.id,
+            })
+
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'mrp.production',
+            'res_id': self.order_id.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    enable_production_order = fields.Boolean(string='Habilitar órdenes de producción', default=False)

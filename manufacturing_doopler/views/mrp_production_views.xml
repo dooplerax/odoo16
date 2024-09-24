@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_mrp_workcenter_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.workcenter.form.inherit</field>
+        <field name="model">mrp.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="responsible"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.form.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='oe_title']" position="after">
+                <div class="o_row">
+                    <div class="o_col o_col-4">
+                        <group name="state">
+                            <field name="client"/>
+                            <field name="costumer"/>
+                            <field name="user_input" required="1" readonly="1"/>
+                            <field name="entry_date" required="1"/>
+                        </group>
+                    </div>
+
+                    <div class="o_col o_col-4">
+                        <group>
+                            <field name="delivery_date" required="1"/>
+                            <field name="installation_req" required="1" readonly="1" widget="badge" decoration-success="installation_req in ['yes']" decoration-danger="installation_req in ['no']"/>
+                            <field name="shift" required="1" readonly="1"/>
+                            <field name="delivery_address" required="1"/>
+                        </group>
+                    </div>
+
+                    <div class="o_col o_col-4">
+                        <group>
+                            <field name="production_date" required="1"/>
+                            <field name="production_table" required="1"/>
+                            <field name="sale_id" readonly="True" widget="badge" decoration-info="1"/>
+                        </group>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <group string="Cotización">
+                            <field name="quotation_note"/>
+                        </group>
+                    </div>
+                    <div class="col-6">
+                        <group string="Producción">
+                            <field name="production_note"/>
+                        </group>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='sale_id']" position="after">
+                <field name="en_ct" invisible="1"/>
+                <field name="ze_ct" invisible="1"/>
+                <field name="ro_ct" invisible="1"/>
+                <field name="pa_ct" invisible="1"/>
+                <field name="cla_ct" invisible="1"/>
+                <field name="tsh_ct" invisible="1"/>
+                <field name="di_ct" invisible="1"/>
+                <field name="top_ct" invisible="1"/>
+                <field name="tcp_ct" invisible="1"/>
+            </xpath>
+            <field name="product_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="bom_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="product_qty" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="date_planned_start" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="user_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+             <xpath expr="//div[field[@name='product_qty']]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//label[@for='product_qty']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_reception_report']" position="before">
+                <button type="object"
+                        name="action_view_sale_order"
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart"
+                        attrs="{'invisible': [('sale_id', '=', False)]}">
+                    <field name="sale_id" widget="statinfo" string="Sales Order"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mrp_production_lines_form_inherit" model="ir.ui.view">
+        <field name="name">mrp.production.lines.form.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='move_raw_ids']/tree/field[@name='product_uom_qty']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree/button[@name='action_product_forecast_report'][1]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree/button[@name='action_product_forecast_report'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree/button[@name='action_show_details'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree//field[@name='location_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree/field[@name='product_uom'][2]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='operations']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+<!--            Nuevos campos-->
+            <xpath expr="//field[@name='move_raw_ids']/tree//field[@name='product_id']" position="after">
+<!--                <field name="name"/>-->
+                <field name="courtain_type"/>
+                <field name="ambience"/>
+                <field name="command"/>
+                <field name="material"/>
+                <field name="broad"/>
+                <field name="high"/>
+                <field name="encj"/>
+                <field name="mot"/>
+                <field name="clnt"/>
+                <field name="quantity"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Ocultar el botón de Cancelar -->
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//header/field[@name='state']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        <!-- Agregar nuevo botón de Confirmar -->
+            <xpath expr="//button[@name='action_cancel']" position="after">
+                <button name="action_confirm_custom" type="object" string="CONFIRMAR" class="btn-success"
+                attrs="{'invisible': [('status_custom', 'in', ['confirm_custom', 'cancel_custom', 'done'])]}"/>
+                <button name="action_cancel_custom" type="object" string="CANCELAR" class="btn-danger" attrs="{'invisible': [('status_custom', 'in', ['cancel_custom', 'done'])]}"/>
+                <button name="action_mark_as_done" type="object" string="MARCAR COMO TERMINADO" class="btn-info"
+                attrs="{'invisible': [('status_custom', 'in', ['cancel_custom', 'draft', 'done'])]}"/>
+                <field name="status_custom" widget="statusbar" statusbar_visible="draft,confirm_custom,progress,done,cancel_custom"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_form_inherit_note" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.note</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="production_order_confirmed" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='note']" position="attributes">
+                <attribute name="placeholder">Notas</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_preview_sale_order']" position="before">
+                <button class="oe_stat_button" type="object" name="action_view_mrp_productions"
+                    groups="sales_team.group_sale_salesman"
+                    icon="fa-wrench">
+                    <field name="production_order_count" widget="statinfo" string="Producción"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit_sale_stock" model="ir.ui.view">
+        <field name="name">sale.order.form.sale.stock</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_delivery']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.enable_production_order</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_ok']" position="before">
+                    <field name="enable_production_order"/>
+                    <label for="enable_production_order"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
