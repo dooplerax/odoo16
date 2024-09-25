@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e-20240404\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-24 14:22+0000\n"
-"PO-Revision-Date: 2024-09-24 14:22+0000\n"
+"POT-Creation-Date: 2024-09-25 13:39+0000\n"
+"PO-Revision-Date: 2024-09-25 13:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,6 +27,98 @@ msgstr ""
 #: code:addons/manufacturing_doopler/models/mrp_production.py:0
 #, python-format
 msgid "%(line_description)s (Draft)"
+msgstr ""
+
+#. module: manufacturing_doopler
+#. odoo-python
+#: code:addons/manufacturing_doopler/models/mrp_production.py:0
+#, python-format
+msgid "%s cannot be deleted. Try to cancel them before."
+msgstr "%s No se pueden eliminar. Intente cancelarlo antes."
+
+#. module: manufacturing_doopler
+#: model:ir.actions.report,print_report_name:manufacturing_doopler.order_prod_report
+msgid "'Orden de producción - %s' % (object.name)"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Caida interior: </strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Cliente:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Encajonadas: </strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Fecha de entrega:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Fecha de ingreso:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Fecha de producción:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Localidad de entrega:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Mesa de producción:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Motores: </strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Observaciones de la orden de producción:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Observaciones del cliente:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Turno:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "<strong>Usuario responsable:</strong>"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "ALTO"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "AMBIENTE"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "ANCHO"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -50,8 +142,18 @@ msgid "Borrador"
 msgstr ""
 
 #. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "C.INT"
+msgstr ""
+
+#. module: manufacturing_doopler
 #: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_lines_form_inherit
 msgid "CANCELAR"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__clnt_count
+msgid "CINT Activos"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -80,9 +182,21 @@ msgid "Cancelar"
 msgstr ""
 
 #. module: manufacturing_doopler
+#. odoo-python
+#: code:addons/manufacturing_doopler/models/mrp_production.py:0
+#, python-format
+msgid "Cannot delete a manufacturing order in done state."
+msgstr "No se puede eliminar una orden de fabricación en estado finalizado."
+
+#. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__client
 msgid "Client"
 msgstr "Cliente"
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "Company Logo"
+msgstr ""
 
 #. module: manufacturing_doopler
 #: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_production_order_wizard_form
@@ -152,6 +266,16 @@ msgid "EN"
 msgstr ""
 
 #. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "ENCAJ"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__encj_count
+msgid "ENCJ Activos"
+msgstr ""
+
+#. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__encj
 msgid "ENCJ."
 msgstr ""
@@ -168,7 +292,7 @@ msgstr "Fecha de ingreso"
 
 #. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__status_custom
-msgid "Estado"
+msgid "Estado de la orden"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -185,6 +309,11 @@ msgstr ""
 #. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_production_order_wizard__id
 msgid "ID"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_lines_form_inherit
+msgid "IMPRIMIR ORDEN"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -209,13 +338,33 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "MANDO"
+msgstr ""
+
+#. module: manufacturing_doopler
 #: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_lines_form_inherit
 msgid "MARCAR COMO TERMINADO"
 msgstr ""
 
 #. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "MATERIAL"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__mot_count
+msgid "MOT Activos"
+msgstr ""
+
+#. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_stock_move__mot
 msgid "MOT."
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "MOTOR"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -243,6 +392,11 @@ msgstr ""
 #. module: manufacturing_doopler
 #: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_sale_order_form_inherit_note
 msgid "Notas"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "ORDEN"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -323,6 +477,11 @@ msgid "Responsible"
 msgstr "Responsable"
 
 #. module: manufacturing_doopler
+#: model:ir.actions.report,name:manufacturing_doopler.order_prod_report
+msgid "Roport sale order"
+msgstr ""
+
+#. module: manufacturing_doopler
 #: model:ir.model,name:manufacturing_doopler.model_sale_order
 #: model_terms:ir.ui.view,arch_db:manufacturing_doopler.view_mrp_production_form_inherit
 msgid "Sales Order"
@@ -342,6 +501,11 @@ msgstr ""
 #. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__tcp_ct
 msgid "TCP"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "TIPO DE CORTINA"
 msgstr ""
 
 #. module: manufacturing_doopler
@@ -433,6 +597,11 @@ msgstr "Centro de producción"
 #. module: manufacturing_doopler
 #: model:ir.model.fields,field_description:manufacturing_doopler.field_mrp_production__ze_ct
 msgid "ZE"
+msgstr ""
+
+#. module: manufacturing_doopler
+#: model_terms:ir.ui.view,arch_db:manufacturing_doopler.production_order_report
+msgid "m2"
 msgstr ""
 
 #. module: manufacturing_doopler
