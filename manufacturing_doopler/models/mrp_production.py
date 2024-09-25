@@ -152,10 +152,10 @@ class MrpProduction(models.Model):
     def _unlink_except_done(self):
         if any(production.status_custom == 'done' for production in self):
             raise UserError(_('Cannot delete a manufacturing order in done state.'))
-        # not_cancel = self.filtered(lambda m: m.state != 'cancel')
-        # if not_cancel:
-        #     productions_name = ', '.join([prod.display_name for prod in not_cancel])
-        #     raise UserError(_('%s cannot be deleted. Try to cancel them before.', productions_name))
+        not_cancel = self.filtered(lambda m: m.status_custom != 'cancel_custom')
+        if not_cancel:
+            productions_name = ', '.join([prod.display_name for prod in not_cancel])
+            raise UserError(_('%s cannot be deleted. Try to cancel them before.', productions_name))
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
