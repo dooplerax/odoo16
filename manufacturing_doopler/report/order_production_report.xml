@@ -20,100 +20,147 @@
                                 border: 1px solid white;
                             }
                         </style>
-                        <div class="page">
-                            <t t-set="company" t-value="o.company_id"/>
-                                <img t-att-src="image_data_uri(company.logo)" alt="Company Logo" style="max-height: 250px; max-width: 250px; padding-top: 0;"/>
 
-                            <table class="table table-sm table-bordered" style="width: 100%; font-size: 14px;">
-                                <tbody>
-                                    <tr>
-                                        <td style="color: #644311"><strong>Usuario responsable:</strong></td>
-                                        <td><span t-field="o.user_input.name"/></td>
-                                        <td style="color: #644311"><strong>Cliente:</strong></td>
-                                        <td><span t-field="o.entry_date"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #644311"><strong>Fecha de ingreso:</strong></td>
-                                        <td><span t-field="o.entry_date"/></td>
-                                        <td style="color: #644311"><strong>Fecha de entrega:</strong></td>
-                                        <td><span t-field="o.delivery_date"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #644311"><strong>Localidad de entrega:</strong></td>
-                                        <td><span t-field="o.delivery_address"/></td>
-                                        <td style="color: #644311"><strong>Turno:</strong></td>
-                                        <td><span t-field="o.shift"/></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="color: #644311"><strong>Mesa de producción:</strong></td>
-                                        <td><span t-field="o.production_table"/></td>
-                                        <td style="color: #644311"><strong>Fecha de producción:</strong></td>
-                                        <td><span t-field="o.production_date"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <t t-set="roles" t-value="['Perfilería', 'Corte y cuadre de telas', 'Armado', 'Probador', 'Empacador']"/>
+                        <t t-foreach="roles" t-as="role">
 
-                            <table class="table table-sm table-bordered" style="width: 100%; font-size: 14px; margin-top: 10px;">
-                                <tbody>
-                                    <tr>
-                                        <td style="color: #644311; width: 50%;"><strong>Observaciones de la orden de producción:</strong></td>
-                                        <td style="color: #644311; width: 50%;"><strong>Observaciones del cliente:</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 1px solid black; width: 50%;"><span t-field="o.production_note"/></td>
-                                        <td style="border: 1px solid black; width: 50%;"><span t-field="o.quotation_note"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="page">
+                                <t t-set="company" t-value="o.company_id"/>
+                                    <img t-att-src="image_data_uri(company.logo)" alt="Company Logo" style="max-height: 250px; max-width: 250px; padding-top: 0;"/>
+                                <h2 style="text-align: right;">
+                                    <strong>
+                                        <t t-esc="role"/>
+                                    </strong>
+                                </h2>
 
-                            <table class="table table-sm table-bordered" style="width: 100%; font-size: 14px; margin-top: 10px;">
-                                <tbody>
-                                    <tr>
-                                        <td style="color: #644311; width: 33%;"><strong>Encajonadas: </strong><span t-field="o.encj_count"/></td>
-                                        <td style="color: #644311; width: 33%;"><strong>Motores: </strong><span t-field="o.mot_count"/></td>
-                                        <td style="color: #644311; width: 33%;"><strong>Caida interior: </strong><span t-field="o.clnt_count"/></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <div style="border-top: 4px solid #815819; width: 100%; margin-bottom: 20px;"></div>
 
-                            <!-- Tabla de las líneas de la orden de producción -->
-                            <table class="table table-sm table-bordered" style="width: 100%; margin-top: 20px;">
-                                <thead>
-                                    <tr>
-                                        <th style="background-color: #ffeaca;">ORDEN</th>
-                                        <th style="background-color: #ffeaca;">TIPO DE CORTINA</th>
-                                        <th style="background-color: #ffeaca;">MATERIAL</th>
-                                        <th style="background-color: #ffeaca;">ANCHO</th>
-                                        <th style="background-color: #ffeaca;">ALTO</th>
-                                        <th style="background-color: #ffeaca;">m2</th>
-                                        <th style="background-color: #ffeaca;">MANDO</th>
-                                        <th style="background-color: #ffeaca;">AMBIENTE</th>
-                                        <th style="background-color: #ffeaca;">ENCAJ</th>
-                                        <th style="background-color: #ffeaca;">MOTOR</th>
-                                        <th style="background-color: #ffeaca;">C.INT</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <t t-set="counter" t-value="0"/>
-                                    <t t-foreach="o.move_raw_ids" t-as="line">
-                                        <t t-set="counter" t-value="counter + 1"/>
+                                <table class="table table-sm table-bordered" style="width: 100%; font-size: 20px; margin-top: 10px;">
+                                    <tbody>
                                         <tr>
-                                            <td><t t-esc="counter"/></td>
-                                            <td><t t-esc="dict(line.fields_get(['courtain_type'])['courtain_type']['selection'])[line.courtain_type]"/></td>
-                                            <td><span t-esc="line.material.name"/></td>
-                                            <td><span t-esc="line.broad"/></td>
-                                            <td><span t-esc="line.high"/></td>
-                                            <td><span t-esc="line.quantity"/></td>
-                                            <td><span t-esc="line.command"/></td>
-                                            <td><span t-esc="line.ambience"/></td>
-                                            <td><input type="checkbox" t-att-checked="line.encj" disabled="disabled" /></td>
-                                            <td><input type="checkbox" t-att-checked="line.mot" disabled="disabled" /></td>
-                                            <td><input type="checkbox" t-att-checked="line.clnt" disabled="disabled" /></td>
+                                            <td style="color: #644311; width: 17%;">
+                                                <strong>Ref Int:</strong>
+                                            </td>
+                                            <td style="width: 83%;">
+                                                <strong><span t-field="o.name" style="color: black; background-color: #ffeaca;"/></strong>
+                                            </td>
                                         </tr>
-                                    </t>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-sm table-bordered" style="width: 100%; font-size: 14px;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="color: #644311"><strong>Usuario responsable:</strong></td>
+                                            <td><span t-field="o.user_input.name"/></td>
+                                            <td style="color: #644311"><strong>Cliente:</strong></td>
+                                            <td><span t-field="o.client.name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #644311"><strong>Customer:</strong></td>
+                                            <td><span t-field="o.costumer"/></td>
+                                            <td style="color: #644311"><strong>Fecha de ingreso:</strong></td>
+                                            <td><span t-field="o.entry_date"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #644311"><strong>Fecha de entrega:</strong></td>
+                                            <td><span t-field="o.delivery_date"/></td>
+                                            <td style="color: #644311"><strong>Localidad de entrega:</strong></td>
+                                            <td><span t-field="o.delivery_address"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #644311"><strong>Turno:</strong></td>
+                                            <td><span t-field="o.shift"/></td>
+                                            <td style="color: #644311"><strong>Mesa de producción:</strong></td>
+                                            <td><span t-field="o.production_table"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color: #644311"><strong>Fecha de producción:</strong></td>
+                                            <td><span t-field="o.production_date"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-sm table-bordered" style="width: 100%; font-size: 14px; margin-top: 10px;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="color: #644311; width: 50%;"><strong>Observaciones de la orden de producción:</strong></td>
+                                            <td style="color: #644311; width: 50%;"><strong>Observaciones del cliente:</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border: 1px solid black; width: 50%;"><span t-field="o.production_note"/></td>
+                                            <td style="border: 1px solid black; width: 50%;"><span t-field="o.quotation_note"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <table class="table table-sm table-bordered" style="width: 100%; font-size: 14px; margin-top: 10px;">
+                                    <tbody>
+                                        <tr>
+                                            <td style="color: #644311; width: 33%;"><strong>Encajonadas: </strong><span t-field="o.encj_count"/></td>
+                                            <td style="color: #644311; width: 33%;"><strong>Motores: </strong><span t-field="o.mot_count"/></td>
+                                            <td style="color: #644311; width: 33%;"><strong>Caida interior: </strong><span t-field="o.clnt_count"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <!-- Tabla de las líneas de la orden de producción -->
+                                <table class="table table-sm table-bordered" style="width: 100%; margin-top: 20px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="background-color: #ffeaca;">ORDEN</th>
+                                            <th style="background-color: #ffeaca;">TIPO DE CORTINA</th>
+                                            <th style="background-color: #ffeaca;">MATERIAL</th>
+                                            <th style="background-color: #ffeaca;">ANCHO</th>
+                                            <th style="background-color: #ffeaca;">ALTO</th>
+                                            <th style="background-color: #ffeaca;">m2</th>
+                                            <th style="background-color: #ffeaca;">MANDO</th>
+                                            <th style="background-color: #ffeaca;">AMBIENTE</th>
+                                            <th style="background-color: #ffeaca;">ENCAJ</th>
+                                            <th style="background-color: #ffeaca;">MOTOR</th>
+                                            <th style="background-color: #ffeaca;">C.INT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="total_broad" t-value="0.0"/>
+                                        <t t-set="total_high" t-value="0.0"/>
+                                        <t t-set="total_quantity" t-value="0.0"/>
+
+                                        <t t-set="counter" t-value="0"/>
+                                        <t t-foreach="o.move_raw_ids" t-as="line">
+                                            <t t-set="counter" t-value="counter + 1"/>
+                                            <tr>
+                                                <td><t t-esc="counter"/></td>
+                                                <td><t t-esc="dict(line.fields_get(['courtain_type'])['courtain_type']['selection'])[line.courtain_type]"/></td>
+                                                <td><span t-esc="line.material.name"/></td>
+                                                <td><span t-esc="line.broad"/></td>
+                                                <td><span t-esc="line.high"/></td>
+                                                <td><span t-esc="line.quantity"/></td>
+                                                <td><span t-esc="line.command"/></td>
+                                                <td><span t-esc="line.ambience"/></td>
+                                                <td><input type="checkbox" t-att-checked="line.encj" disabled="disabled" /></td>
+                                                <td><input type="checkbox" t-att-checked="line.mot" disabled="disabled" /></td>
+                                                <td><input type="checkbox" t-att-checked="line.clnt" disabled="disabled" /></td>
+                                            </tr>
+                                            <t t-set="total_broad" t-value="total_broad + line.broad"/>
+                                            <t t-set="total_high" t-value="total_high + line.high"/>
+                                            <t t-set="total_quantity" t-value="total_quantity + line.quantity"/>
+                                        </t>
+                                    </tbody>
+
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" style="text-align: right;"><strong>Total:</strong></td>
+                                            <td><strong><t t-esc="round(total_broad, 3)"/></strong></td>
+                                            <td><strong><t t-esc="round(total_high, 3)"/></strong></td>
+                                            <td><strong><t t-esc="round(total_quantity, 3)"/></strong></td>
+                                            <td colspan="5"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <div style="page-break-before: always;"></div>
+                            </div>
+                        </t>
                     </t>
                 </t>
             </t>
