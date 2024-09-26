@@ -72,6 +72,7 @@
                 <field name="vert_ct" widget="badge" decoration-warning="1" sum="Total"/>
                 <field name="top_ct" widget="badge" decoration-warning="1" sum="Total"/>
                 <field name="tcp_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="total_curtains" widget="badge" decoration-info="1" sum="Total"/>
                 <field name="encj_count" invisible="1"/>
                 <field name="mot_count" invisible="1"/>
                 <field name="clnt_count" invisible="1"/>

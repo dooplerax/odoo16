@@ -71,6 +71,14 @@ class MrpProduction(models.Model):
         default='draft',
     )
 
+    total_curtains = fields.Integer(string='Total de Cortinas', compute='_compute_total_curtains', store=True)
+
+    @api.depends('move_raw_ids')
+    def _compute_total_curtains(self):
+        for record in self:
+            total = sum(1 for move in record.move_raw_ids if move.product_id)
+            record.total_curtains = total
+
     def action_view_sale_order(self):
         self.ensure_one()
         if self.sale_id:

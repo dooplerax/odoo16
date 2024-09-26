@@ -139,12 +139,12 @@
                 <field name="ambience"/>
                 <field name="command"/>
                 <field name="material"/>
-                <field name="broad"/>
-                <field name="high"/>
+                <field name="broad" sum="Total"/>
+                <field name="high" sum="Total"/>
                 <field name="encj"/>
                 <field name="mot"/>
                 <field name="clnt"/>
-                <field name="quantity"/>
+                <field name="quantity" sum="Total"/>
             </xpath>
             <xpath expr="//button[@name='action_confirm']" position="attributes">
                 <attribute name="invisible">1</attribute>
