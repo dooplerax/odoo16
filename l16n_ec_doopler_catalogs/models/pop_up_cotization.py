@@ -10,6 +10,19 @@ class SaleOrder(models.Model):
     dirEntrega = fields.Char(string="Direccion de entrega")
     customer = fields.Char(string="Customer ")
 
+    partner_shipping_id = fields.Many2one('res.partner', string="Dirección de Entrega",
+                                          domain="[('id', 'child_of', partner_id)]")
+
+    @api.onchange('partner_id')
+    def _onchange_partner_id(self):
+        if self.partner_id:
+            shipping_address = self.partner_id.child_ids.filtered(lambda p: p.type == 'delivery')[:1]
+            if shipping_address:
+                self.partner_shipping_id = shipping_address.id
+                self.dirEntrega = shipping_address.contact_address
+            else:
+                self.dirEntrega = ''
+
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 

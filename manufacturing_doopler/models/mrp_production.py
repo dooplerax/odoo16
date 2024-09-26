@@ -47,8 +47,11 @@ class MrpProduction(models.Model):
     ro_ct = fields.Integer(string="RO", compute="_compute_curtain_counts", help="Tipo de cortina Romana", readonly=True)
     pa_ct = fields.Integer(string="PA", compute="_compute_curtain_counts", help="Tipo de cortina Panelada", readonly=True)
     cla_ct = fields.Integer(string="CLA", compute="_compute_curtain_counts", help="Tipo de cortina Claraboya", readonly=True)
-    tsh_ct = fields.Integer(string="TSH", compute="_compute_curtain_counts", help="Tipo de cortina Shade", readonly=True)
+    tsh_ct = fields.Integer(string="TSH", compute="_compute_curtain_counts", help="Tipo de cortina Triple Shade", readonly=True)
     di_ct = fields.Integer(string="DI", compute="_compute_curtain_counts", help="Tipo de cortina Divergence", readonly=True)
+    trad_ct = fields.Integer(string="TRAD", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional", readonly=True)
+    horz_ct = fields.Integer(string="HORZ", compute="_compute_curtain_counts", help="Tipo de cortina Horizontal", readonly=True)
+    vert_ct = fields.Integer(string="VERT", compute="_compute_curtain_counts", help="Tipo de cortina Vertical", readonly=True)
     top_ct = fields.Integer(string="TOP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Onda Perfecta", readonly=True)
     tcp_ct = fields.Integer(string="TCP", compute="_compute_curtain_counts", help="Tipo de cortina Tradicional Con Pliegues", readonly=True)
 
@@ -85,7 +88,7 @@ class MrpProduction(models.Model):
     @api.depends('move_raw_ids.courtain_type')
     def _compute_curtain_counts(self):
         for production in self:
-            en_ct = ze_ct = ro_ct = pa_ct = cla_ct = tsh_ct = di_ct = top_ct = tcp_ct = 0
+            en_ct = ze_ct = ro_ct = pa_ct = cla_ct = tsh_ct = di_ct = trad_ct = horz_ct = vert_ct = top_ct = tcp_ct = 0
 
             for line in production.move_raw_ids:
                 if line.courtain_type == 'enrollable':
@@ -102,6 +105,12 @@ class MrpProduction(models.Model):
                     tsh_ct += 1
                 elif line.courtain_type == 'divergence':
                     di_ct += 1
+                elif line.courtain_type == 'tradicional':
+                    trad_ct += 1
+                elif line.courtain_type == 'horizontal':
+                    horz_ct += 1
+                elif line.courtain_type == 'vertical':
+                    vert_ct += 1
                 elif line.courtain_type == 'tradicional_onda_perfecta':
                     top_ct += 1
                 elif line.courtain_type == 'tradicional_con_pliegues':
@@ -114,6 +123,9 @@ class MrpProduction(models.Model):
             production.cla_ct = cla_ct
             production.tsh_ct = tsh_ct
             production.di_ct = di_ct
+            production.trad_ct = trad_ct
+            production.horz_ct = horz_ct
+            production.vert_ct = vert_ct
             production.top_ct = top_ct
             production.tcp_ct = tcp_ct
 
@@ -228,30 +240,6 @@ class StockMove(models.Model):
             ('Ambos', 'AMBOS'),
             ('Fijo', 'FIJA')
         ]
-
-    # @api.constrains('broad', 'high', 'courtain_type', 'ambience', 'command', 'material', 'product_id')
-    # def _check_values_confirm(self):
-    #     for record in self:
-    #         if record.courtain_type or record.product_id:
-    #             missing_fields = []
-    #             if not record.courtain_type:
-    #                 missing_fields.append("Tipo cortina")
-    #             if not record.ambience:
-    #                 missing_fields.append("Ambiente")
-    #             if not record.command:
-    #                 missing_fields.append("Mando")
-    #             if not record.material:
-    #                 missing_fields.append("Material")
-    #             if missing_fields:
-    #                 missing_fields_str = ", ".join(missing_fields)
-    #                 product_name = record.product_id.name or "Producto sin nombre"
-    #                 raise ValidationError(
-    #                     _('El producto "{}" tiene campos faltantes que son obligatorios: {}').format(product_name,
-    #                                                                                                  missing_fields_str))
-    #             if record.broad <= 0.0 or record.high <= 0.0:
-    #                 raise ValidationError(_('Los valores de ancho o alto deben ser mayores a cero.'))
-    #             if record.product_uom_qty <= 0.0:
-    #                 raise ValidationError(_('No deben existir registros con cantidades menores a 1.'))
 
     @api.depends('broad', 'high')
     @api.onchange('product_id')

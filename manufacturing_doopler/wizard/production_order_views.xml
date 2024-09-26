@@ -55,19 +55,23 @@
 
 <!--            Nuevos campos-->
             <field name="date_planned_start" position="after">
+                <field name="delivery_date" widget="badge" decoration-warning="1"/>
                 <field name="production_table"/>
                 <field name="client"/>
                 <field name="costumer"/>
                 <field name="user_input" widget="badge" decoration-success="1"/>
-                <field name="en_ct" widget="badge" decoration-warning="1"/>
-                <field name="ze_ct" widget="badge" decoration-warning="1"/>
-                <field name="ro_ct" widget="badge" decoration-warning="1"/>
-                <field name="pa_ct" widget="badge" decoration-warning="1"/>
-                <field name="cla_ct" widget="badge" decoration-warning="1"/>
-                <field name="tsh_ct" widget="badge" decoration-warning="1"/>
-                <field name="di_ct" widget="badge" decoration-warning="1"/>
-                <field name="top_ct" widget="badge" decoration-warning="1"/>
-                <field name="tcp_ct" widget="badge" decoration-warning="1"/>
+                <field name="en_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="ze_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="ro_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="pa_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="cla_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="tsh_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="di_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="trad_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="horz_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="vert_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="top_ct" widget="badge" decoration-warning="1" sum="Total"/>
+                <field name="tcp_ct" widget="badge" decoration-warning="1" sum="Total"/>
                 <field name="encj_count" invisible="1"/>
                 <field name="mot_count" invisible="1"/>
                 <field name="clnt_count" invisible="1"/>
