@@ -2,7 +2,7 @@
 <odoo>
     <data>
         <record id="order_prod_report" model="ir.actions.report">
-            <field name="name">Roport sale order</field>
+            <field name="name">Imprimir orden de producción</field>
             <field name="model">mrp.production</field>
             <field name="report_type">qweb-pdf</field>
             <field name="report_name">manufacturing_doopler.production_order_report</field>
@@ -10,6 +10,16 @@
             <field name="print_report_name">'Orden de producción - %s' % (object.name)</field>
             <field name="binding_model_id" ref="model_mrp_production"/>
             <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="manufacturing_doopler.custom_paperformat_id"/>
+        </record>
+
+<!--        Boton imprimor orden de produccion por defecto, sobreescrito y oculto sin asignar binding_type-->
+        <record id="action_report_production_order" model="ir.actions.report">
+            <field name="name">Orden de producción</field>
+            <field name="model">mrp.production</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">manufacturing_doopler.production_order_report</field>
+            <field name="report_file">manufacturing_doopler.production_order_report</field>
             <field name="paperformat_id" ref="manufacturing_doopler.custom_paperformat_id"/>
         </record>
     </data>
