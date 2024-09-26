@@ -158,10 +158,10 @@
             </xpath>
         <!-- Agregar nuevo botón de Confirmar -->
             <xpath expr="//button[@name='action_cancel']" position="after">
-                <button name="action_confirm_custom" type="object" string="CONFIRMAR" class="btn-success"
+                <button name="action_confirm_custom" type="object" string="CONFIRMAR" class="btn-primary"
                 attrs="{'invisible': [('status_custom', 'in', ['confirm_custom', 'cancel_custom', 'done'])]}"/>
-                <button name="action_cancel_custom" type="object" string="CANCELAR" class="btn-danger" attrs="{'invisible': [('status_custom', 'in', ['cancel_custom', 'done'])]}"/>
-                <button name="action_mark_as_done" type="object" string="MARCAR COMO TERMINADO" class="btn-success"
+                <button name="action_cancel_custom" type="object" string="CANCELAR" class="btn-primary" attrs="{'invisible': [('status_custom', 'in', ['cancel_custom', 'done'])]}"/>
+                <button name="action_mark_as_done" type="object" string="MARCAR COMO TERMINADO" class="btn-primary"
                 attrs="{'invisible': [('status_custom', 'in', ['cancel_custom', 'draft', 'done'])]}"/>
 <!--                <button name="print_production_report" type="object" string="IMPRIMIR ORDEN" class="btn-info"-->
 <!--                attrs="{'invisible': [('status_custom', 'not in', ['confirm_custom', 'done'])]}"/>-->

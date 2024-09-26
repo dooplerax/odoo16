@@ -10,8 +10,8 @@
                     <field name="shift"/>
                 </group>
                 <footer>
-                    <button string="Guardar" type="object" name="action_save" class="btn-success"/>
-                    <button string="Cancelar" class="btn-danger" special="cancel"/>
+                    <button string="Guardar" type="object" name="action_save" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-primary" special="cancel"/>
                 </footer>
             </form>
         </field>
