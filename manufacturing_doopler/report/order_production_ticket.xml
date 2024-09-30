@@ -21,6 +21,7 @@
                             .table td {
                                 border: 1px solid white;
                                 page-break-inside: avoid;
+                                padding: 1px;
                             }
                             .table-container {
                                 display: inline-block;
@@ -57,12 +58,9 @@
                                                             <td colspan="100%"><strong><span t-esc="line.material.name"/></strong></td>
                                                         </tr>
                                                         <tr>
-                                                            <td><strong>AN:</strong></td>
-                                                            <td><span t-esc="line.broad"/></td>
-                                                            <td><strong>ALT:</strong></td>
-                                                            <td><span t-esc="line.high"/></td>
-                                                            <td style="text-align: center;"><strong>L:</strong></td>
-                                                            <td><span t-esc="line.command"/></td>
+                                                            <td colspan="2"><strong>AN: </strong> <span t-esc="line.broad"/></td>
+                                                            <td colspan="2"><strong>ALT: </strong><span t-esc="line.high"/></td>
+                                                            <td colspan="2" style="text-align: center;"><strong>L: </strong><span t-esc="line.command"/></td>
                                                         </tr>
                                                         <tr>
                                                             <td>ENC:</td>
@@ -74,6 +72,10 @@
                                                         </tr>
                                                         <tr>
                                                             <td><span t-esc="line.ambience"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Fecha / producción:</strong></td>
+                                                            <td colspan="100%"><span t-esc="o.production_date"/></td>
                                                         </tr>
                                                         <tr>
                                                             <td><strong>Mesa:</strong></td>
