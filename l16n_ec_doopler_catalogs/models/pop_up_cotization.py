@@ -16,12 +16,30 @@ class SaleOrder(models.Model):
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
         if self.partner_id:
-            shipping_address = self.partner_id.child_ids.filtered(lambda p: p.type == 'delivery')[:1]
-            if shipping_address:
-                self.partner_shipping_id = shipping_address.id
-                self.dirEntrega = shipping_address.contact_address
-            else:
-                self.dirEntrega = ''
+            main_address = self.partner_id
+
+            address = "{} - {} - {} - {} - {}".format(
+                main_address.street or '',
+                main_address.street2 or '',
+                main_address.city or '',
+                main_address.state_id.name if main_address.state_id else '',
+                # main_address.zip or '',
+                main_address.country_id.name if main_address.country_id else ''
+            )
+
+            self.dirEntrega = address.strip(' -')
+        else:
+            self.dirEntrega = ''
+
+    # @api.onchange('partner_id')
+    # def _onchange_partner_id(self):
+    #     if self.partner_id:
+    #         shipping_address = self.partner_id.child_ids.filtered(lambda p: p.type == 'delivery')[:1]
+    #         if shipping_address:
+    #             self.partner_shipping_id = shipping_address.id
+    #             self.dirEntrega = shipping_address.contact_address
+    #         else:
+    #             self.dirEntrega = ''
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'

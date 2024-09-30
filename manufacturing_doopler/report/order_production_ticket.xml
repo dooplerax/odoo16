@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="production_order_ticket">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.basic_layout">
+                        <style>
+                            .page {
+                                font-family: 'Montserrat', sans-serif;
+                                font-weight: normal;
+                                font-style: normal;
+                                font-size: 12px;
+                                box-sizing: border-box;
+                            }
+                            table {
+                                border: 1px solid white;
+                                padding: 20px;
+                                page-break-inside: avoid;
+                            }
+                            .table td {
+                                border: 1px solid white;
+                                page-break-inside: avoid;
+                            }
+                            .table-container {
+                                display: inline-block;
+                                width: 45%;
+                                margin-right: 20px;
+                                margin-bottom: 30px;
+                                vertical-align: top;
+                                page-break-inside: avoid;
+                            }
+                        </style>
+                        <div class="page">
+                            <h3>
+                                <center>
+                                    <strong>ETIQUETA PRODUCTO TERMINADO</strong>
+                                </center>
+                            </h3>
+                            <br/>
+                            <t t-set="counter" t-value="0"/>
+                            <t t-foreach="o.move_raw_ids" t-as="line">
+                                <t t-set="counter" t-value="counter + 1"/>
+                                <div class="table-container">
+                                    <table class="table table-sm table-bordered" style="width: 100%; padding-top: 20px; padding-bottom: 20px;">
+                                        <tr>
+                                            <td style="border: 1px solid black;">
+                                                <table class="table table-sm table-bordered" style="width: 100%; margin-top: 25px;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td><strong>ID:</strong></td>
+                                                            <td><t t-esc="o.name"/></td>
+                                                            <td colspan="2" style="text-align: right;"><strong>TP:</strong></td>
+                                                            <td colspan="100%" style="text-align: left;"><t t-esc="dict(line.fields_get(['courtain_type'])['courtain_type']['selection'])[line.courtain_type]"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="100%"><strong><span t-esc="line.material.name"/></strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>AN:</strong></td>
+                                                            <td><span t-esc="line.broad"/></td>
+                                                            <td><strong>ALT:</strong></td>
+                                                            <td><span t-esc="line.high"/></td>
+                                                            <td style="text-align: center;"><strong>L:</strong></td>
+                                                            <td><span t-esc="line.command"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>ENC:</td>
+                                                            <td><input type="checkbox" t-att-checked="line.encj" disabled="disabled" /></td>
+                                                            <td>MOT:</td>
+                                                            <td><input type="checkbox" t-att-checked="line.mot" disabled="disabled" /></td>
+                                                            <td>C.INT:</td>
+                                                            <td><input type="checkbox" t-att-checked="line.clnt" disabled="disabled" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><span t-esc="line.ambience"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><strong>Mesa:</strong></td>
+                                                            <td colspan="100%"><span t-esc="o.production_table.name"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="100%">Item: <t t-esc="counter"/></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>
