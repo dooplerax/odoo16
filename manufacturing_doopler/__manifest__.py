@@ -27,6 +27,7 @@
         'wizard/custom_paper_format.xml',
         'report/report_actions.xml',
         'report/order_production_report.xml',
+        'report/order_production_ticket.xml',
         'views/mrp_work_center_views.xml',
         'views/mrp_production_views.xml',
     ],
