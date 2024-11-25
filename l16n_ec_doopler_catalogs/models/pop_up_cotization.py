@@ -2,6 +2,7 @@ from odoo import api, fields, models, _
 from odoo.exceptions import (UserError)
 from odoo.exceptions import ValidationError
 from odoo.fields import Command
+from odoo.tools import float_round
 
 
 class SaleOrder(models.Model):
@@ -12,6 +13,30 @@ class SaleOrder(models.Model):
 
     partner_shipping_id = fields.Many2one('res.partner', string="Dirección de Entrega",
                                           domain="[('id', 'child_of', partner_id)]")
+    amount_tax = fields.Float(string="Impuestos ($)", store=True, compute='_compute_amounts')
+
+    @api.depends('order_line.price_subtotal', 'order_line.price_tax', 'order_line.price_total')
+    def _compute_amounts(self):
+        """Compute the total amounts of the SO with rounded tax."""
+        for order in self:
+            order_lines = order.order_line.filtered(lambda x: not x.display_type)
+
+            if order.company_id.tax_calculation_rounding_method == 'round_globally':
+                tax_results = self.env['account.tax']._compute_taxes([
+                    line._convert_to_tax_base_line_dict()
+                    for line in order_lines
+                ])
+                totals = tax_results['totals']
+                amount_untaxed = totals.get(order.currency_id, {}).get('amount_untaxed', 0.0)
+                amount_tax = totals.get(order.currency_id, {}).get('amount_tax', 0.0)
+            else:
+                amount_untaxed = sum(order_lines.mapped('price_subtotal'))
+                amount_tax = sum(order_lines.mapped('price_tax'))
+
+            # Redondear el valor del impuesto a 2 decimales
+            order.amount_untaxed = amount_untaxed
+            order.amount_tax = float_round(amount_tax, precision_digits=2)
+            order.amount_total = order.amount_untaxed + order.amount_tax
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
@@ -68,6 +93,13 @@ class SaleOrderLine(models.Model):
         "product.template", domain="[('class_inherit.cl_name','=','TELAS')]")
     broad = fields.Float(string="Ancho", default=None, digits=(16, 3))
     high = fields.Float(string="Alto", default=None, digits=(16, 3))
+
+    price_subtotal = fields.Float(
+        string="Subtotal ($)",
+        compute='_compute_amount',
+        store=True, precompute=True,
+        digits=(16, 3))
+
     def _get_command_selection(self):
         return [
             ('Izquierda', 'IZQUIERDO'),

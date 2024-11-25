@@ -205,8 +205,43 @@
             <field name="mot" width="100px"/>
             <field name="encj" width="100px"/>
         </xpath>
+
+        <xpath expr="//tree/field[@name='price_subtotal']" position="attributes">
+            <attribute name="widget">float</attribute>
+        </xpath>
+
+        <xpath expr="//field[@name='tax_totals']" position="replace"/>
+
+        <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+            <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" style="font-weight: bold;"/>
+            <field name="amount_tax" readonly="1" style="font-weight: bold;"/>
+            <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" style="font-weight: bold;"/>
+        </group>
       </field>
     </record>
+
+    <record id="view_order_tree_custom" model="ir.ui.view">
+          <field name="name">sale.order.tree.custom</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_tree"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='amount_tax']" position="attributes">
+                  <attribute name="widget">float</attribute>  <!-- Eliminamos el widget "monetary" -->
+              </xpath>
+          </field>
+      </record>
+
+    <record id="view_quotation_tree_custom" model="ir.ui.view">
+          <field name="name">sale.order.tree.custom</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_quotation_tree"/>  <!-- Referencia a la vista original -->
+          <field name="arch" type="xml">
+              <!-- Modificamos el campo amount_tax -->
+              <xpath expr="//field[@name='amount_tax']" position="attributes">
+                  <attribute name="widget">float</attribute>  <!-- Cambiamos de "monetary" a "float" -->
+              </xpath>
+          </field>
+      </record>
 
     <!-- VISTA DESCUENTOS -->
     <record model="ir.ui.view" id="descuentos_model_view_tree">
