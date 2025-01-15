@@ -78,6 +78,27 @@ class ResPartner(models.Model):
     #         if not res:
     #             raise ValidationError('Número de Identificación incorrecto.')
 
+    @api.constrains("vat", "country_id", "l10n_latam_identification_type_id")
+    def check_vat(self):
+        it_ruc = self.env.ref("l10n_ec.ec_ruc", False)
+        it_dni = self.env.ref("l10n_ec.ec_dni", False)
+        ecuadorian_partners = self.filtered(
+            lambda x: x.country_id == self.env.ref("base.ec")
+        )
+        # for partner in ecuadorian_partners:
+        #     if partner.vat:
+        #         if partner.l10n_latam_identification_type_id.id in (
+        #                 it_ruc.id,
+        #                 it_dni.id,
+        #         ):
+        #             if partner.l10n_latam_identification_type_id.id == it_dni.id and len(partner.vat) != 10:
+        #                 raise ValidationError(_('If your identification type is %s, it must be 10 digits')
+        #                                       % it_dni.display_name)
+        #             if partner.l10n_latam_identification_type_id.id == it_ruc.id and len(partner.vat) != 13:
+        #                 raise ValidationError(_('If your identification type is %s, it must be 13 digits')
+        #                                       % it_ruc.display_name)
+        return super(ResPartner, self - ecuadorian_partners).check_vat()
+
     @api.depends('vat')
     def _person_type_compute(self):
         """
