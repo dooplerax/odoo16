@@ -51,32 +51,32 @@ class ResPartner(models.Model):
             partners = self.search(args, limit=limit)
         return partners.name_get()
 
-    @api.constrains('vat')
-    def _check_identifier(self):
-
-        """
-        Valida la identificacion
-        :return:
-        """
-        for obj in self:
-            if not obj.vat:
-                raise ValidationError('Número de Identificación campo requerido')
-            if obj.l10n_latam_identification_type_id.name != 'Pasaporte':
-                partner = self.search(
-                    [('vat', '=', obj.vat),
-                     ('company_id', '=', obj.env.user.company_id.id),
-                     ('id', '!=', obj.id)])
-                if len(partner) > 0:
-                    raise ValidationError('Cliente registrado en el sistema')
-            res = False
-            if obj.l10n_latam_identification_type_id.name == 'Cédula':
-                res = validate_cedula(obj.vat)
-            elif obj.l10n_latam_identification_type_id.name == 'RUC':
-                res = validate_ruc(obj.vat)
-            else:
-                return True
-            if not res:
-                raise ValidationError('Número de Identificación incorrecto.')
+    # @api.constrains('vat')
+    # def _check_identifier(self):
+    #
+    #     """
+    #     Valida la identificacion
+    #     :return:
+    #     """
+    #     for obj in self:
+    #         if not obj.vat:
+    #             raise ValidationError('Número de Identificación campo requerido')
+    #         if obj.l10n_latam_identification_type_id.name != 'Pasaporte':
+    #             partner = self.search(
+    #                 [('vat', '=', obj.vat),
+    #                  ('company_id', '=', obj.env.user.company_id.id),
+    #                  ('id', '!=', obj.id)])
+    #             if len(partner) > 0:
+    #                 raise ValidationError('Cliente registrado en el sistema')
+    #         res = False
+    #         if obj.l10n_latam_identification_type_id.name == 'Cédula':
+    #             res = validate_cedula(obj.vat)
+    #         elif obj.l10n_latam_identification_type_id.name == 'RUC':
+    #             res = validate_ruc(obj.vat)
+    #         else:
+    #             return True
+    #         if not res:
+    #             raise ValidationError('Número de Identificación incorrecto.')
 
     @api.depends('vat')
     def _person_type_compute(self):
