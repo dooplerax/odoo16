@@ -134,7 +134,7 @@ class SaleOrderLine(models.Model):
             'name': '{} - {} - {}'.format(self.name, dict(self._get_tipo_cortina_options()).get(self.courtain_type), self.material.name).upper() if self.courtain_type and self.material else self.name,
             'product_id': self.product_id.id,
             'product_uom_id': self.product_uom.id,
-            'quantity': self.qty_to_invoice,
+            'quantity': float(self.qty_to_invoice),
             'discount': self.discount,
             'price_unit': self.price_unit,
             'tax_ids': [Command.set(self.tax_id.ids)],
