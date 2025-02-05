@@ -6,8 +6,9 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-class AccountEdiDocument(models.Model):
-    _inherit = 'account.edi.document'
+class AccountEdiFormat(models.Model):
+
+    _inherit = 'account.edi.format'
 
     def _l10n_ec_get_xml_common_values(self, move):
         internal_type = move.l10n_latam_document_type_id.internal_type
