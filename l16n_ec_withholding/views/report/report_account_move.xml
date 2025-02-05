@@ -222,8 +222,7 @@
                                             <span t-esc="'%.2f' % line.discount"/>
                                         </div>
                                         <div class="col-2" style="padding-left: 0px; text-align: right;">
-                                            <span t-field="line.price_subtotal"
-                                                  t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                            $ <span t-esc="round(line.price_subtotal, 2)"/>
                                         </div>
                                     </div>
                                 </t>
@@ -285,12 +284,11 @@
                                             <div class="col-7"
                                                  style="border-bottom: 1px solid darkgray; padding-left: 0px;">
                                                 <span>
-                                                    <strong>Subtotal 12%</strong>
+                                                    <strong>IVA en ventas 15%</strong>
                                                 </span>
                                             </div>
                                             <div class="col-5" style="border-bottom: 1px solid darkgray;">
-                                                <span t-field="o.amount_tax_signed"
-                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                $ <span t-esc="round(o.amount_tax_signed, 2)"/>
                                             </div>
                                         </div>
                                         <div class="row" style="text-align: right;">
@@ -301,8 +299,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-5" style="border-bottom: 1px solid darkgray;">
-                                                <span t-field="o.amount_tax"
-                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                               $ <span t-esc="round(o.amount_tax, 2)"/>
                                             </div>
                                         </div>
                                         <div class="row" style="text-align: right;">
@@ -325,8 +322,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-5" style="border-bottom: 1px solid darkgray;">
-                                                <span t-field="o.amount_untaxed"
-                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                $ <span t-esc="round(o.amount_untaxed, 2)"/>
                                             </div>
                                         </div>
                                         <div class="row" style="text-align: right;">
@@ -363,8 +359,7 @@
                                                 </strong>
                                             </div>
                                             <div class="col-5" style="border-bottom: 1px solid darkgray;">
-                                                <span t-field="o.amount_total"
-                                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                               $ <span t-esc="round(o.amount_total, 2)"/>
                                             </div>
                                         </div>
                                     </div>
