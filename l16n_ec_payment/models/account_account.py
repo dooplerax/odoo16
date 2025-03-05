@@ -83,6 +83,7 @@ class AccountMove(models.Model):
         string="Sustento del comprobante",
         store=True, readonly=False,
         help="Indicates if the purchase invoice supports tax credit or cost or expenses, conforming table 5 of ATS",
+        default='01',
     )
 
     @api.model
