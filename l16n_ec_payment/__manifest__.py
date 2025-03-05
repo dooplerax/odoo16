@@ -6,7 +6,7 @@
     'category': 'Generic Modules/Accounting',
     'license': 'AGPL-3',
     'depends': [
-        'account', 'l10n_ec',
+        'account', 'l10n_ec', 'account_edi'
     ],
     'author': 'Danner Marante',
     'website': '',
@@ -14,5 +14,6 @@
         # 'security/ir.model.access.csv',
         'wizard/account_payment_register.xml',
         'views/account_payment.xml',
+        'views/account_move_views.xml'
     ]
 }

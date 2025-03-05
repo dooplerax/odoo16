@@ -1,0 +1,33 @@
+<odoo>
+    <record id="view_account_invoice_filter_custom" model="ir.ui.view">
+        <field name="name">account.invoice.select.custom</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml">
+            <!-- Aquí se utiliza XPath para encontrar el nodo adecuado -->
+            <xpath expr="//filter[@name='draft']" position="after">
+                <filter string="Todas" name="exclude_cancelled" domain="[('state', '!=', 'cancel')]"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="res_config_settings_view_form_inherit_billing_location" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.billing.location</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='expense_currency_exchange_account_id']" position="after">
+                    <div class="content-group">
+                        <div class="row mt8">
+                            <label for="account_client_id" class="col-lg-4 o_light_label" />
+                            <field name="account_client_id"/>
+                        </div>
+                        <div class="row mt8">
+                            <label for="account_provider_id" class="col-lg-4 o_light_label"/>
+                            <field name="account_provider_id"/>
+                        </div>
+                    </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
