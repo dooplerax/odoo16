@@ -197,10 +197,10 @@
             <field name="product_type" invisible="1" width="100px"/>
             <field name="courtain_type" width="100px"/>
             <field name="ambience" width="100px"/>
-            <field name="command" width="100px"/>
             <field name="material" width="100px"/>
             <field name="broad" width="100px"/>
             <field name="high" width="100px"/>
+            <field name="command" width="100px"/>
             <field name="clnt" width="100px"/>
             <field name="mot" width="100px"/>
             <field name="encj" width="100px"/>

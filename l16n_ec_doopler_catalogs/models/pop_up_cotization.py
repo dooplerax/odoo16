@@ -86,7 +86,8 @@ class SaleOrderLine(models.Model):
         string='Product Type', related='product_template_id.detailed_type')
     details_name = fields.Char(string='Descripción')
 
-    ambience = fields.Char(string="Ambiente")
+    ambience = fields.Selection(selection='_get_ambience_selection', string="Ambiente")
+    # new_ambience = fields.Selection(selection='_get_ambience_selection', string="Ambiente")
     courtain_type = fields.Selection(
         selection='_get_tipo_cortina_options', string="Tipo Cortina")
     material = fields.Many2one(
@@ -102,16 +103,30 @@ class SaleOrderLine(models.Model):
 
     def _get_command_selection(self):
         return [
+            ('no_aplica', 'NO APLICA'),
             ('Izquierda', 'IZQUIERDO'),
             ('Derecha', 'DERECHO'),
             ('Ambos', 'AMBOS'),
             ('Fijo', 'FIJA')
         ]
 
+    def _get_ambience_selection(self):
+        return [
+            ('sala', 'SALA'),
+            ('dormitorio', 'DORMITORIO'),
+            ('estudio', 'ESTUDIO'),
+            ('comedor', 'COMEDOR'),
+            ('cocina', 'COCINA'),
+            ('area_social', 'ÁREA SOCIAL'),
+            ('oficina', 'OFICINA'),
+            ('bbq', 'BBQ')
+        ]
+
     command = fields.Selection(
         selection=_get_command_selection,
         string="Mando"
     )
+
     # ambiente = fields.Char(string="Ambiente", required=True)
     encj = fields.Boolean(string="ENCJ.", default=False)
     mot = fields.Boolean(string="MOT.", default=False)

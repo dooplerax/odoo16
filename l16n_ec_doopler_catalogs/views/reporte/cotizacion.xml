@@ -266,6 +266,7 @@
             <!-- <th name="th_orden" class="text-start">ORDEN</th> -->
             <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
             <th name="th_material" class="text-start">MATERIAL</th>
+            <th name="th_ambiente" class="text-start">AMBIENTE</th>
             <th name="th_ancho" class="text-start">ANCHO</th>
             <th name="th_alto" class="text-start">ALTO</th>
             <th name="th_mando" class="text-start">MANDO</th>
@@ -299,6 +300,11 @@
                 <td>
                     <t t-if="line.material">
                         <span t-esc="line.material.name" />
+                    </t>
+                </td>
+                <td>
+                    <t t-if="line.ambience">
+                        <t t-esc="dict(line.fields_get(['ambience'])['ambience']['selection'])[line.ambience]"/>
                     </t>
                 </td>
                 <td>
