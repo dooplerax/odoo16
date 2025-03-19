@@ -218,13 +218,17 @@ class AccountBankReconcile(models.Model):
         default=lambda self: self.env['res.company']._company_default_get('account.invoice')  # noqa
     )
 
-    def _parser_json_line(selef, account):
-        return {
+    def _parser_json_line(self, account):
+        payment_number = account.payment_id.payment_number if account.payment_id else ''
+
+        # Crear el diccionario con los datos
+        account_data = {
             'cuenta': account.account_id.display_name,
             'fecha': account.date,
             'name': account.name,
             'ref': account.ref,
             'id': account.id,
+            'payment_number': payment_number,
             'credit': "{0:.2f}".format(account.credit),
             'debit': "{0:.2f}".format(account.debit),
             'conciliar': [],
@@ -232,8 +236,13 @@ class AccountBankReconcile(models.Model):
             'select': []
         }
 
+        # Imprimir los datos que se están agregando
+        # print("Agregando movimiento contable:", account_data)
+
+        return account_data
+
     def _parser_json_extracto(selef, ext):
-        return {
+        ext_data = {
             'cuenta': ext.oficina,
             'fecha': ext.date,
             'name': ext.concepto,
@@ -243,6 +252,8 @@ class AccountBankReconcile(models.Model):
             'debit': "{0:.2f}".format(ext.debe),
             'conciliar': []
         }
+
+        return ext_data
 
     def _parser_json_saldo_inicial(selef, ext):
         return {
@@ -292,15 +303,32 @@ class AccountBankReconcile(models.Model):
                                                                    ('conciliado', '=', False), ('date', '<=', res[0])
                                                                    ], order="date desc")
 
+            # Primero, crear una lista de referencias de extractos existentes (esto es para evitar recorrer la lista de extractos cada vez)
+            existing_references = {ext.referencia for ext in
+                                   extracto_credit}  # Conjunto de referencias de los extractos de crédito
+            existing_references.update(
+                ext.referencia for ext in extracto_debit)  # También agregamos las referencias de débito
+
             for account in not_conciled:
-                list_no_concilied.append(self._parser_json_line(account))
+                payment_number = account.payment_id.payment_number if account.payment_id else ''
+                if payment_number in existing_references:
+                    # Solo agregamos si hay coincidencia de referencia
+                    print(f"Agregando movimiento contable con payment_number {payment_number}")
+                    list_no_concilied.append(self._parser_json_line(account))
 
-            for ext in extracto_credit:
-                list_extracto_credit.append(self._parser_json_extracto(ext))
+                # Filtrar y agregar los extractos de crédito solo si su referencia coincide con el payment_number
+                for ext in extracto_credit:
+                    if ext.referencia == payment_number:  # Solo agregamos si la referencia coincide
+                        print("coincide credito!!!")
+                        print(f"Mov. Contable Ref: {payment_number} - Extracto Ref: {ext.referencia}")
+                        list_extracto_credit.append(self._parser_json_extracto(ext))
 
-            for ext in extracto_debit:
-                list_extracto_debit.append(self._parser_json_extracto(ext))
-
+                # Filtrar y agregar los extractos de débito solo si su referencia coincide con el payment_number
+                for ext in extracto_debit:
+                    if ext.referencia == payment_number:  # Solo agregamos si la referencia coincide
+                        print("coincide debito!!!")
+                        print(f"Mov. Contable Ref: {payment_number} - Extracto Ref: {ext.referencia}")
+                        list_extracto_debit.append(self._parser_json_extracto(ext))
 
             list_no_coinciden = []
             list_coinciden = []
@@ -549,7 +577,6 @@ class AccountBankReconcile(models.Model):
         except Exception as e:
             return False, e.args[0]
 
-
     def action_load_entries(self):
         try:
             for obj in self:
@@ -645,13 +672,10 @@ class AccountBankReconcile(models.Model):
         return self.env.ref('l16n_ec_reconcile.extracto_reporte').report_action()
     #    return self.env.ref('module_name.action_student_id_card').report_action(None, data=data)
 
-    
-        # return self.env['report']._get_report_values(
-        #     self,
-        #     'l16n_ec_reconcile.extracto_reporte'
-        # )
-
-        
+    # return self.env['report']._get_report_values(
+    #     self,
+    #     'l16n_ec_reconcile.extracto_reporte'
+    # )
 
 
 class AccountMoveLine(models.Model):

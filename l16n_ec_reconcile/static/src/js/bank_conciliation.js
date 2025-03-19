@@ -34,19 +34,39 @@ odoo.define('l16n_ec_reconcile.ConciliacionBancarios', function (require) {
     },
 
     startConciliacion: function (e) {
-      var cuenta = $('#id_banco').val()
-      var limite = $('#id_limite').val()
+        var cuenta = $('#id_banco').val();
+        var limite = $('#id_limite').val();
 
-      this._rpc({
-        model: 'account.bank.reconcile',
-        method: 'list_conciliacion',
-        args: [cuenta, limite],
-      }).then(function (result) {
-        list_cuentas = result
-        console.log('recul', result)
-        var html = QWeb.render('ListCuentas', { items: result })
-        $('#reconciliation_lines_container').html(html)
-      })
+        // Solicitar las líneas de conciliación
+        this._rpc({
+            model: 'account.bank.reconcile',
+            method: 'list_conciliacion',
+            args: [cuenta, limite],
+        }).then(function (result) {
+            list_cuentas = result;
+
+            // Filtrar las cuentas para asegurarse de que las referencias no se mezclen
+            $.each(list_cuentas.account, function (id, cuenta) {
+                // Filtrar las líneas de conciliación basadas en la referencia de pago
+                cuenta.conciliar = cuenta.conciliar.filter(function (line) {
+                console.log(line)
+                    // Aquí debes definir la lógica para asegurarte de que las referencias no se crucen
+                    return line.ref === cuenta.payment_number;
+                });
+
+                // También puede ser necesario filtrar las líneas seleccionadas
+                cuenta.select = cuenta.select.filter(function (line) {
+                    return line.ref === cuenta.payment_number;
+                });
+            });
+
+            // Imprimir los resultados filtrados en la consola para depuración
+            console.log('Reconciliación filtrada:', list_cuentas);
+
+            // Renderizar la interfaz con los datos correctamente filtrados
+            var html = QWeb.render('ListCuentas', { items: list_cuentas });
+            $('#reconciliation_lines_container').html(html);
+        });
     },
 
     mostrarMas: function () {
