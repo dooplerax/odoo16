@@ -48,7 +48,7 @@ class ResPartner(models.Model):
 
     vat = fields.Char(string='VAT', required=True)
 
-    @api.onchange('vat')
+    @api.constrains('vat', 'l10n_latam_identification_type_id')
     def _check_vat_format(self):
         """Ensure that the VAT (RUC/Cédula) is correctly formatted."""
         for record in self:
@@ -58,14 +58,12 @@ class ResPartner(models.Model):
             vat_cleaned = record.vat.strip()  # Eliminar espacios en blanco
 
             if record.l10n_latam_identification_type_id.name == 'RUC':
-                if not re.match(r'^\d{13}$', vat_cleaned):
-                    raise ValidationError("El RUC debe contener exactamente 13 dígitos numéricos.")
-                record.vat = vat_cleaned.zfill(13)  # Asegurar 13 dígitos con ceros a la izquierda si es necesario
+                if len(vat_cleaned) != 13 or not vat_cleaned.isdigit():
+                    raise ValidationError("El RUC debe contener exactamente 13 dígitos numéricos, ni más ni menos.")
 
             elif record.l10n_latam_identification_type_id.name == 'Cédula':
-                if not re.match(r'^\d{10}$', vat_cleaned):
-                    raise ValidationError("La Cédula debe contener exactamente 10 dígitos numéricos.")
-                record.vat = vat_cleaned.zfill(10)  # Asegurar 10 dígitos con ceros a la izquierda si es necesario
+                if len(vat_cleaned) != 10 or not vat_cleaned.isdigit():
+                    raise ValidationError("La Cédula debe contener exactamente 10 dígitos numéricos, ni más ni menos.")
 
 class BillingLocation(models.Model):
     _name = 'billing.location'
