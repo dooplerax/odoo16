@@ -3,7 +3,7 @@
 
 {
     'name': 'Retenciones para Ecuador',
-    'version': '16.0.1.0.0',
+    'version': '16.0.1.0.1',
     'category': 'Generic Modules/Accounting',
     'license': 'AGPL-3',
     'depends': [
@@ -18,6 +18,7 @@
     #     'python': ['xmlsig'],
     # },
     'data': [
+        'data/edi_document.xml',
         'views/withholding_supplier_view.xml',
         'views/withholding_customer_view.xml',
         'security/ir.model.access.csv',
