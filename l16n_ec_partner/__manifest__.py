@@ -4,7 +4,7 @@
 
 {
     'name': 'Partner for Ecuador',
-    'version': '16.0',
+    'version': '16.0.0.0.1',
     'category': 'Localization',
     'author': 'Danner Marante',
     'website': '',
