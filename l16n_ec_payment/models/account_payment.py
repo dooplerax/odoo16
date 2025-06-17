@@ -3,7 +3,8 @@ from odoo.exceptions import UserError, ValidationError
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
-    payment_number = fields.Char('Número', default='000')
+    payment_number = fields.Char('Número')
+    type_journal = fields.Selection(related='journal_id.type', string='Tipo de Diario', readonly=True, store=True)
     def _synchronize_from_moves(self, changed_fields):
         ''' Update the account.payment regarding its related account.move.
         Also, check both models are still consistent.
