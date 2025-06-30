@@ -22,6 +22,7 @@
                         <group name="state">
                             <field name="client"/>
                             <field name="costumer"/>
+                            <field name="courtain_types" invisible="1"/>
                             <field name="user_input" required="1" readonly="1"/>
                             <field name="entry_date" required="1"/>
                         </group>

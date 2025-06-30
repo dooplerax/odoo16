@@ -86,7 +86,7 @@ class SaleOrderLine(models.Model):
         string='Product Type', related='product_template_id.detailed_type')
     details_name = fields.Char(string='Descripción')
 
-    ambience = fields.Selection(selection='_get_ambience_selection', string="Ambiente")
+    ambience = fields.Char(selection='_get_ambience_selection', string="Ambiente")
     # new_ambience = fields.Selection(selection='_get_ambience_selection', string="Ambiente")
     courtain_type = fields.Selection(
         selection='_get_tipo_cortina_options', string="Tipo Cortina")

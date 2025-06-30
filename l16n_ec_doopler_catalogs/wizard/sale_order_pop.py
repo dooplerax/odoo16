@@ -136,28 +136,32 @@ class SaleOrder(models.Model):
     name = fields.Char(string="Título", default="Nuevo Registro", readonly=True)
 
     def get_group_totals(self):
-        group_totals = []
         groups = {}
 
         for line in self.order_line:
-            group_key = f"{line.courtain_type}_{line.product_id_extra.name}"
-            if group_key in groups:
-                groups[group_key]['quantity_extra'] += line.quantity_extra
-                groups[group_key]['price_subtotal_extra'] += line.price_subtotal_extra
-                groups[group_key]['price_total_extra'] += line.price_total_extra
-            else:
-                name = line.material.name if line.material.name else line.product_id_extra.name
+            if line.display_type in ['line_section', 'line_note']:
+                continue
+
+            # Definir la clave de agrupación
+            group_key = (
+                line.courtain_type or '',
+                line.material.name if line.material else line.product_id_extra.name
+            )
+
+            if group_key not in groups:
                 groups[group_key] = {
                     'courtain_type': line.courtain_type,
-                    'name': name,
-                    'quantity_extra': line.quantity_extra,
-                    'price_subtotal_extra': line.price_subtotal_extra,
-                    'price_total_extra': line.price_total_extra,
+                    'name': line.material.name if line.material else line.product_id_extra.name,
+                    'quantity_extra': 0.0,
+                    'price_subtotal_extra': 0.0,
+                    'price_total_extra': 0.0,
                     'price_unit': line.price_unit,
                     'display_type': line.display_type,
                 }
-        """ 'name': line.product_id_extra.name, """
-        for key, value in groups.items():
-            group_totals.append(value)
 
-        return group_totals
+            # Sumar valores
+            groups[group_key]['quantity_extra'] += line.quantity_extra
+            groups[group_key]['price_subtotal_extra'] += line.price_subtotal_extra
+            groups[group_key]['price_total_extra'] += line.price_total_extra
+
+        return list(groups.values())
