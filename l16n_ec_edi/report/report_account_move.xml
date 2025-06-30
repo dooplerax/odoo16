@@ -35,10 +35,8 @@
                                                 <strong></strong>
                                                 <span t-esc="res_company.street"/>
                                                 <br/>
-                                                <span>
-                                                    Contribuyente
-                                                </span>
-                                                <span t-esc="res_company.special_taxpayer"/>
+                                                <strong t-esc="res_company.special_taxpayer"/>
+                                                <span t-esc="res_company.l10n_ec_special_taxpayer_number"/>
                                                 <br/>
                                                 <span>
                                                     <strong>Obligado a Llevar contabilidad:</strong>
@@ -118,6 +116,7 @@
                                                     <img t-if="o.l10n_ec_authorization_number" t-att-src="'/report/barcode/Code128/'+o.l10n_ec_authorization_number"
                                                      style="width:400px;height:25px" alt="Barcode"/>
                                                 </div>
+                                                <span t-field="o.l10n_ec_authorization_number"/>
                                                 <br/>
                                             </div>
                                         </div>
