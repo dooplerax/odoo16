@@ -126,38 +126,38 @@ class ResPartner(models.Model):
         store=True
     )
 
-    @api.constrains('vat', 'l10n_latam_identification_type_id', 'company_id')
-    def _check_unique_identification_per_company(self):
-        """
-        Se dispara al crear/editar un partner. Valida que NO exista otro partner
-        (distinto al actual) con el mismo vat (número de identificación) y la misma
-        company_id, incluso cuando company_id es False (sin compañía).
-        """
-        for partner in self:
-            # Si no hay vat, no hay nada que comparar
-            if not partner.vat:
-                continue
-
-            # Búsqueda de otro partner con mismo vat y misma company_id (puede ser False)
-            otro = self.search([
-                ('vat', '=', partner.vat),
-                ('company_id', '=', partner.company_id.id),
-                ('id', '!=', partner.id),
-            ], limit=1)
-
-            if otro:
-                # Mensaje de error más genérico para incluir casos sin compañía
-                if partner.company_id:
-                    msg = _(
-                        "Ya existe un contacto con el mismo Número de Identificación "
-                        "(%s) en la compañía %s."
-                    ) % (partner.vat, partner.company_id.name)
-                else:
-                    msg = _(
-                        "Ya existe un contacto con el mismo Número de Identificación "
-                        "(%s) sin compañía asignada."
-                    ) % partner.vat
-                raise ValidationError(msg)
+    # @api.constrains('vat', 'l10n_latam_identification_type_id', 'company_id')
+    # def _check_unique_identification_per_company(self):
+    #     """
+    #     Se dispara al crear/editar un partner. Valida que NO exista otro partner
+    #     (distinto al actual) con el mismo vat (número de identificación) y la misma
+    #     company_id, incluso cuando company_id es False (sin compañía).
+    #     """
+    #     for partner in self:
+    #         # Si no hay vat, no hay nada que comparar
+    #         if not partner.vat:
+    #             continue
+    #
+    #         # Búsqueda de otro partner con mismo vat y misma company_id (puede ser False)
+    #         otro = self.search([
+    #             ('vat', '=', partner.vat),
+    #             ('company_id', '=', partner.company_id.id),
+    #             ('id', '!=', partner.id),
+    #         ], limit=1)
+    #
+    #         if otro:
+    #             # Mensaje de error más genérico para incluir casos sin compañía
+    #             if partner.company_id:
+    #                 msg = _(
+    #                     "Ya existe un contacto con el mismo Número de Identificación "
+    #                     "(%s) en la compañía %s."
+    #                 ) % (partner.vat, partner.company_id.name)
+    #             else:
+    #                 msg = _(
+    #                     "Ya existe un contacto con el mismo Número de Identificación "
+    #                     "(%s) sin compañía asignada."
+    #                 ) % partner.vat
+    #             raise ValidationError(msg)
 
     @api.constrains('vat', 'l10n_latam_identification_type_id')
     def _check_identification_length(self):
