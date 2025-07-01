@@ -16,13 +16,6 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    def __init__(self, pool, cr):
-        super(ResPartner, self).__init__(pool, cr)
-        self._constraints = [
-            c for c in self._constraints
-            if c[0].__name__ != '_check_unique_identification_per_company'
-        ]
-
     @api.depends('vat', 'name')
     def name_get(self):
         """
@@ -140,6 +133,10 @@ class ResPartner(models.Model):
         (distinto al actual) con el mismo vat (número de identificación) y la misma
         company_id, incluso cuando company_id es False (sin compañía).
         """
+
+        if self.env.context.get('skip_identification_constraint'):
+            return
+
         for partner in self:
             # Si no hay vat, no hay nada que comparar
             if not partner.vat:
