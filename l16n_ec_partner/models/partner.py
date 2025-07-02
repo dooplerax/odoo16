@@ -133,6 +133,10 @@ class ResPartner(models.Model):
         (distinto al actual) con el mismo vat (número de identificación) y la misma
         company_id, incluso cuando company_id es False (sin compañía).
         """
+
+        if not self.env.context.get('skip_identification_constraint'):
+            return
+
         for partner in self:
             # Si no hay vat, no hay nada que comparar
             if not partner.vat:
@@ -221,3 +225,11 @@ class ResCompany(models.Model):
         string='Agente de Retención',
         default='NO'
     )
+
+
+class MergePartnerAutomatic(models.TransientModel):
+    _inherit = 'base.partner.merge.automatic.wizard'
+
+    def action_merge(self):
+        self = self.with_context(skip_identification_constraint=False)
+        return super(MergePartnerAutomatic, self).action_merge()

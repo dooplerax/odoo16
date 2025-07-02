@@ -1,6 +1,6 @@
 ##
 ##
-from odoo import fields, models
+from odoo import fields, models, api
 class AccountPaymentRegister(models.TransientModel):
     _inherit ='account.payment.register'
 
@@ -13,3 +13,21 @@ class AccountPaymentRegister(models.TransientModel):
         payment_vals['payment_number'] = self.payment_number
         payment_vals['invoice_date'] = self.payment_date
         return payment_vals
+
+    @api.depends(
+        'can_edit_wizard',
+        'source_amount',
+        'source_amount_currency',
+        'source_currency_id',
+        'company_id',
+        'currency_id',
+    )
+    def _compute_amount(self):
+        for wiz in self:
+            if not wiz.amount:
+                if wiz.source_currency_id and wiz.can_edit_wizard:
+                    batch = wiz._get_batches()[0]
+                    wiz.amount = wiz._get_total_amount_in_wizard_currency_to_full_reconcile(batch)[0]
+                else:
+                    wiz.amount = None
+            continue

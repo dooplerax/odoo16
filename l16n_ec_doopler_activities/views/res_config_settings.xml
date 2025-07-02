@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View to Modify it -->
+        <record id="res_config_setting_journal_cross" model="ir.ui.view">
+            <field name="name">Journal Cross Setting</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='pay_invoice_online_setting_container']" position="after">
+                     <div class="row mt16 o_settings_container" name="default_journal_cross_setting_container">
+                            <div class="col-12 col-lg-6 o_setting_box"
+                                id="default_journal_cross_setting"
+                                >
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label string="Diario de cruce de pagos" for="journal_cross_payment_id" class="col-lg-3 o_light_label"/>
+                                            <field name="journal_cross_payment_id" domain="[('type', '=', 'general'), ('l10n_ec_withhold_type', '=', False)]"/>
+                                        </div>
+                                        <div class="row mt16">
+                                            <label string="Cuenta de cruce de pagos" for="account_cross_payment_id" class="col-lg-3 o_light_label"/>
+                                            <field name="account_cross_payment_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                     </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

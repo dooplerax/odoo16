@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Payments Ecuador',
-    'version': '16.0.0.0.1',
+    'version': '16.0.0.0.6',
     'category': 'Generic Modules/Accounting',
     'license': 'AGPL-3',
     'depends': [
