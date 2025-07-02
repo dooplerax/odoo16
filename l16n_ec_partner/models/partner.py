@@ -134,7 +134,7 @@ class ResPartner(models.Model):
         company_id, incluso cuando company_id es False (sin compañía).
         """
 
-        if not self.env.context.get('skip_identification_constraint'):
+        if self.env.context.get('skip_identification_constraint'):
             return
 
         for partner in self:
@@ -225,3 +225,11 @@ class ResCompany(models.Model):
         string='Agente de Retención',
         default='NO'
     )
+
+
+class MergePartnerAutomatic(models.TransientModel):
+    _inherit = 'base.partner.merge.automatic.wizard'
+
+    def action_merge(self):
+        self = self.with_context(skip_identification_constraint=True)
+        return super(MergePartnerAutomatic, self).action_merge()

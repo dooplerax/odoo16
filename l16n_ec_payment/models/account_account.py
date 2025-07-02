@@ -66,7 +66,7 @@ class ResPartner(models.Model):
     @api.constrains('vat')
     def _check_unique_vat(self):
         """ Validación para evitar duplicados en el campo vat """
-        if not self.env.context.get('skip_identification_constraint'):
+        if self.env.context.get('skip_identification_constraint'):
             return
         for record in self:
             if record.vat:
