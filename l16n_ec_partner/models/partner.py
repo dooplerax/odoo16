@@ -231,5 +231,5 @@ class MergePartnerAutomatic(models.TransientModel):
     _inherit = 'base.partner.merge.automatic.wizard'
 
     def action_merge(self):
-        self = self.with_context(skip_identification_constraint=True)
+        self = self.with_context(skip_identification_constraint=False)
         return super(MergePartnerAutomatic, self).action_merge()
