@@ -10,7 +10,7 @@ class AccountPayment(models.Model):
         Also, check both models are still consistent.
         :param changed_fields: A set containing all modified fields on account.move.
         '''
-        if self._context.get('skip_account_move_synchronization'):
+        if not self._context.get('skip_account_move_synchronization'):
             return
 
         for pay in self.with_context(skip_account_move_synchronization=True):

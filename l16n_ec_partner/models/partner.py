@@ -134,7 +134,7 @@ class ResPartner(models.Model):
         company_id, incluso cuando company_id es False (sin compañía).
         """
 
-        if self.env.context.get('skip_identification_constraint'):
+        if not self.env.context.get('skip_identification_constraint'):
             return
 
         for partner in self:
