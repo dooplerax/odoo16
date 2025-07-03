@@ -33,9 +33,9 @@ class ResConfigSettings(models.TransientModel):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    _sql_constraints = [
-        ('unique_vat', 'unique(vat)', 'El número de identificación ya está registrado.')
-    ]
+    # _sql_constraints = [
+    #     ('unique_vat', 'unique(vat)', 'El número de identificación ya está registrado.')
+    # ]
 
     property_account_payable_id = fields.Many2one('account.account', company_dependent=True,
                                                   string="Account Payable",
