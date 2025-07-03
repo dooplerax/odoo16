@@ -10,6 +10,9 @@
                     <field name="type_journal" invisible="1"/>
                     <field name="payment_number" attrs="{'required':[('type_journal', '!=', 'cash')]}"/>
                 </xpath>
+                <xpath expr="//field[@name='date']" position="replace">
+                    <field name="invoice_date" string="Fecha" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                </xpath>
             </field>
         </record>
 

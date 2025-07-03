@@ -1,5 +1,7 @@
 from odoo import models, fields, api, _, Command
 from odoo.exceptions import UserError, ValidationError
+from datetime import timedelta, date
+from odoo.tools import date_utils
 
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
@@ -115,3 +117,34 @@ class AccountMove(models.Model):
     def _get_default_payment_method(self):
         sri_payment = self.env['l10n_ec.sri.payment'].search([('name', '=', 'Otros con utilización del sistema financiero')],limit=1)
         return sri_payment.id or False
+
+    def _get_accounting_date(self, invoice_date, has_tax):
+        lock_dates = self._get_violated_lock_dates(invoice_date, has_tax)
+        today = fields.Date.context_today(self)
+
+        if not lock_dates:
+            return invoice_date
+
+        highest_name = self.highest_name or self._get_last_sequence(relaxed=True, lock=False)
+        number_reset = self._deduce_sequence_number_reset(highest_name)
+
+        invoice_date = lock_dates[-1][0] + timedelta(days=1)
+
+        if self.is_sale_document(include_receipts=True):
+            if not highest_name or number_reset == 'month':
+                return min(today, date_utils.get_month(invoice_date)[1])
+            elif number_reset == 'year':
+                return min(today, date_utils.end_of(invoice_date, 'year'))
+        else:
+            if not highest_name or number_reset == 'month':
+                if (today.year, today.month) > (invoice_date.year, invoice_date.month):
+                    return date_utils.get_month(invoice_date)[1]
+                else:
+                    return max(invoice_date, today)
+            elif number_reset == 'year':
+                if today.year > invoice_date.year:
+                    return date(invoice_date.year, 12, 31)
+                else:
+                    return max(invoice_date, today)
+
+        return invoice_date
