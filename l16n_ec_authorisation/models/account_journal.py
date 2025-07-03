@@ -46,7 +46,7 @@ class Users(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    vat = fields.Char(string='VAT', required=True)
+    vat = fields.Char(string='VAT')
 
     @api.constrains('vat', 'l10n_latam_identification_type_id')
     def _check_vat_format(self):
