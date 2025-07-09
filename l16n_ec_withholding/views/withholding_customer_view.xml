@@ -121,7 +121,7 @@
             <field name="view_mode">form</field>
             <field name="view_id" ref="view_account_retention_customer_form"/>
         </record>
-        <menuitem action="action_account_retention_customer_tree" id="menu_action_retention_customer" parent="account.menu_finance_receivables" sequence="4"/>
+<!--        <menuitem action="action_account_retention_customer_tree" id="menu_action_retention_customer" parent="account.menu_finance_receivables" sequence="4"/>-->
 
     </data>
 </odoo>

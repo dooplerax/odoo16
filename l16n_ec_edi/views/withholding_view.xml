@@ -6,7 +6,15 @@
             <field name="res_model">account.move</field>
             <field name="view_mode">tree,form</field>
             <field name="context">{'default_l10n_ec_withhold_type': 'in_withhold'}</field>
-            <field name="domain">[('l10n_latam_document_type_id.code','=','07')]</field>
+            <field name="domain">[('l10n_ec_withhold_type','=','in_withhold')]</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_withhold_customer">
+            <field name="name">Retenciones de Cliente</field>
+            <field name="res_model">account.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'default_l10n_ec_withhold_type': 'out_withhold'}</field>
+            <field name="domain">[('l10n_ec_withhold_type','=','out_withhold')]</field>
         </record>
 
         <menuitem
@@ -14,6 +22,12 @@
                 name="Retenciones de Proveedores"
                 id="menu_withhold_supplier_form"
                 parent="account.menu_finance_payables"
+                sequence="4"/>
+        <menuitem
+                action="action_withhold_customer"
+                name="Retenciones de Cliente"
+                id="menu_withhold_customer_form"
+                parent="account.menu_finance_receivables"
                 sequence="4"/>
     </data>
 </odoo>

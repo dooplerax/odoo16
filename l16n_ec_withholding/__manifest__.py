@@ -3,7 +3,7 @@
 
 {
     'name': 'Retenciones para Ecuador',
-    'version': '16.0.1.0.1',
+    'version': '16.0.1.0.2',
     'category': 'Generic Modules/Accounting',
     'license': 'AGPL-3',
     'depends': [
@@ -29,7 +29,7 @@
         # REPORTES
         'views/report/reports.xml',
         'views/report/report_account_withdrawing.xml',
-        'views/report/report_account_move.xml',
+        # 'views/report/report_account_move.xml',
         'views/latam_document_number.xml',
 
     ]
