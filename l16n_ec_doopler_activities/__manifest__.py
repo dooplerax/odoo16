@@ -2,7 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': "Doopler Activities",
-    'version': '16.0.0.1.1',
+    'version': '16.0.0.1.2',
     'author': "Sebastian Falconi",
     'description': """
     """,

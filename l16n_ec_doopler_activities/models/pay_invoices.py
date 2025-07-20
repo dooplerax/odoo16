@@ -132,10 +132,8 @@ class AccountPayment(models.Model):
             else:
                 invoices = self.env['account.move']
 
-            if not invoices:
-                raise UserError("No hay facturas pendientes para %s." % self.partner_id.name)
-
-            self.invoice_ids = [(6, 0, invoices.ids)]
+            if invoices:
+                self.invoice_ids = [(6, 0, invoices.ids)]
         else:
             self.invoice_ids = [(5,)]
 
