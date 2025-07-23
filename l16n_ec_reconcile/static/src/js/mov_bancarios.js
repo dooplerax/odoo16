@@ -17,6 +17,7 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
       'click .btn_siquiente': 'actionSiquiente',
       'click .btn_anterior': 'actionAnterior',
       'click .btn-procesar-conciliacion': 'procesarConciliacion',
+      'click .btn_export_banks': 'actionExport'
     },
     start: function () {
       var self = this
@@ -56,9 +57,6 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
       var account = $('#id_cuentas option:selected').val()
       var valor = $('#id_valor').val()
       var estados = $('#id_estado option:selected').val()
-      console.log('valor', valor)
-      console.log('account', account)
-      console.log('estado', estados)
 
       return this._rpc({
         model: 'bank.account.move',
@@ -138,6 +136,34 @@ odoo.define('l16n_ec_reconcile.MovBancarios', function (require) {
         })
       }
     },
+
+    actionExport: function () {
+        var fecha_inicio = $('#id_fecha_desde').val();
+        var fecha_hasta = $('#id_fecha_hasta').val();
+        var no_documento = $('#id_nodocumento').val();
+        var select = $('#id_select option:selected').val();
+        var partner = $('#id_partner option:selected').val();
+        var account = $('#id_cuentas option:selected').val();
+        var valor = $('#id_valor').val();
+        var estados = $('#id_estado option:selected').val();
+        self = this;
+        self._rpc({
+            model: 'bank.account.move',
+            method: 'action_export',
+            args: [fecha_inicio, fecha_hasta, no_documento, select, valor, partner, account, estados]
+        }).then(function(result) {
+            var action = ({
+                type: 'ir.actions.act_window',
+                res_model: 'download.xlsx',
+                view_type: 'form',
+                view_mode: 'form',
+                res_id: result.res_id,
+                views: [[false, 'form']],
+                target: 'new',
+            });
+            self.do_action(action);
+        });
+    }
   })
   core.action_registry.add('movimientos_bancarios', BanckMove)
   return {
