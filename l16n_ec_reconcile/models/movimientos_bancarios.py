@@ -36,7 +36,7 @@ class MovimientosBancarios(models.TransientModel):
         if fecha_hasta:
             where += "and lin.date <= '{}'".format(fecha_hasta)
         if no_documento:
-            where += "and (mov.name like '%{}%')".format(no_documento, no_documento)
+            where += "and (mov.name like '{}' or mov.payment_number like '{}')".format(no_documento, no_documento)
         if id_valor:
             valor = float(id_valor)
             if id_select == 'mayor':
@@ -185,7 +185,7 @@ class MovimientosBancarios(models.TransientModel):
         worksheet.write(3, 4, 'Beneficiario', cabecera)
         worksheet.write(3, 5, 'Concepto', cabecera)
         worksheet.write(3, 6, 'Valor', cabecera)
-        lineas = self._lines(fecha_inicio, fecha_hasta, no_documento, select, valor, patner, account, estados)
+        lineas = self._lines(fecha_inicio, fecha_hasta, no_documento, select, valor, patner, int(account), estados)
         key = 4
         for li in lineas:
             worksheet.write(key, 0, str(li[1]))
