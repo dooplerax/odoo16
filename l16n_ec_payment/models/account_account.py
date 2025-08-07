@@ -92,5 +92,5 @@ class AccountMove(models.Model):
     def create(self, vals):
         move = super(AccountMove, self).create(vals)
         if move.invoice_date:
-            move.date = move.invoice_date  # Asignamos el valor después de la creación
+            move.date = vals['date']  # Asignamos el valor después de la creación
         return move
