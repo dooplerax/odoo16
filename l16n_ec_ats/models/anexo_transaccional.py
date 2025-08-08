@@ -55,9 +55,9 @@ class AnexoTransac(models.Model):
     txt_binary = fields.Binary()
 
     TEMPLATES = {'anexo_transaccional': 'anexo_transaccional.xml'}
-    TIPO_IDENTIFICACION_GENERAL = {'pasaporte': 'P', 'cedula': 'C', 'RUC': 'R'}
-    TIPO_IDENTIFICACION = {'pasaporte': '03', 'Cédula': '02', 'RUC': '01'}
-    TP_ID_CLIENTE = {'pasaporte': '06', 'cedula': '05', 'RUC': '04'}
+    TIPO_IDENTIFICACION_GENERAL = {'Pasaporte': 'P', 'Cédula': 'C', 'RUC': 'R', 'Cédula Extranjera': 'P'}
+    TIPO_IDENTIFICACION = {'Pasaporte': '03', 'Cédula': '02', 'RUC': '01', 'Cédula Extranjera': '03'}
+    TP_ID_CLIENTE = {'Pasaporte': '06', 'Cédula': '05', 'RUC': '04', 'Cédula Extranjera': '06'}
     CARACTERES_PERRMITIDOS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 '
 
     @staticmethod
