@@ -91,6 +91,18 @@ class AccountMove(models.Model):
     @api.model
     def create(self, vals):
         move = super(AccountMove, self).create(vals)
-        if move.invoice_date:
-            move.date = vals['l10n_ec_withhold_date'] if 'l10n_ec_withhold_date' in vals else move.invoice_date  # Asignamos el valor después de la creación
+
+        # Manejo seguro de fechas
+        withhold_date = vals.get('l10n_ec_withhold_date')
+        invoice_date = vals.get('invoice_date')
+
+        if not move.date:
+            if withhold_date:  # Primera prioridad: fecha de retención
+                move.date = withhold_date
+            elif invoice_date:  # Segunda prioridad: fecha de factura
+                move.date = invoice_date
+
+        if withhold_date:
+            move.date = withhold_date
+
         return move
