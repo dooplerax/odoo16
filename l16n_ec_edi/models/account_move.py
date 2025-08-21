@@ -22,3 +22,15 @@ class AccountMove(models.Model):
                 if lines_to_reconcile:
                     lines_to_reconcile.reconcile()
         return res
+
+class AccountMoveLine(models.Model):
+        _inherit = 'account.move.line'
+
+        @api.depends('tax_ids')
+        def _compute_withhold_tax_amount(self):
+            lines_ids = self.filtered('move_id.l10n_ec_withhold_type')
+            for line in lines_ids:
+                currency_rate = line.balance / line.amount_currency if line.amount_currency != 0 else 1
+                line.l10n_ec_withhold_tax_amount = line.currency_id.round(
+                    currency_rate * abs(line.price_total - line.price_subtotal))
+            (self - lines_ids).l10n_ec_withhold_tax_amount = 0.0
