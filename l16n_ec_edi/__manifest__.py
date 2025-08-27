@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
     'name': 'Customs Ecuador EDI',
-    'version': '16.0.0.7',
+    'version': '16.0.0.8',
     'author': 'Johnny Piguave',
     'category': 'Localization',
     'complexity': 'normal',

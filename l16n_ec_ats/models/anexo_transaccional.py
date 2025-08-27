@@ -174,20 +174,21 @@ class AnexoTransac(models.Model):
             temp.update({'puntoEmision': str(comp.l10n_latam_document_number[4:7])})
             temp.update({'secuencial': str(comp.l10n_latam_document_number[8:17])})
             temp.update({'fechaEmision': str(self.formato_fecha(comp.invoice_date))})
+            authorization_number = comp.l10n_ec_authorization_number or comp.authorization_number
             if comp.move_type == 'liq_purchase':
-                if not comp.l10n_ec_authorization_number:
+                if not authorization_number:
                     raise ValidationError(
                         u'El documento de liquidacion de compra '
                         + comp.l10n_latam_document_number
                         + u' no tiene clave de acceso'
                     )
-                temp.update({'autorizacion': str(comp.l10n_ec_authorization_number)})
+                temp.update({'autorizacion': str(authorization_number)})
             else:
-                if not comp.l10n_ec_authorization_number:
+                if not authorization_number:
                     raise ValidationError(
                         "La factura de compra {} no tiene clave de acceso".format(comp.l10n_latam_document_number)
                     )
-                temp.update({'autorizacion': str(comp.l10n_ec_authorization_number)})
+                temp.update({'autorizacion': str(authorization_number)})
             base_exempt_vat, base_zero_vat, base_vats, base_ice = self._get_vat_values(comp)
             temp.update({'baseNoGraIva': f'{base_exempt_vat:.2f}'})
             temp.update({
@@ -211,11 +212,12 @@ class AnexoTransac(models.Model):
                     temp.update({'estabModificado': str(doc_origen.l10n_latam_document_number[0:3])})
                     temp.update({'ptoEmiModificado': str(doc_origen.l10n_latam_document_number[4:7])})
                     temp.update({'secModificado': str(comp.l10n_latam_document_number[8:17])})
-                    if not doc_origen.l10n_ec_authorization_number:
+                    authorization_number = doc_origen.l10n_ec_authorization_number or doc_origen.authorization_number
+                    if not authorization_number:
                         raise ValidationError(
                             u'El documento de nota de crédito {} no tiene clave de acceso'.format(comp.invoice_number)
                         )
-                    temp.update({'autModificado': str(doc_origen.l10n_ec_authorization_number)})
+                    temp.update({'autModificado': str(authorization_number)})
                 else:
                     raise ValidationError(u'Nota de crédito {} , no tiene documento que la sustente'.format(comp.name))
                 pass
