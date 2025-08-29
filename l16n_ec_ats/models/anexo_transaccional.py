@@ -289,10 +289,13 @@ class AnexoTransac(models.Model):
                                 })
                                 impu_retencion.append(temp1)
                             total_amount = total_amount + abs(withhold_line_id.l10n_ec_withhold_tax_amount)
-                temp.update({'estabRetencion1': str(re.l10n_latam_document_number[0:3])})
-                temp.update({'ptoEmiRetencion1': str(re.l10n_latam_document_number[4:7])})
+                l10n_latam_document_number = re.l10n_latam_document_number
+                if l10n_latam_document_number.startswith('Ret '):
+                    l10n_latam_document_number = l10n_latam_document_number.replace('Ret ', '', 1)
+                temp.update({'estabRetencion1': str(l10n_latam_document_number[0:3])})
+                temp.update({'ptoEmiRetencion1': str(l10n_latam_document_number[4:7])})
                 if re.name:
-                    temp.update({'secRetencion1': str(re.l10n_latam_document_number[8:17])})
+                    temp.update({'secRetencion1': str(l10n_latam_document_number[8:17])})
                 else:
                     temp.update({'secRetencion1': ''})
                 temp.update({'autRetencion1': str(re.l10n_ec_authorization_number)})
