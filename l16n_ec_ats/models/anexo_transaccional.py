@@ -183,7 +183,7 @@ class AnexoTransac(models.Model):
                         + u' no tiene clave de acceso'
                     )
                 temp.update({'autorizacion': str(authorization_number)})
-            else:
+            elif comp.move_type == 'in_invoice':
                 if not authorization_number:
                     raise ValidationError(
                         "La factura de compra {} no tiene clave de acceso".format(comp.l10n_latam_document_number)
