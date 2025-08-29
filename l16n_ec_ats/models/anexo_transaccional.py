@@ -189,6 +189,12 @@ class AnexoTransac(models.Model):
                         "La factura de compra {} no tiene clave de acceso".format(comp.l10n_latam_document_number)
                     )
                 temp.update({'autorizacion': str(authorization_number)})
+            else:
+                if not authorization_number:
+                    raise ValidationError(
+                        "La nota de crédito {} no tiene clave de acceso".format(comp.l10n_latam_document_number)
+                    )
+                temp.update({'autorizacion': str(authorization_number)})
             base_exempt_vat, base_zero_vat, base_vats, base_ice = self._get_vat_values(comp)
             temp.update({'baseNoGraIva': f'{base_exempt_vat:.2f}'})
             temp.update({
