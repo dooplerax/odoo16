@@ -245,50 +245,53 @@ class AnexoTransac(models.Model):
             impu_retencion = []
             for re in comp.l10n_ec_withhold_ids:
                 total_amount = 0
-                temp.update({'totalAmount': False})
-                for withhold_line_id in re.l10n_ec_withhold_line_ids:
-                    for tax_id in withhold_line_id.tax_ids:
-                        if tax_id.tax_group_id.l10n_ec_type == 'withhold_vat_purchase':
-                            if tax_id.amount == 10:
-                                ret_bienes10 += withhold_line_id.l10n_ec_withhold_tax_amount
-                            if tax_id.amount == 20:
-                                val_ret_serv20 += withhold_line_id.l10n_ec_withhold_tax_amount
-                            if tax_id.amount == 30:
-                                valor_ret_bienes += withhold_line_id.l10n_ec_withhold_tax_amount
-                            if tax_id.amount == 50:
-                                val_ret_serv50 += withhold_line_id.l10n_ec_withhold_tax_amount
-                            if tax_id.amount == 70:
-                                valor_ret_servicios += withhold_line_id.l10n_ec_withhold_tax_amount
-                            if tax_id.amount == 100:
-                                val_ret_serv100 += withhold_line_id.l10n_ec_withhold_tax_amount
-                        if tax_id.tax_group_id.l10n_ec_type == 'withhold_income_purchase':
-                            existe = False
-                            for tem_impu in impu_retencion:
-                                if tem_impu['codRetAir'] == tax_id.description:
-                                    existe = True
-                                    tem_impu['baseImpAir'] = "{0:.2f}".format(
-                                        float(tem_impu['baseImpAir']) + abs(withhold_line_id.balance)
-                                    )
-                                    tem_impu['valRetAir'] = "{0:.2f}".format(
-                                        float(tem_impu['valRetAir']) + abs(withhold_line_id.l10n_ec_withhold_tax_amount)
-                                    )
-                                    continue
-                            if not existe:
-                                temp1 = {}
-                                temp1.update({'codRetAir': tax_id.l10n_ec_code_ats})
-                                temp1.update({'baseImpAir': str("{0:.2f}".format(abs(withhold_line_id.balance)))})
-                                temp1.update({
-                                    'porcentajeAir': str(
-                                        int(tax_id.amount)
-                                    ) if tax_id.amount == int(tax_id.amount) else f'{tax_id.amount:.2f}'
-                                })
-                                temp1.update({
-                                    'valRetAir': str(
-                                        "{0:.2f}".format(abs(withhold_line_id.l10n_ec_withhold_tax_amount))
-                                    )
-                                })
-                                impu_retencion.append(temp1)
-                            total_amount = total_amount + abs(withhold_line_id.l10n_ec_withhold_tax_amount)
+                if re.state == 'posted':
+                    temp.update({'totalAmount': False})
+                    for withhold_line_id in re.l10n_ec_withhold_line_ids:
+                        for tax_id in withhold_line_id.tax_ids:
+                            if tax_id.tax_group_id.l10n_ec_type == 'withhold_vat_purchase':
+                                if tax_id.amount == 10:
+                                    ret_bienes10 += withhold_line_id.l10n_ec_withhold_tax_amount
+                                if tax_id.amount == 20:
+                                    val_ret_serv20 += withhold_line_id.l10n_ec_withhold_tax_amount
+                                if tax_id.amount == 30:
+                                    valor_ret_bienes += withhold_line_id.l10n_ec_withhold_tax_amount
+                                if tax_id.amount == 50:
+                                    val_ret_serv50 += withhold_line_id.l10n_ec_withhold_tax_amount
+                                if tax_id.amount == 70:
+                                    valor_ret_servicios += withhold_line_id.l10n_ec_withhold_tax_amount
+                                if tax_id.amount == 100:
+                                    val_ret_serv100 += withhold_line_id.l10n_ec_withhold_tax_amount
+                            if tax_id.tax_group_id.l10n_ec_type == 'withhold_income_purchase':
+                                existe = False
+                                for tem_impu in impu_retencion:
+                                    if tem_impu['codRetAir'] == tax_id.description:
+                                        existe = True
+                                        tem_impu['baseImpAir'] = "{0:.2f}".format(
+                                            float(tem_impu['baseImpAir']) + abs(withhold_line_id.balance)
+                                        )
+                                        tem_impu['valRetAir'] = "{0:.2f}".format(
+                                            float(
+                                                tem_impu['valRetAir']
+                                            ) + abs(withhold_line_id.l10n_ec_withhold_tax_amount)
+                                        )
+                                        continue
+                                if not existe:
+                                    temp1 = {}
+                                    temp1.update({'codRetAir': tax_id.l10n_ec_code_ats})
+                                    temp1.update({'baseImpAir': str("{0:.2f}".format(abs(withhold_line_id.balance)))})
+                                    temp1.update({
+                                        'porcentajeAir': str(
+                                            int(tax_id.amount)
+                                        ) if tax_id.amount == int(tax_id.amount) else f'{tax_id.amount:.2f}'
+                                    })
+                                    temp1.update({
+                                        'valRetAir': str(
+                                            "{0:.2f}".format(abs(withhold_line_id.l10n_ec_withhold_tax_amount))
+                                        )
+                                    })
+                                    impu_retencion.append(temp1)
+                                total_amount = total_amount + abs(withhold_line_id.l10n_ec_withhold_tax_amount)
                 l10n_latam_document_number = re.l10n_latam_document_number
                 if l10n_latam_document_number.startswith('Ret '):
                     l10n_latam_document_number = l10n_latam_document_number.replace('Ret ', '', 1)
@@ -375,54 +378,57 @@ class AnexoTransac(models.Model):
             ventas_total += ven['amount_untaxed']
             base_exempt_vat, base_zero_vat, base_vats, base_ice = self._get_vat_values(ven)
             try:
-                ventas[ven.partner_id.id]['baseImponible'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['baseImponible']) + float(base_zero_vat))
+                ventas[ven.partner_id.vat]['baseImponible'] = str(
+                    "{0:.2f}".format(float(ventas[ven.partner_id.vat]['baseImponible']) + float(base_zero_vat))
                 )
-                ventas[ven.partner_id.id]['baseImpGrav'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['baseImpGrav']) + float(base_vats))
+                ventas[ven.partner_id.vat]['baseImpGrav'] = str(
+                    "{0:.2f}".format(float(ventas[ven.partner_id.vat]['baseImpGrav']) + float(base_vats))
                 )
-                ventas[ven.partner_id.id]['montoIce'] = str(
-                    "{0:.2f}".format(float(ventas[ven.partner_id.id]['montoIce']) + base_ice)
+                ventas[ven.partner_id.vat]['montoIce'] = str(
+                    "{0:.2f}".format(float(ventas[ven.partner_id.vat]['montoIce']) + base_ice)
                 )
-                ventas[ven.partner_id.id]['montoIva'] = str("{0:.2f}".format(
-                    float(ventas[ven.partner_id.id]['montoIva']) + ven.amount_tax)
+                ventas[ven.partner_id.vat]['montoIva'] = str("{0:.2f}".format(
+                    float(ventas[ven.partner_id.vat]['montoIva']) + ven.amount_tax)
                 )
-                valor_iva = float(ventas[ven.partner_id.id]['valorRetIva'])
-                ret_rent = float(ventas[ven.partner_id.id]['valorRetRenta'])
+                valor_iva = float(ventas[ven.partner_id.vat]['valorRetIva'])
+                ret_rent = float(ventas[ven.partner_id.vat]['valorRetRenta'])
                 valor_iva, ret_rent = self._get_retention_values(ven, valor_iva, ret_rent)
-                ventas[ven.partner_id.id]['numeroComprobantes'] += 1
-                ventas[ven.partner_id.id]['valorRetIva'] = str("{0:.2f}".format(valor_iva))
-                ventas[ven.partner_id.id]['valorRetRenta'] = str("{0:.2f}".format(ret_rent))
+                ventas[ven.partner_id.vat]['numeroComprobantes'] += 1
+                ventas[ven.partner_id.vat]['valorRetIva'] = str("{0:.2f}".format(valor_iva))
+                ventas[ven.partner_id.vat]['valorRetRenta'] = str("{0:.2f}".format(ret_rent))
             except Exception:
-                ventas[ven.partner_id.id] = {}
-                ventas[ven.partner_id.id].update({'id': ven.id})
-                ventas[ven.partner_id.id].update({
+                ventas[ven.partner_id.vat] = {}
+                ventas[ven.partner_id.vat].update({'id': ven.id})
+                ventas[ven.partner_id.vat].update({
                     'tpIdCliente': str(self.TP_ID_CLIENTE[ven.partner_id.l10n_latam_identification_type_id.name])
                 })
-                ventas[ven.partner_id.id].update({'idCliente': str(ven.partner_id.vat)})
-                ventas[ven.partner_id.id].update({'parteRelVtas': 'NO'})
-                ventas[ven.partner_id.id].update({'tipoComprobante': str(ven.l10n_latam_document_type_id.code)})
+                ventas[ven.partner_id.vat].update({'idCliente': str(ven.partner_id.vat)})
+                ventas[ven.partner_id.vat].update({'parteRelVtas': 'NO'})
+                l10n_latam_document_type_id = ven.l10n_latam_document_type_id.code
+                if l10n_latam_document_type_id == '01':
+                    l10n_latam_document_type_id = '18'
+                ventas[ven.partner_id.vat].update({'tipoComprobante': l10n_latam_document_type_id})
                 if self.env.user.company_id.type_invoice == '1':
-                    ventas[ven.partner_id.id].update({'tipoEmision': 'E'})
+                    ventas[ven.partner_id.vat].update({'tipoEmision': 'E'})
                 else:
-                    ventas[ven.partner_id.id].update({'tipoEmision': 'F'})
+                    ventas[ven.partner_id.vat].update({'tipoEmision': 'F'})
                 if ven.partner_id.l10n_latam_identification_type_id.name == 'Pasaporte':
-                    ventas[ven.partner_id.id].update({'tipoCliente': '01'})
-                    ventas[ven.partner_id.id].update({'nombrCliente': ven.partner_id.name})
-                ventas[ven.partner_id.id].update({'numeroComprobantes': 1})
-                ventas[ven.partner_id.id].update({'baseNoGraIva': f'{base_exempt_vat:.2f}'})
-                ventas[ven.partner_id.id].update({
+                    ventas[ven.partner_id.vat].update({'tipoCliente': '01'})
+                    ventas[ven.partner_id.vat].update({'nombrCliente': ven.partner_id.name})
+                ventas[ven.partner_id.vat].update({'numeroComprobantes': 1})
+                ventas[ven.partner_id.vat].update({'baseNoGraIva': f'{base_exempt_vat:.2f}'})
+                ventas[ven.partner_id.vat].update({
                     'baseImponible': str("{0:.2f}".format(base_zero_vat)) if int(base_exempt_vat) == 0 else "0.00"
                 })
-                ventas[ven.partner_id.id].update({'baseImpGrav': str("{0:.2f}".format(base_vats))})
-                ventas[ven.partner_id.id].update({'montoIce': str("{0:.2f}".format(base_ice))})
-                ventas[ven.partner_id.id].update({'montoIva': str("{0:.2f}".format(ven.amount_tax))})
-                ventas[ven.partner_id.id].update({'formaPago': ven.l10n_ec_sri_payment_id.code})
+                ventas[ven.partner_id.vat].update({'baseImpGrav': str("{0:.2f}".format(base_vats))})
+                ventas[ven.partner_id.vat].update({'montoIce': str("{0:.2f}".format(base_ice))})
+                ventas[ven.partner_id.vat].update({'montoIva': str("{0:.2f}".format(ven.amount_tax))})
+                ventas[ven.partner_id.vat].update({'formaPago': ven.l10n_ec_sri_payment_id.code})
                 valor_iva = 0
                 ret_rent = 0
                 valor_iva, ret_rent = self._get_retention_values(ven, valor_iva, ret_rent)
-                ventas[ven.partner_id.id].update({'valorRetIva': str("{0:.2f}".format(abs(valor_iva)))})
-                ventas[ven.partner_id.id].update({'valorRetRenta': str("{0:.2f}".format(abs(ret_rent)))})
+                ventas[ven.partner_id.vat].update({'valorRetIva': str("{0:.2f}".format(abs(valor_iva)))})
+                ventas[ven.partner_id.vat].update({'valorRetRenta': str("{0:.2f}".format(abs(ret_rent)))})
         total_notas, ventas_notas = self._lista_notas_credito(date_month_start, date_month_end)
         ventas_total -= total_notas
         list_resul = []
