@@ -154,6 +154,8 @@ class AnexoTransac(models.Model):
         ])
         for comp in compras:
             temp = {}
+            if comp.taxsupport_code == '00':
+                continue
             temp.update({'codSustento': str(comp.taxsupport_code)})
             temp.update({
                 'tpIdProv': str(self.TIPO_IDENTIFICACION[comp.partner_id.l10n_latam_identification_type_id.name])
