@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_move_form_invoice_and_withhold_view_inherit" model="ir.ui.view">
+            <field name="name">account.move.form.invoice.and.withhold.view.inherit</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="l10n_ec_edi.account_move_form_invoice_and_withhold_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <field name="have_invoices" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@id='withhold_tab']" position="attributes">
+                    <attribute name="attrs">
+                        {
+                            'invisible': [
+                                '|',
+                                ('l10n_ec_withhold_type', 'not in', ['out_withhold', 'in_withhold']),
+                                ('have_invoices', '=', False)
+                            ]
+                        }
+                    </attribute>
+                </xpath>
+                <xpath expr="//page[@id='withhold_tab']" position="before">
+                    <page id="individual_withhold_tab" string="Líneas de la retención"
+                          attrs="{
+                            'invisible': [
+                                '|',
+                                ('l10n_ec_withhold_type', '!=', 'out_withhold'),
+                                ('have_invoices', '=', True)
+                            ]
+                          }">
+                        <field name="retention_line_ids" mode="tree,kanban" domain="[]"
+                               attrs="{'readonly': [('state', '!=', 'draft')]}">
+                            <tree editable="bottom">
+                                <field name="l10n_ec_code_taxsupport"
+                                       attrs="{
+                                        'column_invisible': [('parent.l10n_ec_withhold_type', '=', 'out_withhold')]
+                                       }"/>
+                                <field name="tax_ids" string="Impuesto" widget="many2many_tags" domain="[]"/>
+                                <field name="balance" string="Monto Base"/>
+                                <field name="ret_tax_amount" attrs="{'readonly': [('parent.state', '!=', 'draft')]}"/>
+                            </tree>
+                        </field>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="l10n_ec_withhold_subtotals" widget="account-tax-totals-field-for-withhold"
+                                   nolabel="1" colspan="2"/>
+                        </group>
+                        <field name="narration" placeholder="Añadir una nota interna..." nolabel="1" height="50"/>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
