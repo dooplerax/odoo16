@@ -12,11 +12,11 @@
         'report/report_account_move.xml',
         'views/withholding_view.xml',
         'views/credit_note_view.xml',
+        'views/account_move_views_inherit.xml'
     ],
     'depends': [
-       'account_edi',
+        'account_edi',
         'l10n_ec_edi'
     ],
     "installable": True,
 }
-
