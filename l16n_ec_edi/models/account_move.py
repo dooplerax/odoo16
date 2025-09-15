@@ -43,7 +43,33 @@ class AccountMove(models.Model):
                             if invoice_repartition_line_id.account_id:
                                 account_id = invoice_repartition_line_id.account_id.id
                         retention_line[2]['account_id'] = account_id
-        return super().write(vals)
+        is_written = super().write(vals)
+        if vals.get('retention_line_ids'):
+            lines = self.env['account.move.line'].search([('move_id', '=', self.id), ('name', '=like', 'Base Ret: %')])
+            if lines:
+                lines.unlink()
+            have_lines = False
+            for line_id in self.line_ids:
+                if line_id.credit == 0 and not line_id.name:
+                    self.env['account.move.line'].create({
+                        'account_id': line_id.account_id.id,
+                        'partner_id': line_id.partner_id.id,
+                        'name': f'Base Ret: {self.payment_number}',
+                        'debit': 0,
+                        'credit': line_id.debit,
+                        'move_id': self.id
+                    })
+                    have_lines = True
+            if have_lines:
+                self.env['account.move.line'].create({
+                    'account_id': self.partner_id.property_account_receivable_id.id,
+                    'partner_id': self.partner_id.id,
+                    'name': f'Base Ret: {self.payment_number}',
+                    'debit': 0,
+                    'credit': self.amount_total,
+                    'move_id': self.id
+                })
+        return is_written
 
     @api.model_create_multi
     def create(self, vals_list):
