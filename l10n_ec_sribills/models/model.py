@@ -160,61 +160,85 @@ class SriBillsLoad(models.Model):
     def import_documentos(self):
         """
         Importa los xml del sri por el numero de autorizacion
-        :return: true
         """
         estadoGeneral = True
-        for line in self.documentos_id:
-            if not line.documento_firmado:
-                line.generada, line.comentario = False, 'Fecha de emisión extemporánea, ocurrió un error en el SRI'
-                continue
+        try:
+            for line in self.documentos_id:
+                try:
+                    if not line.documento_firmado:
+                        line.update({
+                            'generada': False,
+                            'comentario': 'Fecha de emisión extemporánea, ocurrió un error en el SRI',
+                            'existing_invoice_id': False
+                        })
+                        continue
 
-            xslt_content = line.documento_firmado.encode('utf-8')  # Convertir la cadena a bytes con codificación UTF-8
-            comprobante_num = line.serie_comprobante
-            tipo = ''
+                    xslt_content = line.documento_firmado.encode('utf-8')
+                    comprobante_num = line.serie_comprobante
 
-            try:
-                root = etree.fromstring(xslt_content)
-                tipo = root.tag
+                    # Parsear XML
+                    root = etree.fromstring(xslt_content)
+                    tipo = root.tag
 
-                if tipo == 'factura':
-                    objFactura = generarFactura(xslt_content)
-                elif tipo == 'comprobanteRetencion':
-                    objFactura = generarRetencion(xslt_content)
-                else:
-                    raise ValueError(f'Tipo desconocido: {tipo}')
+                    if tipo == 'factura':
+                        objFactura = generarFactura(xslt_content)
+                    elif tipo == 'comprobanteRetencion':
+                        objFactura = generarRetencion(xslt_content)
+                    else:
+                        raise ValueError(f'Tipo de documento no soportado: {tipo}')
 
-                if tipo == 'factura':
-                    line.generada, line.comentario = self._factura(objFactura,xslt_content,comprobante_num)
-                elif tipo == 'comprobanteRetencion':
-                    line.generada, line.comentario = self._retencion(objFactura)
-                else:
-                    line.generada = False
+                    if tipo == 'factura':
+                        success, message = self._factura(objFactura, xslt_content, comprobante_num)
+                    elif tipo == 'comprobanteRetencion':
+                        success, message = self._retencion(objFactura)
+                    else:
+                        success, message = False, "Tipo no soportado"
 
-                if line.generada:
-                    self.documentos_importados += 1
-                else:
+                    line.generada = success
+                    line.comentario = message
+
+                    if success:
+                        self.documentos_importados += 1
+
+                        self.env.cr.commit()
+
+                        existe_fact = self.env['account.move'].search([
+                            ('l10n_latam_document_number_stored', '=', comprobante_num)
+                        ], limit=1)
+
+                        line.existing_invoice_id = existe_fact.id if existe_fact else False
+
+                    else:
+                        self.documentos_error += 1
+                        line.existing_invoice_id = False
+                        self.env.cr.rollback()
+
+                    if not success and estadoGeneral:
+                        estadoGeneral = False
+
+                except Exception as e:
+                    _logger.error(f"Error procesando documento {line.id}: {str(e)}")
+                    line.update({
+                        'generada': False,
+                        'comentario': f"Error: {str(e)}",
+                        'existing_invoice_id': False
+                    })
                     self.documentos_error += 1
-                if not line.generada and estadoGeneral:
                     estadoGeneral = False
+                    # Rollback para este documento específico
+                    self.env.cr.rollback()
 
-                existe_fact = self.env['account.move'].search(
-                    [('l10n_latam_document_number_stored', '=', line.serie_comprobante)], limit=1)
+            # Actualizar estado final
+            if estadoGeneral:
+                self.state = 'done'
+                self.env.cr.commit()
 
-                if existe_fact:
-                    line.existing_invoice_id = existe_fact.id
-                else:
-                    line.existing_invoice_id = False
+            return True
 
-            except etree.XMLSyntaxError as e:
-                # Capturar y registrar el error de manera más detallada
-                self.logger.error(f"Error al analizar el XML en documento_id {line.id}: {e}")
-                self.logger.error(f"Contenido del XML: {xslt_content}")
-                # Establecer estadoGeneral en False si se produce un error
-                estadoGeneral = False
-
-        if estadoGeneral:
-            self.state = 'done'
-        return True
+        except Exception as e:
+            _logger.error(f"Error general en import_documentos: {str(e)}")
+            self.env.cr.rollback()
+            return False
 
 
     def _retencion(self, obj):
