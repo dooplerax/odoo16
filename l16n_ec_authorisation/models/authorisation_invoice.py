@@ -58,7 +58,7 @@ class AccountMove(models.Model):
         ''', [tuple(moves.ids)])
         results = self._cr.fetchall()
         _logger.info(f"🔍 UNBALANCED MOVES: {results}")
-        if self.move_type == 'entry':
+        if len(self) == 1 and self.move_type == 'entry':
             return results
         return self._cr.fetchall()
 
