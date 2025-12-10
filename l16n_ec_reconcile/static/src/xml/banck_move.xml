@@ -142,10 +142,18 @@
                         </td>
                         <td>
                             <div class="oe_button_box" name="button_box">
-                                <button name="action_name" type="object" t-att-id="item.id"
-                                class="oe_stat_button btn-procesar-conciliacion" icon="fa-">
-                                Conciliar
-                                </button>
+                                <t t-if="item.conciliado == 'No'">
+                                    <button name="action_name" type="object" t-att-id="item.id" icon="fa-"
+                                            class="oe_stat_button btn-procesar-conciliacion">
+                                        Conciliar
+                                    </button>
+                                </t>
+                                <t t-if="item.conciliado == 'Si'">
+                                    <button name="action_name" type="object" t-att-id="item.id" icon="fa-"
+                                            class="oe_stat_button btn-procesar-conciliacion">
+                                        Romper conciliación
+                                    </button>
+                                </t>
                             </div>
                         </td> 
                     </tr>

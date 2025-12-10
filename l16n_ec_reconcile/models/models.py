@@ -67,7 +67,7 @@ class AccountBankReconcile(models.Model):
     def _initial_balance(self):
         for ban in self:
             try:
-                if self.journal_id.default_debit_account_id and self.date_start:
+                if ban.journal_id.default_account_id and ban.date_start:
                     sql = """
                          SELECT account_id AS id,
                          SUM(debit) AS debit, 
@@ -79,15 +79,14 @@ class AccountBankReconcile(models.Model):
                          AND (account_move_line.move_id = account_move_line__move_id.id) 
                          AND account_move_line.date <= '%s'
                          GROUP BY account_id 
-                         """ % (ban.journal_id.default_debit_account_id.id, ban.date_start)
-
+                    """ % (ban.journal_id.default_account_id.id, ban.date_start)
                     self.env.cr.execute(sql)
                     saldo_final = self.env.cr.dictfetchone()
-                    ban.balance_start = saldo_final['balance']
+                    ban.balance_start = saldo_final['balance'] if saldo_final else 0.0
                 else:
                     ban.balance_start = 0.0
-            except Exception:
-                ban.balance_start = 0.0
+            except Exception as e:
+                raise UserError(_(f'Error: {e}'))
 
     @api.onchange('journal_id', 'date_stop')
     def _end_balance(self):
@@ -271,13 +270,11 @@ class AccountBankReconcile(models.Model):
 
     @api.model
     def list_conciliacion(self, banco, limit):
-
-        sql = """ select rec.date_stop from account_bank_reconcile rec 
-                   inner join account_journal jou on jou.id = rec.journal_id
-                   where jou.default_account_id =%s and state = 'draft' 
-                   order by date_stop desc              
-                   """ % (banco)
-
+        sql = """
+            select rec.date_stop from account_bank_reconcile rec 
+            inner join account_journal jou on jou.id = rec.journal_id 
+            where jou.default_account_id =%s and state = 'draft' order by date_stop desc              
+        """ % banco
         self._cr.execute(sql)
         res = self._cr.fetchone()
         if res:
@@ -285,62 +282,37 @@ class AccountBankReconcile(models.Model):
                 ('account_id', '=', int(banco)), ('conciled', '=', False),
                 ('date', '<=', res[0])
             ])
-
             list_no_concilied = []
             list_extracto_credit = []
             list_extracto_debit = []
-
             total_dedito = 0
             total_credito = 0
-
-            extracto_credit = self.env['extracto.bancario'].search([('account_id', '=', int(banco)),
-                                                                    ('type', '=', 'ext'), ('debe', '<>', 0),
-                                                                    ('conciliado', '=', False), ('date', '<=', res[0])
-                                                                    ], order="date desc")
-
-            extracto_debit = self.env['extracto.bancario'].search([('account_id', '=', int(banco)),
-                                                                   ('type', '=', 'ext'), ('haber', '<>', 0),
-                                                                   ('conciliado', '=', False), ('date', '<=', res[0])
-                                                                   ], order="date desc")
-
-            # Primero, crear una lista de referencias de extractos existentes (esto es para evitar recorrer la lista de extractos cada vez)
-            existing_references = {ext.referencia for ext in
-                                   extracto_credit}  # Conjunto de referencias de los extractos de crédito
-            existing_references.update(
-                ext.referencia for ext in extracto_debit)  # También agregamos las referencias de débito
-
+            extracto_credit = self.env['extracto.bancario'].search(
+                [('account_id', '=', int(banco)),
+                 ('type', '=', 'ext'), ('debe', '<>', 0),
+                 ('conciliado', '=', False), ('date', '<=', res[0])],
+                order="date desc"
+            )
+            extracto_debit = self.env['extracto.bancario'].search(
+                [('account_id', '=', int(banco)),
+                 ('type', '=', 'ext'), ('haber', '<>', 0),
+                 ('conciliado', '=', False), ('date', '<=', res[0])],
+                order="date desc"
+            )
             for account in not_conciled:
-                payment_number = account.payment_id.payment_number if account.payment_id else ''
-                if payment_number in existing_references:
-                    # Solo agregamos si hay coincidencia de referencia
-                    print(f"Agregando movimiento contable con payment_number {payment_number}")
-                    list_no_concilied.append(self._parser_json_line(account))
-
-                # Filtrar y agregar los extractos de crédito solo si su referencia coincide con el payment_number
-                for ext in extracto_credit:
-                    if ext.referencia == payment_number:  # Solo agregamos si la referencia coincide
-                        print("coincide credito!!!")
-                        print(f"Mov. Contable Ref: {payment_number} - Extracto Ref: {ext.referencia}")
-                        list_extracto_credit.append(self._parser_json_extracto(ext))
-
-                # Filtrar y agregar los extractos de débito solo si su referencia coincide con el payment_number
-                for ext in extracto_debit:
-                    if ext.referencia == payment_number:  # Solo agregamos si la referencia coincide
-                        print("coincide debito!!!")
-                        print(f"Mov. Contable Ref: {payment_number} - Extracto Ref: {ext.referencia}")
-                        list_extracto_debit.append(self._parser_json_extracto(ext))
-
+                list_no_concilied.append(self._parser_json_line(account))
+            for ext in extracto_credit:
+                list_extracto_credit.append(self._parser_json_extracto(ext))
+            for ext in extracto_debit:
+                list_extracto_debit.append(self._parser_json_extracto(ext))
             list_no_coinciden = []
             list_coinciden = []
-            dif_permitida = 0.00001
-
             for account in list_no_concilied:
                 bandera = True
                 for ext1 in list_extracto_debit:
                     ext = copy.copy(ext1)
                     ext['id'] = str(account['id']) + '-' + str(ext['id1'])
-
-                    if abs(float(ext['credit']) - float(account['debit'])) < dif_permitida and float(ext['credit']) > 0:
+                    if account['payment_number'] == ext['ref']:
                         account['select'].append(ext)
                         account['conciliar'] = []
                         try:
@@ -350,15 +322,12 @@ class AccountBankReconcile(models.Model):
                             account['total'] += float(ext1['credit'])
                         list_extracto_debit.remove(ext1)
                         bandera = False
-                        # break
-
                 for ext1 in list_extracto_credit:
                     ext = copy.copy(ext1)
                     ext['id'] = str(account['id']) + '-' + str(ext['id1'])
-                    if abs(float(ext['debit']) - float(account['credit'])) < dif_permitida and float(ext['debit']) > 0:
+                    if account['payment_number'] == ext['ref']:
                         account['select'].append(ext)
                         account['conciliar'] = []
-
                         try:
                             account['total'] += float(ext['debit'])
                         except Exception as e:
@@ -366,8 +335,6 @@ class AccountBankReconcile(models.Model):
                             account['total'] += float(ext1['debit'])
                         list_extracto_credit.remove(ext1)
                         bandera = False
-                        # break
-
                 total_dedito = total_dedito + float(account['debit'])
                 total_credito = total_credito + float(account['credit'])
                 if bandera:
@@ -376,8 +343,6 @@ class AccountBankReconcile(models.Model):
                 else:
                     account1 = copy.copy(account)
                     list_coinciden.append(account1)
-            cant = 0
-
             for noc in list_no_coinciden:
                 noc1 = copy.copy(noc)
                 if float(noc1['debit']) > 0:
@@ -385,15 +350,12 @@ class AccountBankReconcile(models.Model):
                         deb1 = copy.copy(deb)
                         deb1['id'] = str(noc1['id']) + '-' + str(deb['id1'])
                         noc1['conciliar'].append(deb1)
-
                 if float(noc1['credit']) > 0:
                     for deb in list_extracto_credit:
                         deb1 = copy.copy(deb)
                         deb1['id'] = str(noc1['id']) + '-' + str(deb['id1'])
                         noc1['conciliar'].append(deb1)
-
                 list_coinciden.append(noc1)
-
             cantidad = len(list_coinciden)
             if cantidad > int(limit):
                 list_coinciden = list_coinciden[0: int(limit)]
