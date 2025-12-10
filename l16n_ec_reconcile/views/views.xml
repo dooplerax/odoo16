@@ -90,8 +90,8 @@
                                                         <field name="date"/>
                                                         <field name="concepto"/>
                                                         <field name="type"/>
-                                                        <field name="debe"/>
-                                                        <field name="haber"/>
+                                                        <field name="debe" string="Haber Extracto"/>
+                                                        <field name="haber" string="Debe Extracto"/>
                                                         <field name="conciliado"/>
                                                         <button name="action_done"
                                                                 class="oe_stat_button"
