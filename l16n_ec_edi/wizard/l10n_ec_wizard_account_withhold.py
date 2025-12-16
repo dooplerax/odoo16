@@ -13,7 +13,7 @@ class L10nEcWizardAccountWithhold(models.TransientModel):
         return res
 
     def _prepare_withhold_move_lines(self):
-        if len(self.related_invoice_ids) == 1 and self.related_invoice_ids.move_type == 'out_invoice':
+        if self._is_out_invoice():
             return super(L10nEcWizardAccountWithhold, self)._prepare_withhold_move_lines()
         total_per_invoice = defaultdict(lambda: [0, self.env['l10n_ec.wizard.account.withhold.line']])
         total_lines = []
@@ -53,6 +53,8 @@ class L10nEcWizardAccountWithhold(models.TransientModel):
 
     @api.model
     def _get_move_line_default_values(self, line, price, debit_wh_type):
+        if self._is_out_invoice():
+            return super(L10nEcWizardAccountWithhold, self)._get_move_line_default_values(line, price, debit_wh_type)
         return {
             'partner_id': self.partner_id.commercial_partner_id.id,
             'quantity': 1.0,
@@ -64,3 +66,6 @@ class L10nEcWizardAccountWithhold(models.TransientModel):
             'l10n_ec_withhold_invoice_id': line.invoice_id.id,
             'l10n_ec_code_taxsupport': line.taxsupport_code,
         }
+
+    def _is_out_invoice(self):
+        return len(self.related_invoice_ids) == 1 and self.related_invoice_ids.move_type == 'out_invoice'
