@@ -92,28 +92,26 @@ class AccountBankReconcile(models.Model):
     def _end_balance(self):
         for ban in self:
             try:
-                if self.journal_id.default_debit_account_id and self.date_stop:
+                if ban.journal_id.default_account_id and ban.date_stop:
                     sql = """
-                                SELECT account_id AS id,
-                                SUM(debit) AS debit, 
-                                SUM(credit) AS credit, 
-                                (SUM(debit) - SUM(credit)) AS balance 
-                                FROM account_move as account_move_line__move_id,
-                                account_move_line 
-                                WHERE account_id =%s
-                                AND (account_move_line.move_id = account_move_line__move_id.id) 
-                                AND account_move_line.date <= '%s'
-                                GROUP BY account_id 
-                                """ % (ban.journal_id.default_debit_account_id.id, ban.date_stop)
-
+                        SELECT account_id AS id,
+                        SUM(debit) AS debit, 
+                        SUM(credit) AS credit, 
+                        (SUM(debit) - SUM(credit)) AS balance 
+                        FROM account_move as account_move_line__move_id,
+                        account_move_line 
+                        WHERE account_id =%s
+                        AND (account_move_line.move_id = account_move_line__move_id.id) 
+                        AND account_move_line.date <= '%s'
+                        GROUP BY account_id 
+                    """ % (ban.journal_id.default_account_id.id, ban.date_stop)
                     self.env.cr.execute(sql)
                     saldo_final = self.env.cr.dictfetchone()
-                    ban.balance_stop = saldo_final['balance']
-
+                    ban.balance_stop = saldo_final['balance'] if saldo_final else 0.0
                 else:
                     ban.balance_stop = 0.0
-            except Exception:
-                ban.balance_stop = 0.0
+            except Exception as e:
+                raise UserError(_(f'Error: {e}'))
 
     name = fields.Char(
         'Codigo',
