@@ -217,10 +217,9 @@ class AccountBankReconcile(models.Model):
         default=lambda self: self.env['res.company']._company_default_get('account.invoice')  # noqa
     )
 
-    def _parser_json_line(self, account):
-        payment_number = account.payment_id.payment_number if account.payment_id else ''
-
-        # Crear el diccionario con los datos
+    @staticmethod
+    def _parser_json_line(account):
+        payment_number = account.payment_id.payment_number if account.payment_id else account.move_id.payment_number
         account_data = {
             'cuenta': account.account_id.display_name,
             'fecha': account.date,
@@ -234,10 +233,6 @@ class AccountBankReconcile(models.Model):
             'total': 0,
             'select': []
         }
-
-        # Imprimir los datos que se están agregando
-        # print("Agregando movimiento contable:", account_data)
-
         return account_data
 
     def _parser_json_extracto(selef, ext):
