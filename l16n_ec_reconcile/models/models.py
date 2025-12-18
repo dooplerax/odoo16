@@ -77,7 +77,7 @@ class AccountBankReconcile(models.Model):
                          account_move_line 
                          WHERE account_id =%s
                          AND (account_move_line.move_id = account_move_line__move_id.id) 
-                         AND account_move_line.date <= '%s'
+                         AND account_move_line.date < '%s'
                          GROUP BY account_id 
                     """ % (ban.journal_id.default_account_id.id, ban.date_start)
                     self.env.cr.execute(sql)
