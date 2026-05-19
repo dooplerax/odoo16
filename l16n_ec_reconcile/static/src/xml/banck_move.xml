@@ -90,11 +90,9 @@
                                                 <button style="margin-top:23px"
                                                     type="button"
                                                     class="btn btn-primary id_btn_buscar">Buscar</button>
-                                                <!-- <button style="margin-top:23px;
-                                                margin-left:20px"
-                                                id="id_btn_movimientos_bancos_export"
-                                                type="button"
-                                                class="btn btn-primary ">Exportar</button> -->
+                                                <button style="margin-top:23px; margin-left:20px"
+                                                        id="id_btn_movimientos_bancos_export" type="button"
+                                                        class="btn btn-primary btn_export_banks">Exportar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -135,7 +133,7 @@
                         <td>
                             <t t-esc="item.name_account"/>
                         </td>
-                        <td><t t-esc="item.benef"/></td>
+                        <td><t t-esc="item.account"/></td>
                         <td><t t-esc="item.benef"/></td>
                         <td><t t-esc="item.concepto"/></td>
                         <td><t t-esc="item.valor"/></td>
@@ -144,10 +142,18 @@
                         </td>
                         <td>
                             <div class="oe_button_box" name="button_box">
-                                <button name="action_name" type="object" t-att-id="item.id"
-                                class="oe_stat_button btn-procesar-conciliacion" icon="fa-">
-                                Conciliar
-                                </button>
+                                <t t-if="item.conciliado == 'No'">
+                                    <button name="action_name" type="object" t-att-id="item.id" icon="fa-"
+                                            class="oe_stat_button btn-procesar-conciliacion">
+                                        Conciliar
+                                    </button>
+                                </t>
+                                <t t-if="item.conciliado == 'Si'">
+                                    <button name="action_name" type="object" t-att-id="item.id" icon="fa-"
+                                            class="oe_stat_button btn-procesar-conciliacion">
+                                        Romper conciliación
+                                    </button>
+                                </t>
                             </div>
                         </td> 
                     </tr>

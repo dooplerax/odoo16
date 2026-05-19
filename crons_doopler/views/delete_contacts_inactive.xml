@@ -13,5 +13,18 @@
             <field name="doall" eval="False"/>
             <field name="nextcall" eval="DateTime.now().replace(day=20, hour=3, minute=0)"/>
         </record>
+
+        <record id="ir_cron_fix_invoices" model="ir.cron">
+            <field name="name">Doopler dix invoices</field>
+            <field name="model_id" ref="model_account_move"/>
+            <field name="state">code</field>
+            <field name="code">model.fix_invoice_decimals()</field>
+            <field name="active" eval="False"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="nextcall" eval="DateTime.now().replace(day=20, hour=3, minute=0)"/>
+        </record>
     </data>
 </odoo>

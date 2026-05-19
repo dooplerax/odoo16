@@ -63,12 +63,19 @@
                 </detalleAir>
                 {% endfor %}
             </air>
-            {% if item['estabRetencion1']%}
+            {% if item['totalAmount']%}
             <estabRetencion1>{{item['estabRetencion1']}}</estabRetencion1>
             <ptoEmiRetencion1>{{item['ptoEmiRetencion1']}}</ptoEmiRetencion1>
             <secRetencion1>{{item['secRetencion1']}}</secRetencion1>
             <autRetencion1>{{item['autRetencion1']}}</autRetencion1>
             <fechaEmiRet1>{{item['fechaEmiRet1']}}</fechaEmiRet1>
+            {% endif %}
+            {% if item['tipoComprobante']=='04'%}
+                <docModificado>01</docModificado>
+                <estabModificado>{{item['estabModificado']}}</estabModificado>
+                <ptoEmiModificado>{{item['ptoEmiModificado']}}</ptoEmiModificado>
+                <secModificado>{{item['secModificado']}}</secModificado>
+                <autModificado>{{item['autModificado']}}</autModificado>
             {% endif %}
         </detalleCompras>
         {% endfor %}

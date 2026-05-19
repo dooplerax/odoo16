@@ -35,10 +35,8 @@
                                                 <strong></strong>
                                                 <span t-esc="res_company.street"/>
                                                 <br/>
-                                                <span>
-                                                    Contribuyente
-                                                </span>
-                                                <span t-esc="res_company.special_taxpayer"/>
+                                                <strong t-esc="res_company.special_taxpayer"/>
+                                                <span t-esc="res_company.l10n_ec_special_taxpayer_number"/>
                                                 <br/>
                                                 <span>
                                                     <strong>Obligado a Llevar contabilidad:</strong>
@@ -93,22 +91,21 @@
                                                     <strong>NUMERO DE AUTORIZACION</strong>
                                                 </span>
                                                 <br/>
-                                                <span t-esc="o.authorization_number"/>
+                                                <span t-esc="o.l10n_ec_authorization_number"/>
                                                 <br/>
                                                 <span>
                                                     <strong>FECHA Y HORA DE AUTORIZACION:</strong>
                                                 </span>
-                                                <!--<span t-esc="o.authorization_date"/>-->
-                                                <!--                                    <span t-esc="context_timestamp(o.authorization_date).strftime('%Y-%m-%d %H:%M')"/>-->
+                                                <span t-esc="o.l10n_ec_authorization_date"/>
                                                 <br/>
                                                 <span>
                                                     <strong>AMBIENTE:</strong>
                                                 </span>
-                                                <span t-esc="res_company.env_service == '1' and 'PRUEBAS' or 'PRODUCCION'"/>
+                                                <span t-esc="res_company.l10n_ec_production_env and 'PRODUCCION' or 'PRUEBAS'"/>
                                                 <br/>
                                                 <span>
                                                     <strong>EMISION:</strong>
-                                                    <span t-esc="res_company.env_service == '1' and 'NORMAL' or 'INDISPONIBILIDAD'"/>
+                                                    <span t-esc="res_company.l10n_ec_production_env and 'NORMAL' or 'INDISPONIBILIDAD'"/>
                                                 </span>
                                                 <br/>
                                                 <span>
@@ -116,9 +113,10 @@
                                                 </span>
                                                 <br/>
                                                 <div class="text-align: left;">
-                                                    <img t-if="o.authorization_number" t-att-src="'/report/barcode/Code128/'+o.authorization_number"
+                                                    <img t-if="o.l10n_ec_authorization_number" t-att-src="'/report/barcode/Code128/'+o.l10n_ec_authorization_number"
                                                      style="width:400px;height:25px" alt="Barcode"/>
                                                 </div>
+                                                <span t-field="o.l10n_ec_authorization_number"/>
                                                 <br/>
                                             </div>
                                         </div>
@@ -265,7 +263,7 @@
                                                     <span>
                                                         <strong>Forma de pago:</strong>
                                                     </span>
-                                                    <span t-esc="o.epayment_id.name"/>
+                                                    <span t-esc="o.l10n_ec_sri_payment_id.name"/>
                                                 </td>
                                                 <td>
                                                     <span style="margin-left: 20px">

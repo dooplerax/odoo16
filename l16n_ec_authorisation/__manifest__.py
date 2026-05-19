@@ -6,7 +6,7 @@
 
 {
     'name': 'Establecimientos y autorizaciones del SRI',
-    'version': '16.0',
+    'version': '16.0.0.1.1',
     'author': 'Danner Marante',
     'category': 'Localization',
     'complexity': 'normal',

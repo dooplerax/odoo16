@@ -2,9 +2,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
     'name': "Doopler Activities",
-    'version': '1.0',
+    'version': '16.0.0.1.2',
     'author': "Sebastian Falconi",
-    'category': 'Category',
     'description': """
     """,
     'category': 'CRM/Activities',
@@ -12,12 +11,13 @@
     'images': [],
     'depends': ['l16n_ec_partner','base', 'mail', 'crm', 'sale', 'account', 'stock', 'sale_stock'],
     'data': [
-            'security/ir.model.access.csv',
-            'views/mail.activity.view.form.popup.inherited.xml',
-            'views/stock_move_line.xml',
-            'views/payments_methods.xml',
-            'views/account_journal_views.xml',
-            'views/custom_quotation_views.xml',
+        'security/ir.model.access.csv',
+        'views/res_config_settings.xml',
+        'views/mail.activity.view.form.popup.inherited.xml',
+        'views/stock_move_line.xml',
+        'views/payments_methods.xml',
+        'views/account_journal_views.xml',
+        'views/custom_quotation_views.xml',
     ],
     'installable': True,
     'application': True,

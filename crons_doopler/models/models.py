@@ -21,3 +21,18 @@ class IrCron(models.Model):
     @api.model
     def scheduler_cleanup_contacts(self):
         self.env['contact.cleanup'].cleanup_contacts()
+
+class AccountMoveFix(models.Model):
+    _inherit = 'account.move'
+
+    @api.model
+    def fix_invoice_decimals(self):
+        invoices = self.search([('move_type', 'in', ['out_invoice', 'in_invoice'])])
+        _logger.info(f"Corrigiendo decimales en {len(invoices)} facturas.")
+
+        for invoice in invoices:
+            for line in invoice.line_ids:
+                line.price_total = round(line.price_total, 2)
+                line.price_subtotal = round(line.price_subtotal, 2)
+
+        _logger.info("Proceso de corrección de decimales completado.")

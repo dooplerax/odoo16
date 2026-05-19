@@ -132,10 +132,8 @@ class AccountPayment(models.Model):
             else:
                 invoices = self.env['account.move']
 
-            if not invoices:
-                raise UserError("No hay facturas pendientes para %s." % self.partner_id.name)
-
-            self.invoice_ids = [(6, 0, invoices.ids)]
+            if invoices:
+                self.invoice_ids = [(6, 0, invoices.ids)]
         else:
             self.invoice_ids = [(5,)]
 
@@ -165,103 +163,116 @@ class AccountPayment(models.Model):
         invoices_to_pay = self.invoice_ids.filtered(lambda inv: inv.pagos)
 
         if invoices_to_pay:
-            # Inicializar el monto restante a pagar
-            remaining_amount = self.amount
-            new_invoice_lines = []
-            for invoice in invoices_to_pay:
-                if remaining_amount <= 0:
-                    break
-
-                if invoice.amount_pay <= 0:
-                    raise UserError(f"El valor a pagar de la factura {invoice.name} es menor o igual a 0.")
-
-                if invoice.amount_pay > invoice.amount_residual:
-                    raise UserError(f"El valor a pagar de la factura {invoice.name} es mayor que el saldo restante.")
-
-                # Obtener el valor a pagar en la factura
-                payment_amount = min(remaining_amount, invoice.amount_pay)
-
-                if payment_amount > 0:
-                    # Restar el importe pagado del total disponible
-                    remaining_amount -= payment_amount
-
-                    # Agregar los datos de las facturas pagadas al modelo AccountMoveInvoiceLine
-                    account_id = invoice.partner_id.property_account_receivable_id.id if invoice.move_type == 'out_invoice' else invoice.partner_id.property_account_payable_id.id
-                    label_text = invoice.name
-
-                    new_invoice_lines.append({
-                        'move_id': self.move_id.id,  # Aquí se usa el ID del asiento contable actual
-                        'account_id': account_id,
-                        'partner_id': invoice.partner_id.id,
-                        'label': label_text,
-                        'debit': 0.0 if invoice.move_type == 'out_invoice' else payment_amount,
-                        'credit': payment_amount if invoice.move_type == 'out_invoice' else 0.0,
-                    })
-
-            # Agregar la línea adicional
-            label_text_cli = f"Pago de cliente ${self.amount:.2f} - {self.partner_id.name} - {self.move_id.date}"
-            label_text_prov = f"Pago de Proveedor ${self.amount:.2f} - {self.partner_id.name} - {self.move_id.date}"
-            additional_line = {
-                'move_id': self.move_id.id,
-                'account_id': self.journal_id.default_account_id.id,
-                'partner_id': self.partner_id.id,
-                'label': label_text_cli if self.payment_type == 'inbound' else label_text_prov,
-                'debit': self.amount if self.payment_type == 'inbound' else 0.0,
-                'credit': 0.0 if self.payment_type == 'inbound' else self.amount,
-            }
-            new_invoice_lines.insert(0, additional_line)
-
-            # Calcular los totales de débito y crédito
-            total_debit = sum(line['debit'] for line in new_invoice_lines)
-            total_credit = sum(line['credit'] for line in new_invoice_lines)
-
-            # Verificar si se necesita una línea de ajuste
-            if total_debit != total_credit:
-                adjustment_amount = abs(total_debit - total_credit)
-                adjustment_line = {
-                    'move_id': self.move_id.id,
-                    'account_id': self.journal_id.default_account_id.id,
-                    'partner_id': self.partner_id.id,
-                    'label': 'Saldo diferencial',
-                    'debit': adjustment_amount if total_debit > total_credit else 0.0,
-                    'credit': adjustment_amount if total_debit < total_credit else 0.0,
-                }
-                new_invoice_lines.append(adjustment_line)
-
-            # Crear las líneas de factura en el modelo AccountMoveInvoiceLine
-            self.env['account.move.invoice.line'].create(new_invoice_lines)
-
-            # Volver a inicializar el monto restante a pagar
-            remaining_amount = self.amount
-
-            # Realizar los pagos usando account.payment.register
-            for invoice in invoices_to_pay:
-                if remaining_amount <= 0:
-                    break
-
-                payment_amount = min(remaining_amount, invoice.amount_pay)
-
-                if payment_amount > 0:
-                    # Crear y registrar el pago usando account.payment.register
-                    self.env['account.payment.register'].with_context(
-                        active_model='account.move',
-                        active_ids=invoice.ids
-                    ).create({
-                        'payment_date': invoice.date,
-                        'amount': payment_amount,
-                    })._create_payments()
-
-                    # Restar el importe pagado del total disponible
-                    remaining_amount -= payment_amount
-                    self.saldo_favor = remaining_amount
-
-                    # Actualizar el estado de pago de la factura
-                    invoice._compute_amount()
-
-                    invoice.write({'pagos': False})
+            self.payment_cross_invoice(invoices_to_pay)
+        return
 
     def action_draft(self):
         if self.move_id.state == 'posted' and self.move_id.move_type == 'entry':
             raise UserError(_("No se puede cambiar a estado borrador, debido que, este pago esta atado a un asiento publicado"))
 
         self.move_id.button_draft()
+
+    def payment_cross_invoice(self, invoices_to_pay):
+        partner_account = self.partner_id.property_account_receivable_id.id if self.payment_type == 'inbound' else self.partner_id.property_account_payable_id.id
+        journal_id = self.company_id.journal_cross_payment_id.id
+        date = self.move_id.date
+        company_id = self.env.company.id
+        amount_invoice = sum(invoices_to_pay.mapped('amount_pay'))
+
+        inter_move_vals = {
+            'journal_id': journal_id,
+            'date': date,
+            'company_id': company_id,
+            'ref': _('Cruce del pago %s') % self.name,
+            'line_ids': [
+                (0, 0, {
+                    'account_id': partner_account,
+                    'debit': amount_invoice if self.payment_type == 'inbound' else 0.0,
+                    'credit': 0.0 if self.payment_type == 'inbound' else amount_invoice,
+                    'partner_id': self.partner_id.id,
+                }),
+                (0, 0, {
+                    'account_id': self.company_id.account_cross_payment_id.id,
+                    'debit': 0.0 if self.payment_type == 'inbound' else amount_invoice,
+                    'credit': amount_invoice if self.payment_type == 'inbound' else 0.0,
+                    'partner_id': self.partner_id.id,
+                }),
+            ]
+        }
+        inter_move = self.env['account.move'].create(inter_move_vals)
+        inter_move.action_post()
+
+        orig_line = self.move_id.line_ids.filtered(lambda l: l.account_id.id == partner_account)
+        inter_line = inter_move.line_ids.filtered(lambda l: l.account_id.id == partner_account)
+        (orig_line + inter_line).reconcile()
+
+        final_lines = [
+            (0, 0, {
+                'account_id': self.company_id.account_cross_payment_id.id,
+                'debit': amount_invoice if self.payment_type == 'inbound' else 0.0,
+                'credit': 0.0 if self.payment_type == 'inbound' else amount_invoice,
+                'partner_id': self.partner_id.id,
+            }),
+        ]
+        remaining = amount_invoice
+        for inv in invoices_to_pay:
+            pay_amt = min(remaining, inv.amount_pay)
+            remaining -= pay_amt
+            final_lines.append((0, 0, {
+                'account_id': partner_account,
+                'debit': 0.0 if self.payment_type == 'inbound' else pay_amt,
+                'credit': pay_amt if self.payment_type == 'inbound' else 0.0,
+                'partner_id': inv.partner_id.id,
+                'name': _('Pago de factura %s') % inv.name,
+            }))
+            if remaining <= 0:
+                break
+
+        final_move = self.env['account.move'].create({
+            'journal_id': journal_id,
+            'date': date,
+            'company_id': company_id,
+            'ref': _('Asiento de distribución del pago %s') % self.name,
+            'line_ids': final_lines,
+        })
+        final_move.action_post()
+
+        inter_line = inter_move.line_ids.filtered(lambda l: l.account_id.id == self.company_id.account_cross_payment_id.id)
+        final_line = final_move.line_ids.filtered(lambda l: l.account_id.id == self.company_id.account_cross_payment_id.id)
+        (inter_line + final_line).reconcile()
+
+        for inv in invoices_to_pay:
+            inv_lines = inv.line_ids.filtered(lambda l: l.account_id.id == partner_account and not l.reconciled)
+            pay_lines = final_move.line_ids.filtered(
+                lambda l: l.account_id.id == partner_account and l.name == _('Pago de factura %s') % inv.name
+            )
+            (inv_lines + pay_lines).reconcile()
+
+        return True
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    journal_cross_payment_id = fields.Many2one(
+        'account.journal',
+        string="Diario para cruces internos de pagos",
+    )
+    account_cross_payment_id = fields.Many2one('account.account',
+                                               string="Cuenta para cruces internos de pagos",
+                                               domain="[('deprecated', '=', False)]",
+                                            )
+
+class ResConfigSetting(models.TransientModel):
+    _inherit = 'res.config.settings'
+
+    journal_cross_payment_id = fields.Many2one('account.journal',
+                                               string="Diario para cruces internos de pagos",
+                                               related='company_id.journal_cross_payment_id',
+                                               readonly=False
+                                               )
+    account_cross_payment_id = fields.Many2one('account.account',
+                                               string='Cuenta para cruces de pagos',
+                                               related='company_id.account_cross_payment_id',
+                                               readonly=False
+                                               )
+

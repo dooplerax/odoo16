@@ -128,50 +128,41 @@
             </thead>
             <!--             <t t-if="line.display_type != 'line_note'"> -->
             <tbody>
-              <t t-set="group_totals" t-value="doc.get_group_totals()" />
-              <t t-foreach="group_totals" t-as="group">
+            <t t-set="group_totals" t-value="doc.get_group_totals()" />
+            <t t-foreach="group_totals" t-as="group">
                 <t t-if="group['display_type'] not in ['line_note', 'line_section']">
-                  <tr>
-                    <td>
-                      <span t-esc="round(group['quantity_extra'], 2)" />
-                    </td>
-                    <td>
-                        <t t-if="group['name']">
-                            <t t-if="group['courtain_type']">
-                                <span t-esc="group['courtain_type']" />
-                            </t>
-                            <t t-else="">
+                    <tr>
+                        <td>
+                            <span t-esc="round(group['quantity_extra'], 2)" />
+                        </td>
+                        <td>
+                            <span t-esc="group['courtain_type'] or group['name']" />
+                        </td>
+                        <td>
+                            <t t-if="group['courtain_type'] and group['name']">
                                 <span t-esc="group['name']" />
                             </t>
-                        </t>
-                    </td>
-                    <td>
-                      <t t-if="group['name'] and group['courtain_type']">
-                        <span t-esc="group['name']" />
-                      </t>
-                      <t t-if="not group['name'] and not group['courtain_type']">
-                        <span> </span>
-                      </t>
-                    </td>
-                    <td>
-                      <span t-esc="group['price_unit']" />
-                    </td>
-                    <td>
-                      <span t-esc="round(group['price_subtotal_extra'], 2)" />
-                    </td>
-                    <td>
-
-                      <t t-set="iva"
-                        t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
-                      <span t-esc="round(iva, 2)" />
-                    </td>
-                    <td>
-                      <span t-esc="round(group['price_total_extra'], 2)" />
-                    </td>
-                  </tr>
+                            <t t-if="not group['courtain_type'] and not group['name']">
+                                <span> </span>
+                            </t>
+                        </td>
+                        <td>
+                            <span t-esc="group['price_unit']" />
+                        </td>
+                        <td>
+                            <span t-esc="round(group['price_subtotal_extra'], 2)" />
+                        </td>
+                        <td>
+                            <t t-set="iva" t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
+                            <span t-esc="round(iva, 2)" />
+                        </td>
+                        <td>
+                            <span t-esc="round(group['price_total_extra'], 2)" />
+                        </td>
+                    </tr>
                 </t>
-              </t>
-            </tbody>
+            </t>
+        </tbody>
           </table>
         </div>
         <div class="row data">
@@ -266,6 +257,7 @@
             <!-- <th name="th_orden" class="text-start">ORDEN</th> -->
             <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
             <th name="th_material" class="text-start">MATERIAL</th>
+            <th name="th_ambiente" class="text-start">AMBIENTE</th>
             <th name="th_ancho" class="text-start">ANCHO</th>
             <th name="th_alto" class="text-start">ALTO</th>
             <th name="th_mando" class="text-start">MANDO</th>
@@ -299,6 +291,11 @@
                 <td>
                     <t t-if="line.material">
                         <span t-esc="line.material.name" />
+                    </t>
+                </td>
+                <td>
+                    <t t-if="line.ambience">
+                        <t t-esc="line.ambience"/>
                     </t>
                 </td>
                 <td>

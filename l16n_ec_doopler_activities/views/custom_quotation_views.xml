@@ -64,10 +64,8 @@
                 <attribute name="attrs">
                     {'invisible': [
                         '|',
-                        '|',
-                        ('production_order_confirmed', '=', False),
                         ('invoice_count', '>', 0),
-                        ('state', '=', 'draft')
+                        ('state', '!=', 'accredited_confirm')
                     ]}
                 </attribute>
             </xpath>

@@ -1,5 +1,6 @@
 from odoo import fields, models, api
 from odoo.exceptions import ValidationError, UserError
+import re
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
@@ -12,6 +13,12 @@ class AccountJournal(models.Model):
                                              domain=[('deprecated', '=', False)])
 
     billing_location = fields.Many2one('billing.location', string='Accounting Location', stored=True, ondelete='restrict')
+
+    invoice_sequence_id = fields.Many2one(
+        'ir.sequence',
+        string='Invoice Sequence',
+        help='Secuencia para generar números de factura según el diario.'
+    )
 
 class Users(models.Model):
     _inherit = 'res.users'
@@ -35,6 +42,28 @@ class Users(models.Model):
 
             if user.account_group_custom == False:
                 user.billing_location = False
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    vat = fields.Char(string='VAT')
+
+    @api.constrains('vat', 'l10n_latam_identification_type_id')
+    def _check_vat_format(self):
+        """Ensure that the VAT (RUC/Cédula) is correctly formatted."""
+        for record in self:
+            if not record.vat or not record.l10n_latam_identification_type_id:
+                return
+
+            vat_cleaned = record.vat.strip()  # Eliminar espacios en blanco
+
+            if record.l10n_latam_identification_type_id.name == 'RUC':
+                if len(vat_cleaned) != 13 or not vat_cleaned.isdigit():
+                    raise ValidationError("El RUC debe contener exactamente 13 dígitos numéricos, ni más ni menos.")
+
+            elif record.l10n_latam_identification_type_id.name == 'Cédula':
+                if len(vat_cleaned) != 10 or not vat_cleaned.isdigit():
+                    raise ValidationError("La Cédula debe contener exactamente 10 dígitos numéricos, ni más ni menos.")
 
 class BillingLocation(models.Model):
     _name = 'billing.location'

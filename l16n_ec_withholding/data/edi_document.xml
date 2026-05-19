@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="edi_withholding" inherit_id="l10n_ec_edi.withhold_info_template">
+            <xpath expr='//fechaEmision' position="replace">
+                <fechaEmision t-out="strftime(move.l10n_ec_withhold_date or move.date)"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

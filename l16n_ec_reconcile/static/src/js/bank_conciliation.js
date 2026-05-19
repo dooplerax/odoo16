@@ -34,19 +34,17 @@ odoo.define('l16n_ec_reconcile.ConciliacionBancarios', function (require) {
     },
 
     startConciliacion: function (e) {
-      var cuenta = $('#id_banco').val()
-      var limite = $('#id_limite').val()
-
-      this._rpc({
-        model: 'account.bank.reconcile',
-        method: 'list_conciliacion',
-        args: [cuenta, limite],
-      }).then(function (result) {
-        list_cuentas = result
-        console.log('recul', result)
-        var html = QWeb.render('ListCuentas', { items: result })
-        $('#reconciliation_lines_container').html(html)
-      })
+        var cuenta = $('#id_banco').val();
+        var limite = $('#id_limite').val();
+        this._rpc({
+            model: 'account.bank.reconcile',
+            method: 'list_conciliacion',
+            args: [cuenta, limite],
+        }).then(function (result) {
+            list_cuentas = result;
+            var html = QWeb.render('ListCuentas', { items: result });
+            $('#reconciliation_lines_container').html(html);
+        });
     },
 
     mostrarMas: function () {

@@ -71,7 +71,7 @@ class AccountMoveLine(models.Model):
 
     quantity = fields.Float(
         string='Quantity',
-        compute='_compute_quantity', store=True, readonly=False, precompute=True,
+        store=True, readonly=False,
         digits=(16, 3),
         help="The optional quantity expressed by this line, eg: number of product sold. "
              "The quantity is not a legal requirement but is very useful for some reports.",
@@ -86,7 +86,8 @@ class SaleOrderLine(models.Model):
         string='Product Type', related='product_template_id.detailed_type')
     details_name = fields.Char(string='Descripción')
 
-    ambience = fields.Char(string="Ambiente")
+    ambience = fields.Char(selection='_get_ambience_selection', string="Ambiente")
+    # new_ambience = fields.Selection(selection='_get_ambience_selection', string="Ambiente")
     courtain_type = fields.Selection(
         selection='_get_tipo_cortina_options', string="Tipo Cortina")
     material = fields.Many2one(
@@ -102,16 +103,30 @@ class SaleOrderLine(models.Model):
 
     def _get_command_selection(self):
         return [
+            ('no_aplica', 'NO APLICA'),
             ('Izquierda', 'IZQUIERDO'),
             ('Derecha', 'DERECHO'),
             ('Ambos', 'AMBOS'),
             ('Fijo', 'FIJA')
         ]
 
+    def _get_ambience_selection(self):
+        return [
+            ('sala', 'SALA'),
+            ('dormitorio', 'DORMITORIO'),
+            ('estudio', 'ESTUDIO'),
+            ('comedor', 'COMEDOR'),
+            ('cocina', 'COCINA'),
+            ('area_social', 'ÁREA SOCIAL'),
+            ('oficina', 'OFICINA'),
+            ('bbq', 'BBQ')
+        ]
+
     command = fields.Selection(
         selection=_get_command_selection,
         string="Mando"
     )
+
     # ambiente = fields.Char(string="Ambiente", required=True)
     encj = fields.Boolean(string="ENCJ.", default=False)
     mot = fields.Boolean(string="MOT.", default=False)
@@ -123,15 +138,24 @@ class SaleOrderLine(models.Model):
         digits=(16, 3), default=0.0,
         store=True, readonly=False, required=True, precompute=True)
 
+    qty_to_invoice = fields.Float(
+        string="Quantity To Invoice",
+        compute='_compute_qty_to_invoice',
+        digits=(16, 3),
+        store=True)
+
     @api.model
     def _prepare_invoice_line(self, **optional_values):
-        self.ensure_one()
-        res = super(SaleOrderLine, self)._prepare_invoice_line(**optional_values)
+        """Prepare the values to create the new invoice line for a sales order line.
 
-        res.update({
+        :param optional_values: any parameter that should be added to the returned invoice line
+        :rtype: dict
+        """
+        self.ensure_one()
+        res = {
             'display_type': self.display_type or 'product',
             'sequence': self.sequence,
-            'name': '{} - {} - {}'.format(self.name, dict(self._get_tipo_cortina_options()).get(self.courtain_type), self.material.name).upper() if self.courtain_type and self.material else self.name,
+            'name': self.name,
             'product_id': self.product_id.id,
             'product_uom_id': self.product_uom.id,
             'quantity': self.qty_to_invoice,
@@ -140,9 +164,37 @@ class SaleOrderLine(models.Model):
             'tax_ids': [Command.set(self.tax_id.ids)],
             'sale_line_ids': [Command.link(self.id)],
             'is_downpayment': self.is_downpayment,
-        })
-
+        }
+        analytic_account_id = self.order_id.analytic_account_id.id
+        if self.analytic_distribution and not self.display_type:
+            res['analytic_distribution'] = self.analytic_distribution
+        if analytic_account_id and not self.display_type:
+            analytic_account_id = str(analytic_account_id)
+            if 'analytic_distribution' in res:
+                res['analytic_distribution'][analytic_account_id] = res['analytic_distribution'].get(
+                    analytic_account_id, 0) + 100
+            else:
+                res['analytic_distribution'] = {analytic_account_id: 100}
+        if optional_values:
+            res.update(optional_values)
+        if self.display_type:
+            res['account_id'] = False
         return res
+
+    @api.depends('qty_invoiced', 'qty_delivered', 'product_uom_qty', 'state')
+    def _compute_qty_to_invoice(self):
+        """
+        Compute the quantity to invoice. If the invoice policy is order, the quantity to invoice is
+        calculated from the ordered quantity. Otherwise, the quantity delivered is used.
+        """
+        for line in self:
+            if line.state in ['sale', 'done'] and not line.display_type:
+                if line.product_id.invoice_policy == 'order':
+                    line.qty_to_invoice = line.product_uom_qty - line.qty_invoiced
+                else:
+                    line.qty_to_invoice = line.qty_delivered - line.qty_invoiced
+            else:
+                line.qty_to_invoice = 0
 
     @api.model
     def _get_tipo_cortina_options(self):

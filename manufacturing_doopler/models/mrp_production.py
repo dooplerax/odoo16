@@ -73,6 +73,19 @@ class MrpProduction(models.Model):
 
     total_curtains = fields.Integer(string='Total de Cortinas', compute='_compute_total_curtains', store=True)
 
+    courtain_types = fields.Char(
+        string='Tipos de Cortina',
+        compute='_compute_courtain_types',
+        store=True,
+        help='Tipos de cortina usados en los movimientos de stock'
+    )
+
+    @api.depends('move_raw_ids.courtain_type')
+    def _compute_courtain_types(self):
+        for order in self:
+            types = order.move_raw_ids.mapped('courtain_type')
+            order.courtain_types = ', '.join(filter(None, set(types))) if types else False
+
     @api.depends('move_raw_ids')
     def _compute_total_curtains(self):
         for record in self:
