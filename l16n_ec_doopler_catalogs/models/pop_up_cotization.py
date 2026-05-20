@@ -206,11 +206,19 @@ class SaleOrderLine(models.Model):
             ('claraboya', 'Claraboya'),
             ('triple_shade', 'Triple Shade'),
             ('divergence', 'Divergence'),
-            ('tradicional', 'Tradicional'),
+            #('tradicional', 'Tradicional'),
             ('horizontal', 'Horizontal'),
             ('vertical', 'Vertical'),
             ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
             ('tradicional_con_pliegues', 'Tradicional con pliegues'),
+            # Nuevas opciones motorizadas con el mismo formato:
+            ('enrollable_motorizada', 'Roller motorizada'),
+            ('zebra_motorizada', 'Zebra motorizada'),
+            ('claraboya_motorizada', 'Claraboya motorizada'),
+            ('tradicional_onda_perfecta_motorizada', 'Tradicional onda perfecta motorizada'),
+            ('tradicional_con_pliegues_motorizada', 'Tradicional con pliegues motorizada'),
+            ('panelada_motorizada', 'Panelada motorizada'),
+            ('romana_motorizada', 'Romana motorizada'),
         ]
 
     @api.depends('broad', 'high')
