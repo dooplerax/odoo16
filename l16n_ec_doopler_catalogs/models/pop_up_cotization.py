@@ -206,7 +206,7 @@ class SaleOrderLine(models.Model):
             ('claraboya', 'Claraboya'),
             ('triple_shade', 'Triple Shade'),
             ('divergence', 'Divergence'),
-            #('tradicional', 'Tradicional'),
+            ('tradicional', 'Tradicional'),
             ('horizontal', 'Horizontal'),
             ('vertical', 'Vertical'),
             ('tradicional_onda_perfecta', 'Tradicional onda perfecta'),
