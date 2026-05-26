@@ -128,41 +128,50 @@
             </thead>
             <!--             <t t-if="line.display_type != 'line_note'"> -->
             <tbody>
-            <t t-set="group_totals" t-value="doc.get_group_totals()" />
-            <t t-foreach="group_totals" t-as="group">
+              <t t-set="group_totals" t-value="doc.get_group_totals()" />
+              <t t-foreach="group_totals" t-as="group">
                 <t t-if="group['display_type'] not in ['line_note', 'line_section']">
-                    <tr>
-                        <td>
-                            <span t-esc="round(group['quantity_extra'], 2)" />
-                        </td>
-                        <td>
-                            <span t-esc="group['courtain_type'] or group['name']" />
-                        </td>
-                        <td>
-                            <t t-if="group['courtain_type'] and group['name']">
+                  <tr>
+                    <td>
+                      <span t-esc="round(group['quantity_extra'], 2)" />
+                    </td>
+                    <td>
+                        <t t-if="group['name']">
+                            <t t-if="group['courtain_type']">
+                                <span t-esc="group['courtain_type']" />
+                            </t>
+                            <t t-else="">
                                 <span t-esc="group['name']" />
                             </t>
-                            <t t-if="not group['courtain_type'] and not group['name']">
-                                <span> </span>
-                            </t>
-                        </td>
-                        <td>
-                            <span t-esc="group['price_unit']" />
-                        </td>
-                        <td>
-                            <span t-esc="round(group['price_subtotal_extra'], 2)" />
-                        </td>
-                        <td>
-                            <t t-set="iva" t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
-                            <span t-esc="round(iva, 2)" />
-                        </td>
-                        <td>
-                            <span t-esc="round(group['price_total_extra'], 2)" />
-                        </td>
-                    </tr>
+                        </t>
+                    </td>
+                    <td>
+                      <t t-if="group['name'] and group['courtain_type']">
+                        <span t-esc="group['name']" />
+                      </t>
+                      <t t-if="not group['name'] and not group['courtain_type']">
+                        <span> </span>
+                      </t>
+                    </td>
+                    <td>
+                      <span t-esc="group['price_unit']" />
+                    </td>
+                    <td>
+                      <span t-esc="round(group['price_subtotal_extra'], 2)" />
+                    </td>
+                    <td>
+
+                      <t t-set="iva"
+                        t-value="group['price_total_extra'] - group['price_subtotal_extra']" />
+                      <span t-esc="round(iva, 2)" />
+                    </td>
+                    <td>
+                      <span t-esc="round(group['price_total_extra'], 2)" />
+                    </td>
+                  </tr>
                 </t>
-            </t>
-        </tbody>
+              </t>
+            </tbody>
           </table>
         </div>
         <div class="row data">
@@ -257,7 +266,6 @@
             <!-- <th name="th_orden" class="text-start">ORDEN</th> -->
             <th name="th_descripcion" class="text-start">DESCRIPCIÓN</th>
             <th name="th_material" class="text-start">MATERIAL</th>
-            <th name="th_ambiente" class="text-start">AMBIENTE</th>
             <th name="th_ancho" class="text-start">ANCHO</th>
             <th name="th_alto" class="text-start">ALTO</th>
             <th name="th_mando" class="text-start">MANDO</th>
@@ -272,74 +280,74 @@
         </thead>
       </xpath>
       <xpath expr="//tbody" position="replace">
-    <tbody>
-        <tr t-foreach="doc.order_line" t-as="line">
-            <t t-if="line.display_type not in ['line_note', 'line_section']">
-                <td>
-                    <span t-esc="line_index + 1"/>
-                </td>
-                <td>
-                    <t t-if="line.name">
-                        <t t-if="line.courtain_type">
-                            <span t-field="line.courtain_type" />
+        <tbody>
+            <tr t-foreach="doc.order_line" t-as="line">
+                <t t-if="line.display_type not in ['line_note', 'line_section']">
+                    <td>
+                        <span t-esc="line_index + 1"/>
+                    </td>
+                    <td>
+                        <t t-if="line.name">
+                            <t t-if="line.courtain_type">
+                                <span t-field="line.courtain_type" />
+                            </t>
+                            <t t-if="not line.courtain_type">
+                                <span t-field="line.name" />
+                            </t>
                         </t>
-                        <t t-if="not line.courtain_type">
-                            <span t-field="line.name" />
+                    </td>
+                    <td>
+                        <t t-if="line.material">
+                            <span t-esc="line.material.name" />
                         </t>
-                    </t>
-                </td>
-                <td>
-                    <t t-if="line.material">
-                        <span t-esc="line.material.name" />
-                    </t>
-                </td>
-                <td>
-                    <t t-if="line.ambience">
-                        <t t-esc="line.ambience"/>
-                    </t>
-                </td>
-                <td>
-                    <t t-if="line.broad is not None">
-                        <span t-esc="line.broad" />
-                    </t>
-                </td>
-                <td>
-                    <t t-if="line.high is not None">
-                        <span t-esc="line.high" />
-                    </t>
-                </td>
-                <td>
-                    <span t-field="line.command" />
-                </td>
-                <td>
-                    <t t-if="line.product_uom_qty is not None">
-                        <span t-esc="line.product_uom_qty" />
-                    </t>
-                </td>
-                <td>
-                    <span t-field="line.price_unit" />
-                </td>
-                <td>
-                    <span t-field="line.price_subtotal" />
-                </td>
-                <td>
-                    <input type="checkbox" t-att-checked="line.encj" disabled="disabled" />
-                </td>
-                <td>
-                    <input type="checkbox" t-att-checked="line.mot" disabled="disabled" />
-                </td>
-                <td>
-                    <input type="checkbox" t-att-checked="line.clnt" disabled="disabled" />
-                </td>
-            </t>
-            <tr t-elif="line.display_type == 'line_section'" style="background-color: #f2f2f2;">
-                <td colspan="12">
-                    <span t-field="line.name" />
-                </td>
+                    </td>
+                    <td>
+                        <t t-if="line.ambience">
+                            <t t-esc="line.ambience"/>
+                        </t>
+                    </td>
+                    <td>
+                        <t t-if="line.broad is not None">
+                            <span t-esc="line.broad" />
+                        </t>
+                    </td>
+                    <td>
+                        <t t-if="line.high is not None">
+                            <span t-esc="line.high" />
+                        </t>
+                    </td>
+                    <td>
+                        <span t-field="line.command" />
+                    </td>
+                    <td>
+                        <t t-if="line.product_uom_qty is not None">
+                            <span t-esc="line.product_uom_qty" />
+                        </t>
+                    </td>
+                    <td>
+                        <span t-field="line.price_unit" />
+                    </td>
+                    <td>
+                        <span t-field="line.price_subtotal" />
+                    </td>
+                    <td>
+                        <input type="checkbox" t-att-checked="line.encj" disabled="disabled" />
+                    </td>
+                    <td>
+                        <input type="checkbox" t-att-checked="line.mot" disabled="disabled" />
+                    </td>
+                    <td>
+                        <input type="checkbox" t-att-checked="line.clnt" disabled="disabled" />
+                    </td>
+                </t>
+                <tr t-elif="line.display_type == 'line_section'" style="background-color: #f2f2f2;">
+                    <td colspan="12">
+                        <span t-field="line.name" />
+                    </td>
+                </tr>
             </tr>
-        </tr>
-    </tbody>
-</xpath>
+        </tbody>
+      </xpath>
 
 
     </template>
