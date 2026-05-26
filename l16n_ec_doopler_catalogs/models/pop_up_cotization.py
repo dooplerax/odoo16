@@ -100,6 +100,9 @@ class SaleOrderLine(models.Model):
         store=True, precompute=True,
         digits=(16, 3))
 
+    # Nuevo campo para congelar el precio real digitado (F7107)
+    x_manual_price = fields.Float(string="Precio Manual Guardado", digits=(16, 2), default=0.0)
+
     def _get_command_selection(self):
         return [
             ('Izquierda', 'IZQUIERDO'),
@@ -161,14 +164,20 @@ class SaleOrderLine(models.Model):
             ('tradicional_con_pliegues', 'Tradicional con pliegues'),
         ]
 
+    #F7107
     @api.depends('broad', 'high')
-    @api.onchange('product_id')
+    @api.onchange('product_id', 'broad', 'high')
     def calculated_quantity_field(self):
         for record in self:
-            if (record.broad <= 0.0 or record.high <= 0.0):
-                record.product_uom_qty = 1
+            # 1. Calculamos los metros cuadrados de forma normal
+            if record.broad <= 0.0 or record.high <= 0.0:
+                record.product_uom_qty = 1.0
             else:
                 record.product_uom_qty = record.broad * record.high
+
+            # 2. Si el usuario ya guardó un precio manual en nuestro campo espejo, lo obligamos a restaurarse
+            if record.x_manual_price > 1.0:
+                record.price_unit = record.x_manual_price
 
     def name_get(self):
         result = []
@@ -249,6 +258,17 @@ class SaleOrderLine(models.Model):
     def _compute_m2(self):
         for record in self:
             record.m2 = record.broad * record.high
+
+    #F7107
+    @api.depends('product_id', 'product_uom_qty', 'x_manual_price')
+    def _compute_price_unit(self):
+        # 1. Dejamos que Odoo ejecute todos sus cálculos y tarifas estándar de fondo
+        super()._compute_price_unit()
+
+        # 2. Rompemos el resultado forzando nuestro precio manual guardado antes de que se mande al PDF
+        for line in self:
+            if line.x_manual_price > 1.0:
+                line.price_unit = line.x_manual_price
 
     order_id_extra = fields.Many2one(
         'sale.order', compute='_compute_order_id_extra', store=True)

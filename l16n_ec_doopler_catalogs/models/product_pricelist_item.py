@@ -159,10 +159,16 @@ class Pricelist(models.Model):
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    @api.onchange('courtain_type', 'material')
+    #F7107
+    @api.onchange('courtain_type', 'material', 'price_unit')
     @api.depends('product_id', 'product_uom', 'product_uom_qty', 'courtain_type', 'material')
     def _compute_pricelist_item_id(self):
         for line in self:
+            # 1. CAPTURA: Solo si el usuario digita activamente un precio real en pantalla, lo blindamos.
+            # Evitamos sobreescribir el baúl con un 1.0 espurio del sistema.
+            if line.price_unit > 1.0 and line.price_unit != line.product_id.list_price:
+                line.x_manual_price = line.price_unit
+
             if not line.product_id or line.display_type or not line.order_id.pricelist_id:
                 line.pricelist_item_id = False
             else:
@@ -172,29 +178,25 @@ class SaleOrderLine(models.Model):
                 uom = line.product_uom
                 date = line.order_id.date_order
 
-                # Obtener la regla de precios aplicable
                 rule_id = pricelist_id._get_product_rule(product, quantity, line.courtain_type, line.material, uom=uom,
                                                          date=date)
 
-                # Si se encontró una regla de precios, actualizar el precio en la línea de pedido
                 if rule_id:
-                    # Obtener el precio utilizando la regla de precios
                     price = pricelist_id.with_context(date=date)._compute_price_rule(
                         product, quantity, line.courtain_type, line.material, uom=uom, date=date
                     )[product.id][0]
+                    line.pricelist_item_id = rule_id
 
-                    # Actualizar la línea de pedido con el precio calculado
-                    line.write({
-                        'pricelist_item_id': rule_id,
-                        'price_unit': price,
-                    })
+                    # 2. APLICACIÓN IMPERATIVA: Si hay un precio manual guardado en el baúl, congelamos la línea
+                    if line.x_manual_price > 1.0:
+                        line.price_unit = line.x_manual_price
+                    else:
+                        line.price_unit = price
                 else:
                     line.pricelist_item_id = False
-                    line.price_unit = product.list_price  # Otra acción en caso de no encontrar regla de precios
 
-
-
-
-
-
-
+                    # Si no hay regla en la tarifa pero el baúl tiene el precio real, lo forzamos
+                    if line.x_manual_price > 1.0:
+                        line.price_unit = line.x_manual_price
+                    else:
+                        line.price_unit = product.list_price
