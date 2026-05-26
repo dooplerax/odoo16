@@ -276,7 +276,7 @@
         <tr t-foreach="doc.order_line" t-as="line">
             <t t-if="line.display_type not in ['line_note', 'line_section']">
                 <td>
-                    <span t-if="line.items" t-field="line.items" t-options='{"widget": "text"}' />
+                    <span t-esc="line_index + 1"/>
                 </td>
                 <td>
                     <t t-if="line.name">
