@@ -222,6 +222,14 @@ class SaleOrderLine(models.Model):
             ('tradicional_con_pliegues_motorizada', 'Tradicional con pliegues motorizada'),
             ('panelada_motorizada', 'Panelada motorizada'),
             ('romana_motorizada', 'Romana motorizada'),
+            ('riel_tradicional_onda_perfecta', 'Riel tradicional onda perfecta'),
+            ('riel_tradicional_pliegues', 'Riel tradicional pliegues'),
+            ('side_channel_armado', 'Side channel armado'),
+            ('riel_de_vertical', 'Riel de vertical'),
+            ('riel_de_panelada', 'Riel de panelada'),
+            ('riel_de_romana', 'Riel de romana'),
+            ('cenefa_armada', 'Cenefa armada'),
+            ('cenefa_de_tela', 'Cenefa de tela'),
         ]
 
     #F7107
