@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_stock_date_report_search" model="ir.ui.view">
+            <field name="name">stock.date.report.search</field>
+            <field name="model">product.product</field>
+            <field name="arch" type="xml">
+                <search string="Existencias a la Fecha">
+                    <field name="name" string="Producto"/>
+                    <field name="categ_id"/>
+                    <separator/>
+                    <filter string="Bodega Quito" name="bodega_quito"
+                            context="{'warehouse': 1}"/>
+                    <filter string="Bodega Guayaquil" name="bodega_guayaquil"
+                            context="{'warehouse': 2}"/>
+                    <filter string="Bodega Cuenca" name="bodega_cuenca"
+                            context="{'warehouse': 3}"/>
+                    <searchpanel>
+                        <field name="categ_id" icon="fa-filter" string="Categoría" select="multi"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+    </data>
+</odoo>
